@@ -244,8 +244,8 @@ namespace bravo
     }
     
 
-	inline int get_line(io_stream &is, std::string &line, int timeout = -1, int max_length = 512)
-	{
+    inline int get_line(io_stream &is, std::string &line, int timeout = -1, int max_length = 512)
+    {
         // max_length doesn't include crlf or a null terminator
         
         if (max_length < 0)
@@ -265,108 +265,108 @@ namespace bravo
         // end points to the last char in the buffer, reserved for a null terminator
         char *end = buf.data() + buf.size() - 1;
         char *ptr = buf.data();
-		
+        
         for (; ptr != end; ++ptr)
-		{
+        {
             if (is.closed())
             {
                 break;
             }
-			
-			int read_count = is.read(ptr, 1, timeout);
+            
+            int read_count = is.read(ptr, 1, timeout);
 
-			if (read_count != 1)
-			{
+            if (read_count != 1)
+            {
                 break;
-			}
+            }
 
-			if (*ptr == '\r')
-			{
+            if (*ptr == '\r')
+            {
                 *ptr = 0;
-			}
-			else if (*ptr == '\n')
-			{
-				break;
-			}
-			else if (!*ptr)
-			{
-				break;
-			}
-		}
+            }
+            else if (*ptr == '\n')
+            {
+                break;
+            }
+            else if (!*ptr)
+            {
+                break;
+            }
+        }
 
         *ptr = 0;
         
         line = buf.data();
 
-		return (int)(end - buf.data());
-	}
+        return (int)(end - buf.data());
+    }
 
 
-	inline int parse_header(const std::string &line, std::string &name, std::string &val)
-	{
-		size_t pos = line.find(':');
+    inline int parse_header(const std::string &line, std::string &name, std::string &val)
+    {
+        size_t pos = line.find(':');
 
-		if (pos == std::string::npos)
-		{
-			name = "";
-			val = "";
-			return -1;
-		}
+        if (pos == std::string::npos)
+        {
+            name = "";
+            val = "";
+            return -1;
+        }
 
-		size_t name_len = pos;
-		size_t val_len = line.size() - pos - 1;
+        size_t name_len = pos;
+        size_t val_len = line.size() - pos - 1;
 
-		if (!name_len)
-		{
-			name = "";
-			val = "";
-			return -1;
-		}
+        if (!name_len)
+        {
+            name = "";
+            val = "";
+            return -1;
+        }
 
-		name = bravo::trim(line.substr(0, name_len));
+        name = bravo::trim(line.substr(0, name_len));
         
         if(val_len)
             val = trim(line.substr(pos + 1, val_len));
         else
             val = "";
         
-		return 0;
-	}
+        return 0;
+    }
 
 
-	inline int read_all_headers(io_stream &is, std::map<std::string, std::string> &headers, int timeout = -1)
-	{
-		headers.clear();
-		int rc = 0;
-		int len = 0;
-		int total = 0;
-		std::string line;
-		std::string name;
-		std::string val;
+    inline int read_all_headers(io_stream &is, std::map<std::string, std::string> &headers, int timeout = -1)
+    {
+        headers.clear();
+        int rc = 0;
+        int len = 0;
+        int total = 0;
+        std::string line;
+        std::string name;
+        std::string val;
 
         while (true)
-		{
-			len = get_line(is, line, timeout);
+        {
+            len = get_line(is, line, timeout);
 
-			if (len == 0)
-			{
-				break;
-			}
-			else if (len < 0)
-			{
-				headers.clear();
-				return -1;
-			}
-			
-			total += len;
-
-			rc = parse_header(line, name, val);
+            if (len == 0)
+            {
+                break;
+            }
+            else if (len < 0)
+            {
+                headers.clear();
+                return -1;
+            }
             
-			if (rc < 0)
-			{
-				headers.clear();
-				return -1;
-			}
+            total += len;
+
+            rc = parse_header(line, name, val);
+            
+            if (rc < 0)
+            {
+                headers.clear();
+                return -1;
+            }
 
             if (headers.count(name))
             {
@@ -376,10 +376,10 @@ namespace bravo
             {
                 headers[name] = val;
             }
-		}
+        }
 
-		return total;
-	}
+        return total;
+    }
 
 
     inline int read_all_headers(std::istream &is, std::map<std::string, std::string> &headers)
@@ -432,60 +432,60 @@ namespace bravo
     }
     
 
-	inline std::string get_path_end(const std::string &path, int count = 1)
-	{
-		if (!path.size())
-		{
-			return "";
-		}
+    inline std::string get_path_end(const std::string &path, int count = 1)
+    {
+        if (!path.size())
+        {
+            return "";
+        }
 
-		std::vector<std::string> parts;
-		split(path, "\\/", parts);
+        std::vector<std::string> parts;
+        split(path, "\\/", parts);
 
-		int start = (int)parts.size() - count;
+        int start = (int)parts.size() - count;
 
-		if (start < 0)
-		{
-			start = 0;
-		}
+        if (start < 0)
+        {
+            start = 0;
+        }
 
-		std::string result;
+        std::string result;
 
-		for (int i = start; i < (int)parts.size(); ++i)
-		{
-			if (i > start)
-			{
-				result += "/";
-			}
+        for (int i = start; i < (int)parts.size(); ++i)
+        {
+            if (i > start)
+            {
+                result += "/";
+            }
 
-			result += parts[i];
-		}
+            result += parts[i];
+        }
 
-		return result;
-	}
+        return result;
+    }
 
 
-	inline std::string get_filename(const std::string &path)
-	{
-		if (!path.size())
-		{
-			return "";
-		}
+    inline std::string get_filename(const std::string &path)
+    {
+        if (!path.size())
+        {
+            return "";
+        }
 
-		size_t slash_stop = path.find_last_of("\\/");
+        size_t slash_stop = path.find_last_of("\\/");
 
-		if (slash_stop == path.size() - 1)
-		{
-			return "";
-		}
+        if (slash_stop == path.size() - 1)
+        {
+            return "";
+        }
 
-		if (slash_stop == std::string::npos)
-		{
-			return path;
-		}
+        if (slash_stop == std::string::npos)
+        {
+            return path;
+        }
 
-		return path.substr(slash_stop + 1);
-	}
+        return path.substr(slash_stop + 1);
+    }
     
 
     inline int find_positions(std::string &text, const std::string &find_string, std::vector<size_t> &pos)

@@ -46,266 +46,266 @@ namespace bravo
     // will be used with a single io_named_pipe instance. One for read, one for write and one
     // for connect.
     
-	class overlapped_data
-	{
-	public:
-		overlapped_data()
-		{
-			memset(&overlapped, 0, sizeof(overlapped));
+    class overlapped_data
+    {
+    public:
+        overlapped_data()
+        {
+            memset(&overlapped, 0, sizeof(overlapped));
             
             // Create event
-			overlapped.hEvent           = CreateEvent(0, TRUE, TRUE, 0);
-			current                     = buf;
-			requested_transfer_count    = 0;
-			actual_transfer_count       = 0;
-			remaining_count             = 0;
-			pending                     = false;
-			timed_out                   = false;
-		}
+            overlapped.hEvent           = CreateEvent(0, TRUE, TRUE, 0);
+            current                     = buf;
+            requested_transfer_count    = 0;
+            actual_transfer_count       = 0;
+            remaining_count             = 0;
+            pending                     = false;
+            timed_out                   = false;
+        }
 
-		virtual ~overlapped_data()
-		{
-			CloseHandle(overlapped.hEvent);
-		}
+        virtual ~overlapped_data()
+        {
+            CloseHandle(overlapped.hEvent);
+        }
 
-		OVERLAPPED  overlapped;
-		char        buf[OVERLAPPED_BUFSIZE];
-		char *      current;
-		DWORD       requested_transfer_count;
-		DWORD       actual_transfer_count;
+        OVERLAPPED  overlapped;
+        char        buf[OVERLAPPED_BUFSIZE];
+        char *      current;
+        DWORD       requested_transfer_count;
+        DWORD       actual_transfer_count;
         int         remaining_count;
-		bool        pending;
-		bool        timed_out;
-	};
+        bool        pending;
+        bool        timed_out;
+    };
 
 
-	class io_named_pipe : bravo::io_stream
-	{
-	public:
+    class io_named_pipe : bravo::io_stream
+    {
+    public:
         
-		io_named_pipe(HANDLE h = INVALID_HANDLE_VALUE)
-		{
-			handle = h;
-		}
-
-        
-		void set_handle(HANDLE h = INVALID_HANDLE_VALUE)
-		{
-			handle = h;
-		}
+        io_named_pipe(HANDLE h = INVALID_HANDLE_VALUE)
+        {
+            handle = h;
+        }
 
         
-		void detach_handle()
-		{
-			if (INVALID_HANDLE_VALUE == handle)
-			{
-				return;
-			}
-
-			cancel_pending_io();
-			handle = INVALID_HANDLE_VALUE;
-		}
+        void set_handle(HANDLE h = INVALID_HANDLE_VALUE)
+        {
+            handle = h;
+        }
 
         
-		int listen()
-		{
+        void detach_handle()
+        {
+            if (INVALID_HANDLE_VALUE == handle)
+            {
+                return;
+            }
+
+            cancel_pending_io();
+            handle = INVALID_HANDLE_VALUE;
+        }
+
+        
+        int listen()
+        {
             // Connect named pipe
-			BOOL connect_result = ConnectNamedPipe(handle, &connect_info.overlapped);
+            BOOL connect_result = ConnectNamedPipe(handle, &connect_info.overlapped);
 
-			if (connect_result)
-			{
+            if (connect_result)
+            {
                 // Successful connection
-				connect_info.pending = false;
+                connect_info.pending = false;
                 SetEvent(connect_info.overlapped.hEvent);
-			}
-			else
-			{
-				int errnum = GetLastError();
+            }
+            else
+            {
+                int errnum = GetLastError();
 
-				if (ERROR_IO_PENDING == errnum || ERROR_PIPE_LISTENING == errnum)
-				{
-					connect_info.pending = true;
-				}
-				else if (ERROR_PIPE_CONNECTED == errnum)
-				{
+                if (ERROR_IO_PENDING == errnum || ERROR_PIPE_LISTENING == errnum)
+                {
+                    connect_info.pending = true;
+                }
+                else if (ERROR_PIPE_CONNECTED == errnum)
+                {
                     // Already connected
-					connect_info.pending = false;
-				}
-				else
-				{
-					CloseHandle(handle);
-					handle = INVALID_HANDLE_VALUE;
-				}
-			}
+                    connect_info.pending = false;
+                }
+                else
+                {
+                    CloseHandle(handle);
+                    handle = INVALID_HANDLE_VALUE;
+                }
+            }
             
             return 0;
-		}
+        }
 
         
-		int listen(const std::string &pipe_name, int instances = 1)
-		{
-			SECURITY_ATTRIBUTES saAttr;
-			saAttr.nLength              = sizeof(SECURITY_ATTRIBUTES);
-			saAttr.bInheritHandle       = TRUE;
-			saAttr.lpSecurityDescriptor = NULL;
+        int listen(const std::string &pipe_name, int instances = 1)
+        {
+            SECURITY_ATTRIBUTES saAttr;
+            saAttr.nLength              = sizeof(SECURITY_ATTRIBUTES);
+            saAttr.bInheritHandle       = TRUE;
+            saAttr.lpSecurityDescriptor = NULL;
 
-			std::wstring wname(pipe_name.begin(), pipe_name.end());
+            std::wstring wname(pipe_name.begin(), pipe_name.end());
             
             // Create named pipe
-			handle = CreateNamedPipe(
-				wname.c_str(),           
-				PIPE_ACCESS_DUPLEX |     
-				FILE_FLAG_OVERLAPPED,    
-				PIPE_TYPE_BYTE |        // Not using a message type pipe.
-				PIPE_READMODE_BYTE |	 
-				PIPE_WAIT,               
-				instances,
-				OVERLAPPED_BUFSIZE,
-				OVERLAPPED_BUFSIZE,
-				5000,                   // Client timeout
-				&saAttr);
+            handle = CreateNamedPipe(
+                wname.c_str(),           
+                PIPE_ACCESS_DUPLEX |     
+                FILE_FLAG_OVERLAPPED,    
+                PIPE_TYPE_BYTE |        // Not using a message type pipe.
+                PIPE_READMODE_BYTE |     
+                PIPE_WAIT,               
+                instances,
+                OVERLAPPED_BUFSIZE,
+                OVERLAPPED_BUFSIZE,
+                5000,                   // Client timeout
+                &saAttr);
 
-			if (INVALID_HANDLE_VALUE == handle)
+            if (INVALID_HANDLE_VALUE == handle)
                 return -1;
             
             return listen();
-		}
+        }
 
         // Client side method        
-		int connect(const std::string &pipe_name, int timeout = -1)
-		{		
-			std::wstring wname(pipe_name.begin(), pipe_name.end());
+        int connect(const std::string &pipe_name, int timeout = -1)
+        {        
+            std::wstring wname(pipe_name.begin(), pipe_name.end());
             
-			for (int i = 0; i < 2; i++)
-			{
-				handle = CreateFile(
-					wname.c_str(),  
-					GENERIC_READ |  
-					GENERIC_WRITE,
-					0,              
-					&saAttr,        
-					OPEN_EXISTING,
-					FILE_FLAG_OVERLAPPED,
-					NULL);
+            for (int i = 0; i < 2; i++)
+            {
+                handle = CreateFile(
+                    wname.c_str(),  
+                    GENERIC_READ |  
+                    GENERIC_WRITE,
+                    0,              
+                    &saAttr,        
+                    OPEN_EXISTING,
+                    FILE_FLAG_OVERLAPPED,
+                    NULL);
 
-				if (handle != INVALID_HANDLE_VALUE)
-					break;
+                if (handle != INVALID_HANDLE_VALUE)
+                    break;
 
-				if (GetLastError() != ERROR_PIPE_BUSY)
-					return -1;
+                if (GetLastError() != ERROR_PIPE_BUSY)
+                    return -1;
 
-				if (timeout == 0)
-					return -1;
+                if (timeout == 0)
+                    return -1;
 
-				if (timeout < 0)
-					timeout = NMPWAIT_WAIT_FOREVER;
+                if (timeout < 0)
+                    timeout = NMPWAIT_WAIT_FOREVER;
 
-				if (!WaitNamedPipe(wname.c_str(), timeout))
+                if (!WaitNamedPipe(wname.c_str(), timeout))
                     return -1;
             }
 
             if (handle == INVALID_HANDLE_VALUE)
                 return -1;
 
-			DWORD dwMode = PIPE_READMODE_BYTE;
-			BOOL result = SetNamedPipeHandleState(
-				handle,     
-				&dwMode,    
-				NULL,       
-				NULL);
+            DWORD dwMode = PIPE_READMODE_BYTE;
+            BOOL result = SetNamedPipeHandleState(
+                handle,     
+                &dwMode,    
+                NULL,       
+                NULL);
 
-			if (!result)
-			{
-				CloseHandle(handle);
-				handle = INVALID_HANDLE_VALUE;
-				return -1;
-			}
+            if (!result)
+            {
+                CloseHandle(handle);
+                handle = INVALID_HANDLE_VALUE;
+                return -1;
+            }
 
-			return 0;
-		}
-
-        
-		void cancel_pending_io()
-		{
-			if (INVALID_HANDLE_VALUE == handle)
-			{
-				return;
-			}
-
-			if (connect_info.pending)
-			{
-				BOOL cancel_result = CancelIoEx(handle, &connect_info.overlapped);
-
-				if (cancel_result == TRUE || GetLastError() != ERROR_NOT_FOUND)
-				{
-					DWORD transfer_count = 0;
-					GetOverlappedResult(handle, &connect_info.overlapped, &transfer_count, TRUE);
-				}
-
-				connect_info.pending = false;
-			}
-
-			if (read_info.pending)
-			{
-				BOOL result = CancelIoEx(handle, &read_info.overlapped);
-
-				if (result == TRUE || GetLastError() != ERROR_NOT_FOUND)
-				{
-					DWORD transfer_count = 0;
-					GetOverlappedResult(handle, &read_info.overlapped, &transfer_count, TRUE);
-				}
-
-				read_info.pending = false;
-			}
-
-			if (write_info.pending)
-			{
-				BOOL result = CancelIoEx(handle, &write_info.overlapped);
-
-				if (result == TRUE || GetLastError() != ERROR_NOT_FOUND)
-				{
-					DWORD transfer_count = 0;
-					GetOverlappedResult(handle, &write_info.overlapped, &transfer_count, TRUE);
-				}
-
-				write_info.pending = false;
-			}
-		}
-
-        
-		int close()
-		{
-			cancel_pending_io();
-			CloseHandle(handle);
-			handle = INVALID_HANDLE_VALUE;
             return 0;
-		}
+        }
 
         
-		virtual ~io_named_pipe()
-		{
-			close();
-		}
+        void cancel_pending_io()
+        {
+            if (INVALID_HANDLE_VALUE == handle)
+            {
+                return;
+            }
+
+            if (connect_info.pending)
+            {
+                BOOL cancel_result = CancelIoEx(handle, &connect_info.overlapped);
+
+                if (cancel_result == TRUE || GetLastError() != ERROR_NOT_FOUND)
+                {
+                    DWORD transfer_count = 0;
+                    GetOverlappedResult(handle, &connect_info.overlapped, &transfer_count, TRUE);
+                }
+
+                connect_info.pending = false;
+            }
+
+            if (read_info.pending)
+            {
+                BOOL result = CancelIoEx(handle, &read_info.overlapped);
+
+                if (result == TRUE || GetLastError() != ERROR_NOT_FOUND)
+                {
+                    DWORD transfer_count = 0;
+                    GetOverlappedResult(handle, &read_info.overlapped, &transfer_count, TRUE);
+                }
+
+                read_info.pending = false;
+            }
+
+            if (write_info.pending)
+            {
+                BOOL result = CancelIoEx(handle, &write_info.overlapped);
+
+                if (result == TRUE || GetLastError() != ERROR_NOT_FOUND)
+                {
+                    DWORD transfer_count = 0;
+                    GetOverlappedResult(handle, &write_info.overlapped, &transfer_count, TRUE);
+                }
+
+                write_info.pending = false;
+            }
+        }
 
         
-		int flush()
-		{
-			if (INVALID_HANDLE_VALUE == handle)
-			{
-				return -1;
-			}
-
-			FlushFileBuffers(handle);
+        int close()
+        {
+            cancel_pending_io();
+            CloseHandle(handle);
+            handle = INVALID_HANDLE_VALUE;
             return 0;
-		}
+        }
 
         
-		int read(char *read_buf, int requested_count, int timeout = -1)
-		{
+        virtual ~io_named_pipe()
+        {
+            close();
+        }
+
+        
+        int flush()
+        {
+            if (INVALID_HANDLE_VALUE == handle)
+            {
+                return -1;
+            }
+
+            FlushFileBuffers(handle);
+            return 0;
+        }
+
+        
+        int read(char *read_buf, int requested_count, int timeout = -1)
+        {
             // Check internal state
-			if (INVALID_HANDLE_VALUE == handle)
-				return -1;
-			
+            if (INVALID_HANDLE_VALUE == handle)
+                return -1;
+            
             // Check parameters
             if (!read_buf || requested_count < 0)
                 return -1;
@@ -319,8 +319,8 @@ namespace bravo
             int attempted   = 0;
             
             // First check to see if we are connected yet.
-			if (connect_info.pending)
-			{
+            if (connect_info.pending)
+            {
                 // If timeout == 0 the caller doesn't want to wait, thus return now because the connection is pending.
                 if (timeout == 0)
                 {
@@ -389,8 +389,8 @@ namespace bravo
             // If read_info.remaining_count > 0 we have data cached from the last read and we should
             // get this data before we even attempt ReadFile()
             
-			if (read_info.remaining_count > 0)
-			{
+            if (read_info.remaining_count > 0)
+            {
                 attempted = std::min(remaining, read_info.remaining_count);
  
                 memcpy(buf, read_info.current, attempted);
@@ -401,7 +401,7 @@ namespace bravo
                 
                 if (!remaining)
                     return buf - read_buf;
-			}
+            }
 
             // The only reasons we will exit from the loop below are
             // 1) An error condition
@@ -558,8 +558,8 @@ namespace bravo
             } // while(1)
 
             // Should never actually reach this point
-			return 0;
-		}
+            return 0;
+        }
 
         
         int write(const char *write_buf, int requested_count, int timeout = -1)
@@ -814,11 +814,11 @@ namespace bravo
         }
 
 
-		overlapped_data connect_info;
-		overlapped_data write_info;
-		overlapped_data read_info;
-		HANDLE          handle;
-	};
+        overlapped_data connect_info;
+        overlapped_data write_info;
+        overlapped_data read_info;
+        HANDLE          handle;
+    };
 
 
     // Good references:
@@ -827,87 +827,87 @@ namespace bravo
     
     
     inline std::string new_guid()
-	{
-		GUID guid_struct = { 0 };
-		::CoCreateGuid(&guid_struct);
-		OLECHAR olechar_guid[40] = { 0 };
-		int nCount = ::StringFromGUID2(guid_struct, olechar_guid, 40);
+    {
+        GUID guid_struct = { 0 };
+        ::CoCreateGuid(&guid_struct);
+        OLECHAR olechar_guid[40] = { 0 };
+        int nCount = ::StringFromGUID2(guid_struct, olechar_guid, 40);
         
-		char guid_buf[1024];
-		char *dst = guid_buf;
-		OLECHAR *src = olechar_guid;
-		char char1 = ' ';
+        char guid_buf[1024];
+        char *dst = guid_buf;
+        OLECHAR *src = olechar_guid;
+        char char1 = ' ';
         
-		for (;; ++src)
-		{
-			char1 = (char)*src;
+        for (;; ++src)
+        {
+            char1 = (char)*src;
             
-			if (char1 == '{')
-				continue;
+            if (char1 == '{')
+                continue;
 
-			if (char1 == '}')
-			{
-				*dst = 0;
-				break;
-			}
+            if (char1 == '}')
+            {
+                *dst = 0;
+                break;
+            }
 
-			*dst = char1;
-			++dst;
-		}
+            *dst = char1;
+            ++dst;
+        }
 
-		return guid_buf;
-	}
+        return guid_buf;
+    }
 
     
-	inline void new_guids(std::vector<std::string> &guids, int count)
-	{
-		::CoInitialize(0);
-		guids.clear();
+    inline void new_guids(std::vector<std::string> &guids, int count)
+    {
+        ::CoInitialize(0);
+        guids.clear();
         
-		for (int i = 0; i < count; i++)
-		{
-			guids.push_back(new_guid());
-		}
+        for (int i = 0; i < count; i++)
+        {
+            guids.push_back(new_guid());
+        }
         
-		::CoUninitialize();
-	}
+        ::CoUninitialize();
+    }
 
     
-	inline void new_pipe_names(std::vector<std::string> &pipe_names, const std::string &prefix, int count)
-	{
-		pipe_names.clear();
-		std::vector<std::string> guids;
-		new_guids(guids, count);
+    inline void new_pipe_names(std::vector<std::string> &pipe_names, const std::string &prefix, int count)
+    {
+        pipe_names.clear();
+        std::vector<std::string> guids;
+        new_guids(guids, count);
 
-		for (std::string &guid : guids)
-		{
-			std::string name = "\\\\.\\pipe\\";
-			name += prefix + '-' + guid;
-			pipe_names.push_back(name);
-		}
-	}
+        for (std::string &guid : guids)
+        {
+            std::string name = "\\\\.\\pipe\\";
+            name += prefix + '-' + guid;
+            pipe_names.push_back(name);
+        }
+    }
 
     
-	BOOL CreatePipe2(HANDLE *read_handle, HANDLE *write_handle)
-	{
-		std::vector<std::string> pipe_names;
-		new_pipe_names(pipe_names, "pipe1", 1);
-		std::string pipe_name = pipe_names[0];
+    BOOL CreatePipe2(HANDLE *read_handle, HANDLE *write_handle)
+    {
+        std::vector<std::string> pipe_names;
+        new_pipe_names(pipe_names, "pipe1", 1);
+        std::string pipe_name = pipe_names[0];
 
-		io_named_pipe pipe1;
-		io_named_pipe pipe2;
+        io_named_pipe pipe1;
+        io_named_pipe pipe2;
 
-		pipe1.listen(pipe_name);
-		pipe2.connect(pipe_name);
+        pipe1.listen(pipe_name);
+        pipe2.connect(pipe_name);
 
-		*read_handle = pipe1.handle;
-		*write_handle = pipe2.handle;
+        *read_handle = pipe1.handle;
+        *write_handle = pipe2.handle;
 
-		pipe1.detach_handle();
-		pipe2.detach_handle();
+        pipe1.detach_handle();
+        pipe2.detach_handle();
 
-		return TRUE;
-	}
+        return TRUE;
+    }
 }
 
 #endif

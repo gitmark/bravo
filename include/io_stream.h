@@ -34,17 +34,17 @@ namespace bravo
 class io_stream
 {
 public:
-	virtual         ~io_stream      () {}
+    virtual         ~io_stream      () {}
     virtual int     read            (char *buf, int count, int timeout = -1) = 0;
-	virtual int     write           (const char *buf, int count, int timeout = -1) = 0;
-	virtual bool    timed_out       () { return false; }
-	virtual void    clear_timed_out () {}
-	virtual int     read_count      () { return 1; }
-	virtual void    clear_read_count() {}
-	virtual void    set_bad_data    () {}
-	virtual bool    bad_data        () { return false; }
-	virtual void    clear_bad_data  () {}
-	virtual bool	closed          () { return true; }
+    virtual int     write           (const char *buf, int count, int timeout = -1) = 0;
+    virtual bool    timed_out       () { return false; }
+    virtual void    clear_timed_out () {}
+    virtual int     read_count      () { return 1; }
+    virtual void    clear_read_count() {}
+    virtual void    set_bad_data    () {}
+    virtual bool    bad_data        () { return false; }
+    virtual void    clear_bad_data  () {}
+    virtual bool    closed          () { return true; }
     virtual int     close           () { return -1; }
     virtual int     flush           () { return -1; }
     virtual void    lock            () {}

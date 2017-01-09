@@ -39,39 +39,39 @@
 
 inline void read_dir(const std::string &path, const std::string &prefix, std::vector<std::string> &filenames)
 {
-	WIN32_FIND_DATA fd;
+    WIN32_FIND_DATA fd;
 
-	std::string path2 = path + "/*";
-	std::wstring path3(path2.begin(), path2.end());
-	HANDLE hFind = ::FindFirstFile(path3.c_str(), &fd);
-	
+    std::string path2 = path + "/*";
+    std::wstring path3(path2.begin(), path2.end());
+    HANDLE hFind = ::FindFirstFile(path3.c_str(), &fd);
+    
     if (hFind != INVALID_HANDLE_VALUE) 
     {
-		do 
+        do 
         {
-			//	if (!(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) 
-			{
-				std::wstring filename1 = fd.cFileName;
-				std::string filename2(filename1.begin(), filename1.end());
+            //    if (!(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) 
+            {
+                std::wstring filename1 = fd.cFileName;
+                std::string filename2(filename1.begin(), filename1.end());
 
                 if (filename2.find(prefix) == 0)
-				{
-					filenames.push_back(filename2);
-				}
-			}
-		} while (::FindNextFile(hFind, &fd));
+                {
+                    filenames.push_back(filename2);
+                }
+            }
+        } while (::FindNextFile(hFind, &fd));
 
         ::FindClose(hFind);
-	}
+    }
 }
 
 
 inline bool file_exists(const std::string &filename)
 {
-	std::wstring filename2(filename.begin(), filename.end());
-	DWORD dwAttrib = GetFileAttributes(filename2.c_str());
+    std::wstring filename2(filename.begin(), filename.end());
+    DWORD dwAttrib = GetFileAttributes(filename2.c_str());
     
-	return (dwAttrib != INVALID_FILE_ATTRIBUTES && !(dwAttrib & FILE_ATTRIBUTE_DIRECTORY));
+    return (dwAttrib != INVALID_FILE_ATTRIBUTES && !(dwAttrib & FILE_ATTRIBUTE_DIRECTORY));
 }
 
 #else
@@ -86,15 +86,15 @@ inline bool file_exists(const std::string &filename)
 
 inline std::string to_win_path(std::string path)
 {
-	for (int i = 0; i < path.size(); i++)
-	{
-		if (path[i] == '/')
-		{
-			path[i] = '\\';
-		}
-	}
+    for (int i = 0; i < path.size(); i++)
+    {
+        if (path[i] == '/')
+        {
+            path[i] = '\\';
+        }
+    }
 
-	return path;
+    return path;
 }
 
 // Good reference:
@@ -102,16 +102,16 @@ inline std::string to_win_path(std::string path)
 
 inline int read_file(const std::string &filename, std::vector<char> &buf, bool add_null = false)
 {
-	buf.clear();
-	std::ifstream file(filename, std::ios::binary | std::ios::ate);
+    buf.clear();
+    std::ifstream file(filename, std::ios::binary | std::ios::ate);
 
     if (!file.is_open())
-	{
-		return -1;
-	}
+    {
+        return -1;
+    }
 
-	std::streamsize len = file.tellg();
-	file.seekg(0, std::ios::beg);
+    std::streamsize len = file.tellg();
+    file.seekg(0, std::ios::beg);
     
     if(add_null)
     {
@@ -124,7 +124,7 @@ inline int read_file(const std::string &filename, std::vector<char> &buf, bool a
         buf.resize(len);
         file.read(buf.data(), len);
     }
-	return 0;
+    return 0;
 }
 
 }
