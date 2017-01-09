@@ -61,38 +61,38 @@ int get_flags(std::map<string, int>         flag_defs,
         {
             if (AP_DOUBLE_DASH == state)
             {
-                std::string f;
-                size_t eq_pos = arg.find("=");
+                std::string flag;
+                size_t equals_pos = arg.find("=");
 
-                if (eq_pos == std::string::npos)
+                if (equals_pos == std::string::npos)
                 {
-                    f = arg.substr(i);
+                    flag = arg.substr(i);
                     
-                    if (!flag_defs.count(f))
+                    if (!flag_defs.count(flag))
                     {
                         last_flag.clear();
                         return AP_UNKNOWN_FLAG;
                     }
 
-                    flags[f];
-                    last_flag = f;
-                    state = flag_defs[f];
+                    flags[flag];
+                    last_flag = flag;
+                    state = flag_defs[flag];
                     return state;
                 }
                 else
                 {
-                    f = arg.substr(i, eq_pos - i);
+                    flag = arg.substr(i, equals_pos - i);
 
-                    if (!flag_defs.count(f))
+                    if (!flag_defs.count(flag))
                     {
                         last_flag.clear();
                         return AP_UNKNOWN_FLAG;
                     }
 
-                    if (arg.size() - 1 > eq_pos)
-                        flags[f] = arg.substr(eq_pos + 1);
+                    if (arg.size() - 1 > equals_pos)
+                        flags[flag] = arg.substr(equals_pos + 1);
                     else
-                        flags[f];
+                        flags[flag];
 
                     last_flag = "";
                     return AP_NO_ARG;
@@ -113,19 +113,19 @@ int get_flags(std::map<string, int>         flag_defs,
                 }
                 else
                 {
-                    std::string f;
-                    f += arg[i];
+                    std::string flag;
+                    flag += arg[i];
 
-                    if (!flag_defs.count(f))
+                    if (!flag_defs.count(flag))
                     {
                         last_flag.clear();
                         return AP_UNKNOWN_FLAG;
                     }
                     else
                     {
-                        flags[f]; // Enter a place holder
-                        state = flag_defs[f];
-                        last_flag = f;
+                        flags[flag]; // Enter a place holder
+                        state = flag_defs[flag];
+                        last_flag = flag;
                     }
                 }
             }
