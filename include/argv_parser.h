@@ -39,10 +39,8 @@ SOFTWARE.
 #define AP_DOUBLE_DASH    7
 #define AP_VERIFY_ERROR   8
 
-
 namespace bravo
 {
-    
 extern const char *ap_strings[];
 
 int get_flags(std::map<std::string, int>                flag_defs,
@@ -54,7 +52,6 @@ int get_flags(int argc, const char *argv[],
                 std::map<std::string, int>              flag_defs,
                 std::map<std::string, std::string> &    flags,
                 int &                                   index);
-
 
 class argv_parser
 {
@@ -88,9 +85,7 @@ public:
             error_string_ = std::string("error: ") + ap_strings[state];
 
             if (index < argc)
-            {
                 error_string_ += std::string(", ") + argv[index];
-            }
 
             error_ = state;
         }
@@ -111,21 +106,21 @@ public:
         return parse_(argc, argv, flags, args);
     }
     
-    inline int error() { return error_; }
-
     inline std::string usage() { return usage_; }
     
     inline std::string error_msg()
     {
         return error_string_ + "\n" + usage_;
     }
+    
+    inline int error() { return error_; }
 
     inline bool verbose() { return verbose_; }
     
 protected:
     
-    std::string error_string_;
     std::string usage_;
+    std::string error_string_;
     int         error_;
     bool        verbose_;
     std::map<std::string, int>          flag_defs;

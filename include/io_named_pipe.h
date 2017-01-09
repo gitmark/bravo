@@ -26,11 +26,9 @@
 #define IO_NAMED_PIPE_H_
 
 #ifdef _WIN32
-#include <windows.h> 
-
+#include <windows.h>
 #include <string>
 #include <vector>
-
 #include <bravo/io_stream.h>
 
 #define OVERLAPPED_BUFSIZE 4096
@@ -39,13 +37,11 @@
 // https://msdn.microsoft.com/en-us/library/windows/desktop/aa365592(v=vs.85).aspx
 // https://msdn.microsoft.com/en-us/library/windows/desktop/aa365603(v=vs.85).aspx
 
-
 namespace bravo
 {
     // overlapped_data encapsulates the OVERLAPPED structure. Three instances of overlapped_data
     // will be used with a single io_named_pipe instance. One for read, one for write and one
     // for connect.
-    
     class overlapped_data
     {
     public:
@@ -78,35 +74,22 @@ namespace bravo
         bool        timed_out;
     };
 
-
     class io_named_pipe : bravo::io_stream
     {
     public:
         
-        io_named_pipe(HANDLE h = INVALID_HANDLE_VALUE)
-        {
-            handle = h;
-        }
-
-        
-        void set_handle(HANDLE h = INVALID_HANDLE_VALUE)
-        {
-            handle = h;
-        }
-
+        io_named_pipe(HANDLE h = INVALID_HANDLE_VALUE) { handle = h; }
+        void set_handle(HANDLE h = INVALID_HANDLE_VALUE) { handle = h; }
         
         void detach_handle()
         {
             if (INVALID_HANDLE_VALUE == handle)
-            {
                 return;
-            }
 
             cancel_pending_io();
             handle = INVALID_HANDLE_VALUE;
         }
 
-        
         int listen()
         {
             // Connect named pipe
@@ -123,14 +106,9 @@ namespace bravo
                 int errnum = GetLastError();
 
                 if (ERROR_IO_PENDING == errnum || ERROR_PIPE_LISTENING == errnum)
-                {
                     connect_info.pending = true;
-                }
                 else if (ERROR_PIPE_CONNECTED == errnum)
-                {
-                    // Already connected
-                    connect_info.pending = false;
-                }
+                    connect_info.pending = false;  // Already connected
                 else
                 {
                     CloseHandle(handle);
@@ -140,7 +118,6 @@ namespace bravo
             
             return 0;
         }
-
         
         int listen(const std::string &pipe_name, int instances = 1)
         {
@@ -148,7 +125,6 @@ namespace bravo
             saAttr.nLength              = sizeof(SECURITY_ATTRIBUTES);
             saAttr.bInheritHandle       = TRUE;
             saAttr.lpSecurityDescriptor = NULL;
-
             std::wstring wname(pipe_name.begin(), pipe_name.end());
             
             // Create named pipe
@@ -223,14 +199,11 @@ namespace bravo
 
             return 0;
         }
-
         
         void cancel_pending_io()
         {
             if (INVALID_HANDLE_VALUE == handle)
-            {
                 return;
-            }
 
             if (connect_info.pending)
             {
@@ -271,7 +244,6 @@ namespace bravo
                 write_info.pending = false;
             }
         }
-
         
         int close()
         {
@@ -280,26 +252,21 @@ namespace bravo
             handle = INVALID_HANDLE_VALUE;
             return 0;
         }
-
         
         virtual ~io_named_pipe()
         {
             close();
         }
 
-        
         int flush()
         {
             if (INVALID_HANDLE_VALUE == handle)
-            {
                 return -1;
-            }
 
             FlushFileBuffers(handle);
             return 0;
         }
 
-        
         int read(char *read_buf, int requested_count, int timeout = -1)
         {
             // Check internal state
@@ -323,10 +290,7 @@ namespace bravo
             {
                 // If timeout == 0 the caller doesn't want to wait, thus return now because the connection is pending.
                 if (timeout == 0)
-                {
-                    // Timed out, not an error
-                    return 0;
-                }
+                    return 0; // Timed out, not an error
                 
                 // If we reach this point, we know that timeout is non-zero
                 if (timeout < 0)
@@ -353,7 +317,6 @@ namespace bravo
                 // If we reach this point we know that WaitForSingleObject() was successful
                 // and we are ready to call GetOverlappedResult()
                 DWORD transfer_count = 0;
-                
                 BOOL overlapped_result = GetOverlappedResult(
                     handle,
                     &connect_info.overlapped,
@@ -364,7 +327,6 @@ namespace bravo
                 {
                     // Successful connect
                     connect_info.pending = false;
-                    
                     // Fall through and call ReadFile()
                 }
                 else
@@ -392,7 +354,6 @@ namespace bravo
             if (read_info.remaining_count > 0)
             {
                 attempted = std::min(remaining, read_info.remaining_count);
- 
                 memcpy(buf, read_info.current, attempted);
                 read_info.remaining_count -= attempted;
                 read_info.current += attempted;
@@ -415,7 +376,6 @@ namespace bravo
                 if (!read_info.pending)
                 {
                     // At this point we know that read_info is empty so we are free to set it up.
-                    
                     attempted = std::min(remaining, OVERLAPPED_BUFSIZE);
                     read_info.requested_transfer_count = attempted;
                     read_info.actual_transfer_count = 0;
@@ -434,7 +394,6 @@ namespace bravo
                         {
                             read_info.remaining_count = read_info.actual_transfer_count;
                             attempted = std::min(remaining, read_info.remaining_count);
-                            
                             memcpy(buf, read_info.current, attempted);
                             read_info.remaining_count -= attempted;
                             read_info.current += attempted;
@@ -486,9 +445,7 @@ namespace bravo
                 }
                 
                 if (timeout < 0)
-                {
                     timeout = INFINITE;
-                }
 
                 DWORD wait_result = WaitForSingleObject(read_info.overlapped.hEvent, timeout);
 
@@ -512,7 +469,6 @@ namespace bravo
                         {
                             read_info.remaining_count = read_info.actual_transfer_count;
                             attempted = std::min(remaining, read_info.remaining_count);
-                            
                             memcpy(buf, read_info.current, attempted);
                             read_info.remaining_count -= attempted;
                             read_info.current += attempted;
@@ -560,7 +516,6 @@ namespace bravo
             // Should never actually reach this point
             return 0;
         }
-
         
         int write(const char *write_buf, int requested_count, int timeout = -1)
         {
@@ -585,10 +540,7 @@ namespace bravo
             {
                 // If timeout == 0 the caller doesn't want to wait, thus return now because the connection is pending.
                 if (timeout == 0)
-                {
-                    // Timed out, not an error
-                    return 0;
-                }
+                    return 0; // Timed out, not an error
                 
                 // If we reach this point, we know that timeout is non-zero
                 if (timeout < 0)
@@ -626,13 +578,11 @@ namespace bravo
                 {
                     // Successful connect
                     connect_info.pending = false;
-                    
                     // Fall through and call WriteFile()
                 }
                 else
                 {
                     int errnum = GetLastError();
-                    
                     if (ERROR_IO_PENDING == errnum || ERROR_PIPE_LISTENING == errnum || ERROR_IO_INCOMPLETE == errnum)
                     {
                         // Timed out, not an error
@@ -652,20 +602,16 @@ namespace bravo
             // 2) We wrote the full count the caller requested, remaining == 0 and write_info.requested_count == 0
             // 3) We timed out
             // 4) We wrote 0 bytes with no error
-            
             while(1)
             {
                 // If we reach this point, we know we still need to write data.
-                
                 if (!write_info.pending)
                 {
                     // Because write data is not pending, we know that write_info.remaining_count is valid.
- 
                     // If there is space remaining at the end of the buffer ...
                     if (write_info.remaining_count > 0)
                     {
                         attempted = std::min(remaining, write_info.remaining_count);
-                        
                         memcpy(write_info.current, buf, attempted);
                         write_info.remaining_count -= attempted;
                         write_info.current += attempted;
@@ -675,7 +621,6 @@ namespace bravo
                     
                     write_info.requested_transfer_count = write_info.current - write_info.buf;
                     write_info.actual_transfer_count = 0;
-                    
                     BOOL write_result = WriteFile(handle,
                                                 write_info.buf,
                                                 write_info.requested_transfer_count,
@@ -734,22 +679,16 @@ namespace bravo
                 // If we reach this point we know that data is pending
                 // If timeout == 0, the caller doesn't want to wait, thus return now because data is pending.
                 if (timeout == 0)
-                {
-                    // Timed out, not an error
-                    return buf - write_buf;
-                }
+                    return buf - write_buf; // Timed out, not an error
                 
                 if (timeout < 0)
-                {
                     timeout = INFINITE;
-                }
                 
                 DWORD wait_result = WaitForSingleObject(write_info.overlapped.hEvent, timeout);
                 
                 if (WAIT_OBJECT_0 == wait_result)
                 {
                     write_info.actual_transfer_count = 0;
-
                     BOOL overlapped_result = GetOverlappedResult(
                                                                  handle,
                                                                  &write_info.overlapped,
@@ -759,7 +698,6 @@ namespace bravo
                     if (overlapped_result)
                     {
                         write_info.pending = false;
-                        
                         int delta = write_info.requested_transfer_count - write_info.actual_transfer_count;
                         
                         if (delta)
@@ -813,18 +751,15 @@ namespace bravo
             return 0;
         }
 
-
         overlapped_data connect_info;
         overlapped_data write_info;
         overlapped_data read_info;
         HANDLE          handle;
     };
 
-
     // Good references:
     // http://stackoverflow.com/questions/1672677/print-a-guid-variable
     // http://stackoverflow.com/questions/18555306/convert-guid-structure-to-lpcstr
-    
     
     inline std::string new_guid()
     {
@@ -832,7 +767,6 @@ namespace bravo
         ::CoCreateGuid(&guid_struct);
         OLECHAR olechar_guid[40] = { 0 };
         int nCount = ::StringFromGUID2(guid_struct, olechar_guid, 40);
-        
         char guid_buf[1024];
         char *dst = guid_buf;
         OLECHAR *src = olechar_guid;
@@ -857,7 +791,6 @@ namespace bravo
 
         return guid_buf;
     }
-
     
     inline void new_guids(std::vector<std::string> &guids, int count)
     {
@@ -871,7 +804,6 @@ namespace bravo
         
         ::CoUninitialize();
     }
-
     
     inline void new_pipe_names(std::vector<std::string> &pipe_names, const std::string &prefix, int count)
     {
@@ -886,7 +818,6 @@ namespace bravo
             pipe_names.push_back(name);
         }
     }
-
     
     BOOL CreatePipe2(HANDLE *read_handle, HANDLE *write_handle)
     {

@@ -30,7 +30,6 @@
 
 namespace bravo
 {
-
 class io_stream
 {
 public:
@@ -52,7 +51,6 @@ public:
     virtual int     timeout         () { return -1; }
 };
 
-    
 class io_end : public io_stream
 {
 public:
@@ -79,16 +77,13 @@ public:
         if (in->closed())
         {
             if (!out->closed())
-            {
                 out->close();
-            }
-                
+            
             return true;
         }
         else if (out->closed())
         {
-            in->close();
-                
+            in->close();                
             return true;
         }
             

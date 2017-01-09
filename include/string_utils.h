@@ -30,9 +30,7 @@
 #include <sstream>
 #include <map>
 #include <deque>
-
 #include <bravo/io_stream.h>
-
 
 static int char_types[] = {
 //  0           4           8 9 A B     C D E F
@@ -57,10 +55,8 @@ static int char_types[] = {
     0,0,0,0,    0,0,0,0,    0,0,0,0,    0,0,0,0
 };
 
-
 namespace bravo
 {
-    
     inline void chomp(std::string &str)
     {
         if(!str.size())
@@ -81,7 +77,6 @@ namespace bravo
         }
     }
     
-
     inline std::string trim(const std::string &str)
     {
         if (!str.size())
@@ -103,7 +98,6 @@ namespace bravo
         return move(str.substr(start, stop - start + 1));
     }
     
-
     inline std::string trim_left(const std::string &str)
     {
         if (!str.size())
@@ -120,7 +114,6 @@ namespace bravo
         return move(str.substr(start));
     }
     
-
     inline std::string trim_right(const std::string &str)
     {
         if (!str.size())
@@ -137,7 +130,6 @@ namespace bravo
         return move(str.substr(0, stop + 1));
     }
     
-
     template<class T>
     void split(const std::string &str, char delim, T &vec)
     {
@@ -153,6 +145,7 @@ namespace bravo
         while(start < str.size())
         {
             stop = str.find(delim, start);
+            
             if (stop == std::string::npos)
                 stop = str.size();
         
@@ -166,7 +159,6 @@ namespace bravo
     
         return;
     }
-
 
     template<class T>
     void to_stream(const T &vec, std::ostream &os)
@@ -182,7 +174,6 @@ namespace bravo
             ++i;
         }
     }
-
 
     template<class T>
     std::string to_string(const std::vector<T> &vec)
@@ -202,11 +193,9 @@ namespace bravo
         return ss.str();
     }
 
-
     inline void split(const std::string &str, const std::string &delim, std::vector<std::string> &vec)
     {
         vec.clear();
-        
         int len = 0;
         int delim_pos = 0;
         int token_pos = 0;
@@ -214,40 +203,30 @@ namespace bravo
         do
         {
             if (token_pos == str.size())
-            {
                 delim_pos = (int)str.size();
-            }
             else
             {
                 delim_pos = (int)str.find_first_of(delim, token_pos);
                 
                 if (delim_pos == std::string::npos)
-                {
                     delim_pos = (int)str.size();
-                }
             }
 
             len = delim_pos - token_pos;
             
             if (len)
-            {
                 vec.push_back(str.substr(token_pos, len));
-            }
             else
-            {
                 vec.push_back("");
-            }
             
             token_pos = delim_pos + 1;
             
         } while (delim_pos < (int)str.size());
     }
     
-
     inline int get_line(io_stream &is, std::string &line, int timeout = -1, int max_length = 512)
     {
         // max_length doesn't include crlf or a null terminator
-        
         if (max_length < 0)
         {
             line.clear();
@@ -269,38 +248,25 @@ namespace bravo
         for (; ptr != end; ++ptr)
         {
             if (is.closed())
-            {
                 break;
-            }
             
             int read_count = is.read(ptr, 1, timeout);
 
             if (read_count != 1)
-            {
                 break;
-            }
 
             if (*ptr == '\r')
-            {
                 *ptr = 0;
-            }
             else if (*ptr == '\n')
-            {
                 break;
-            }
             else if (!*ptr)
-            {
                 break;
-            }
         }
 
         *ptr = 0;
-        
         line = buf.data();
-
         return (int)(end - buf.data());
     }
-
 
     inline int parse_header(const std::string &line, std::string &name, std::string &val)
     {
@@ -333,7 +299,6 @@ namespace bravo
         return 0;
     }
 
-
     inline int read_all_headers(io_stream &is, std::map<std::string, std::string> &headers, int timeout = -1)
     {
         headers.clear();
@@ -349,9 +314,7 @@ namespace bravo
             len = get_line(is, line, timeout);
 
             if (len == 0)
-            {
                 break;
-            }
             else if (len < 0)
             {
                 headers.clear();
@@ -359,7 +322,6 @@ namespace bravo
             }
             
             total += len;
-
             rc = parse_header(line, name, val);
             
             if (rc < 0)
@@ -369,18 +331,13 @@ namespace bravo
             }
 
             if (headers.count(name))
-            {
                 headers[name] += "," + val;
-            }
             else
-            {
                 headers[name] = val;
-            }
         }
 
         return total;
     }
-
 
     inline int read_all_headers(std::istream &is, std::map<std::string, std::string> &headers)
     {
@@ -399,9 +356,7 @@ namespace bravo
             chomp(line);
             
             if (len == 0)
-            {
                 break;
-            }
             else if (len < 0)
             {
                 headers.clear();
@@ -409,7 +364,6 @@ namespace bravo
             }
             
             total += len;
-            
             rc = parse_header(line, name, val);
             
             if (rc < 0)
@@ -419,44 +373,32 @@ namespace bravo
             }
             
             if (headers.count(name))
-            {
                 headers[name] += "," + val;
-            }
             else
-            {
                 headers[name] = val;
-            }
         }
         
         return total;
     }
     
-
     inline std::string get_path_end(const std::string &path, int count = 1)
     {
         if (!path.size())
-        {
             return "";
-        }
 
         std::vector<std::string> parts;
         split(path, "\\/", parts);
-
         int start = (int)parts.size() - count;
 
         if (start < 0)
-        {
             start = 0;
-        }
 
         std::string result;
 
         for (int i = start; i < (int)parts.size(); ++i)
         {
             if (i > start)
-            {
                 result += "/";
-            }
 
             result += parts[i];
         }
@@ -464,38 +406,28 @@ namespace bravo
         return result;
     }
 
-
     inline std::string get_filename(const std::string &path)
     {
         if (!path.size())
-        {
             return "";
-        }
 
         size_t slash_stop = path.find_last_of("\\/");
 
         if (slash_stop == path.size() - 1)
-        {
             return "";
-        }
 
         if (slash_stop == std::string::npos)
-        {
             return path;
-        }
 
         return path.substr(slash_stop + 1);
     }
     
-
     inline int find_positions(std::string &text, const std::string &find_string, std::vector<size_t> &pos)
     {
         pos.clear();
         
         if (!text.size())
-        {
             return 0;
-        }
         
         size_t start = 0;
         size_t f = 0;
@@ -505,36 +437,27 @@ namespace bravo
             f = text.find(find_string, start);
             
             if (f == std::string::npos)
-            {
                 return 0;
-            }
             
             pos.push_back(f);
-            
             start = f + find_string.size();
             
             if (start >= text.size())
-            {
                 return 0;
-            }
         }
         
         return 0;
     }
     
-
     inline int replace_all(std::string &text, const std::map<std::string, std::string> &replace_map)
     {
         if (!text.size())
-        {
             return -1;
-        }
         
         if(!replace_map.size())
             return 0;
         
         std::map<size_t, int> pos_to_string;
-        
         std::vector<std::map<std::string, std::string>::const_iterator> index_to_iterator;
         
         for (auto it = replace_map.begin(); it != replace_map.end(); ++it)
@@ -543,9 +466,7 @@ namespace bravo
             find_positions(text, it->first, pos);
             
             for (auto p : pos)
-            {
                 pos_to_string[p] = (int)index_to_iterator.size();
-            }
             
             index_to_iterator.push_back(it);
         }
@@ -560,7 +481,6 @@ namespace bravo
             pos = pair1.first;
             len = pos - start;
             ss << text.substr(start, len);
-            
             ss << index_to_iterator[pair1.second]->second;
             start = pos + index_to_iterator[pair1.second]->first.size();
         }
@@ -570,7 +490,6 @@ namespace bravo
         return 0;
     }
     
-
     inline std::string escape(const std::string &str)
     {
         std::map<std::string, std::string> m;

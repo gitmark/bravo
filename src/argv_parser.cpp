@@ -28,7 +28,6 @@ using namespace std;
 
 namespace bravo
 {
-    
 const char *ap_strings[] = {
     "AP_SUCCESS",
     "AP_NO_ARG",
@@ -39,7 +38,6 @@ const char *ap_strings[] = {
     "AP_SINGLE_DASH",
     "AP_DOUBLE_DASH",
     "AP_VERIFY_ERROR" };
-
 
 int get_flags(std::map<string, int>         flag_defs,
                 const std::string &         arg,
@@ -108,9 +106,7 @@ int get_flags(std::map<string, int>         flag_defs,
                 char ch = arg[i];
 
                 if (ch == '-')
-                {
                     state = AP_DOUBLE_DASH;
-                }
                 else
                 {
                     std::string flag;
@@ -135,7 +131,6 @@ int get_flags(std::map<string, int>         flag_defs,
     return state;
 }
 
-
 int get_flags(int argc, const char *argv[],
               std::map<string, int>         flag_defs,
               std::map<string, string> &    flag_vals,
@@ -147,7 +142,6 @@ int get_flags(int argc, const char *argv[],
 
     // The value of i when this for loop exits is important. i is assigned to index which the caller may use.
     // index indicates the location of the first parameter after the flags.
-    
     for (; i < argc; ++i)
     {
         // Double dash indicates there are no more flags
@@ -160,9 +154,7 @@ int get_flags(int argc, const char *argv[],
             state = AP_NO_ARG;
         }
         else
-        {
             state = get_flags(flag_defs, argv[i], flag_vals, last_flag);
-        }
 
         // A single dash by itself is treated as an argument and indicates that standard io should be used.
         if (state == AP_NOT_A_FLAG || state == AP_UNKNOWN_FLAG || state == AP_SINGLE_DASH)
