@@ -31,11 +31,15 @@
 
 #ifndef _WIN32
 #include <unistd.h>
+namespace bravo
+{
 #endif
 
 #ifdef _WIN32
 #include <Windows.h>
 
+namespace bravo
+{
 inline void read_dir(const std::string &path, const std::string &prefix, std::vector<std::string> &filenames)
 {
     WIN32_FIND_DATA fd;

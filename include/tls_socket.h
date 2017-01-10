@@ -49,6 +49,10 @@ void set_server_cert_file(const std::string &server_cert_file);
 void set_server_key_file(const std::string &server_key_file);
 void set_client_ca_file(const std::string &client_ca_file);
     
+std::string server_cert_file();
+std::string server_key_file();
+std::string client_ca_file();
+
 class tls_init_t
 {
 public:

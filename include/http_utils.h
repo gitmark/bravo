@@ -46,25 +46,25 @@ public:
 };
 
 int write_headers           (base_socket  *s,   const std::map<std::string, std::string> &headers,
-                             int timeout = base_socket::default_timeout);
+                             int timeout = base_socket::default_timeout_);
 int write_headers           (std::ostream &s,   const std::map<std::string, std::string> &headers);
 int read_all_headers        (base_socket  *s,   std::map<std::string, std::string> &headers,
-                             int timeout = base_socket::default_timeout);
-int read_chunk_length       (base_socket  *s,   int &len, int timeout = base_socket::default_timeout);
+                             int timeout = base_socket::default_timeout_);
+int read_chunk_length       (base_socket  *s,   int &len, int timeout = base_socket::default_timeout_);
 int read_chunk_length       (std::istream &s,   int &len);
-int read_fixed_length_string(base_socket  *s,   std::string &str, int len, int timeout = base_socket::default_timeout);
+int read_fixed_length_string(base_socket  *s,   std::string &str, int len, int timeout = base_socket::default_timeout_);
 int read_fixed_length_string(std::istream &s,   std::string &str, int len);
-int read_chunked_content    (base_socket  *s,   std::string &str, int timeout = base_socket::default_timeout);
+int read_chunked_content    (base_socket  *s,   std::string &str, int timeout = base_socket::default_timeout_);
 int read_chunked_content    (std::istream &s,   std::string &str);
-int write_chunk_length      (base_socket  *s,   int len, int timeout = base_socket::default_timeout);
+int write_chunk_length      (base_socket  *s,   int len, int timeout = base_socket::default_timeout_);
 int write_chunk_length      (std::ostream &s,   int len);
-int write_string            (base_socket  *s,   const std::string &str, int timeout = base_socket::default_timeout);
+int write_string            (base_socket  *s,   const std::string &str, int timeout = base_socket::default_timeout_);
 int write_string            (std::ostream &s,   const std::string &str);
-int write_chunk             (base_socket  *s,   const std::string &str, int timeout = base_socket::default_timeout);
+int write_chunk             (base_socket  *s,   const std::string &str, int timeout = base_socket::default_timeout_);
 int write_chunk             (std::ostream &s,   const std::string &str);
-int write_chunk             (base_socket  *s,   const std::vector<char> &buf, int timeout = base_socket::default_timeout);
+int write_chunk             (base_socket  *s,   const std::vector<char> &buf, int timeout = base_socket::default_timeout_);
 int write_chunk             (std::ostream &s,   const std::vector<char> &buf);
-int write_chunk             (base_socket  *s,   const char *buf, int count, int timeout = base_socket::default_timeout);
+int write_chunk             (base_socket  *s,   const char *buf, int count, int timeout = base_socket::default_timeout_);
 int write_chunk             (std::ostream &s,   const char *buf, int count);
 int parse_uri               (const std::string &uri, std::string &dir, std::string &sub_dir, std::string &filename,
                              std::string &params);

@@ -228,7 +228,7 @@ int http_message::write_to(std::ostream &s)
             if (content_length < 0 || content_length > MAX_CONTENT_LENGTH)
                 return -1;
 
-            headers["Content-Length"] = to_string(content_length);
+            headers["Content-Length"] = std::to_string(content_length);
         }
         else
         {

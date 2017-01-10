@@ -22,26 +22,39 @@
  SOFTWARE.
  *******************************************************************************/
 
-#ifndef dir_specs_h
-#define dir_specs_h
+#ifndef __SOCKET_UTILS_H__
+#define __SOCKET_UTILS_H__
 
-#include <string>
+#ifndef _WIN32
+#define SOCKET int
+#include <arpa/inet.h>
+namespace bravo
+{
+#else
+#include <winsock2.h>
+#include <ws2tcpip.h>
 
 namespace bravo
 {
-class dir_specs
-{
+class WinSockInitializer
+{//--------------------------------------------------------------------
 public:
-    enum dir_type {unknown, text, exec};
-
-    dir_specs(const std::string &name_ = "", dir_type type_ = text)
-    : name(name_), type(type_)
+    WinSockInitializer()
     {}
-    
-    std::string name;
-    dir_type    type;
+
+    ~WinSockInitializer()
+    {
+        WSACleanup();
+    }
+
+    WSAData wsaData;
 };
+
+#endif
+
+int safe_close(SOCKET s);
 
 }
 
-#endif
+#endif // __SOCKET_UTILS_H__
+

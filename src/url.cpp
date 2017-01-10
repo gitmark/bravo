@@ -83,13 +83,6 @@ int num_chars[256] = {
     O, O, O, O,    O, O, O, O,    O, O, O, O,    O, O, O, O
 };
 
-#undef C
-#undef S
-#undef F
-#undef A
-#undef O
-#undef N
-
 #define S_UNK    0
 #define S_PROT1  (S_UNK+1)
 #define S_PROT   (S_PROT1+1)
@@ -325,5 +318,12 @@ bool url::secure()
     
     return false;
 }
+
+#undef C
+#undef S
+#undef F
+#undef A
+#undef O
+#undef N
 
 

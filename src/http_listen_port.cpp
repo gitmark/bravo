@@ -28,6 +28,7 @@
 
 #include <fcntl.h>
 #include <sstream>
+#include <string>
 #include <bravo/http_listen_port.h>
 #include <bravo/dir_utils.h>
 #include <bravo/string_utils.h>
@@ -162,7 +163,7 @@ int http_listen_port::build_response(http_message &request, http_message &respon
         if (distro_name.size())
             not_found += "(" + distro_name + ") ";
         
-        not_found += "Server at localhost Port " + to_string(port_) + "</address>"
+        not_found += "Server at localhost Port " + std::to_string(port_) + "</address>"
                     "</body></html>";
         response.content = not_found;
     }
@@ -190,7 +191,7 @@ int http_listen_port::build_response(http_message &request, http_message &respon
     if (keep_alive_max > 1)
     {
         string val = "timeout=";
-        val += to_string(timeout_ / 1000) + ", max=" + to_string(keep_alive_max);
+        val += std::to_string(timeout_ / 1000) + ", max=" + std::to_string(keep_alive_max);
         response.headers["Keep-Alive"] = val;
         response.headers["Connection"] = "Keep-Alive";
     }

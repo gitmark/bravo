@@ -22,26 +22,36 @@
  SOFTWARE.
  *******************************************************************************/
 
-#ifndef dir_specs_h
-#define dir_specs_h
+#include <bravo/socket_utils.h>
 
-#include <string>
+using namespace bravo;
 
-namespace bravo
+#define CLOSE_BUF_SIZE 1024
+
+#ifndef _WIN32
+#include <unistd.h>
+#define closesocket close
+#define SD_SEND SHUT_RDWR
+#define SOCKET_ERROR -1
+#endif
+
+int safe_close(SOCKET s)
 {
-class dir_specs
-{
-public:
-    enum dir_type {unknown, text, exec};
-
-    dir_specs(const std::string &name_ = "", dir_type type_ = text)
-    : name(name_), type(type_)
-    {}
+    // Closing sockets gracefully per Microsoft documentaion.
+    // https://msdn.microsoft.com/en-us/library/windows/desktop/ms738547(v=vs.85).aspx
     
-    std::string name;
-    dir_type    type;
-};
+    char closeBuf[CLOSE_BUF_SIZE];
+    size_t readCount = 1;
+    shutdown(s, SD_SEND);
 
+    while (readCount != 0 && readCount != SOCKET_ERROR)
+    {
+        readCount = recv(s, closeBuf, CLOSE_BUF_SIZE, 0);
+    }
+
+    closesocket(s);
+    return 0;
 }
 
-#endif
+
+

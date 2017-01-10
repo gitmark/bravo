@@ -22,26 +22,58 @@
  SOFTWARE.
  *******************************************************************************/
 
-#ifndef dir_specs_h
-#define dir_specs_h
+#ifndef ssl_socket_h_
+#define ssl_socket_h_
 
 #include <string>
 
+#ifndef _WIN32
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdocumentation"
+#endif
+
+#include <openssl/ssl.h>
+
+#ifndef _WIN32
+#pragma clang pop
+#define SOCKET int
+#endif
+
+#include <bravo/norm_socket.h>
+
 namespace bravo
 {
-class dir_specs
+class ssl_init_t
 {
 public:
-    enum dir_type {unknown, text, exec};
-
-    dir_specs(const std::string &name_ = "", dir_type type_ = text)
-    : name(name_), type(type_)
-    {}
+    ssl_init_t();
+    virtual ~ssl_init_t();
     
-    std::string name;
-    dir_type    type;
+    BIO *outbio;
+    SSL_CTX *client_ctx;
+    SSL_CTX *server_ctx;
+};
+
+class ssl_socket : public norm_socket
+{
+public:
+    ssl_socket();
+    ssl_socket(SOCKET s, const std::string & cert_file = "", const std::string &key_file = "");
+    virtual         ~ssl_socket ();
+    
+    virtual int     read_       (char *buf, int count);
+    virtual int     write_      (const char *buf, int count);
+    virtual int     init        ();
+    virtual int     close       ();
+    virtual int     safe_ssl_handshake(bool input = true, int timeout = default_timeout_);
+    
+private:
+    std::string cert_file_;
+    std::string key_file_;
+    SSL* ssl;
 };
 
 }
 
-#endif
+#endif // ssl_socket_h_
+

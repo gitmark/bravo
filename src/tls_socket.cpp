@@ -66,6 +66,21 @@ void set_client_ca_file(const std::string &client_ca_file)
     client_ca_file_ = client_ca_file;
 }
 
+std::string server_cert_file()
+{
+    return server_cert_file_;
+}
+
+std::string server_key_file()
+{
+    return server_key_file_;
+}
+
+std::string client_ca_file()
+{
+    return client_ca_file_;
+}
+
 static void locking_function(int mode, int n, const char *file, int line)
 {
     if(mode & CRYPTO_LOCK)

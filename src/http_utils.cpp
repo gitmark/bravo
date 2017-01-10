@@ -28,7 +28,8 @@
 #include <bravo/hex.h>
 
 using namespace std;
-using namespace bravo;
+namespace bravo
+{
 
 static int path_chars[] = {
 //  0           4           8 9 A B     C D E F
@@ -751,5 +752,5 @@ std::string get_file_ext(const std::string &filename)
     return filename.substr(pos + 1);
 }
 
-
+}
 

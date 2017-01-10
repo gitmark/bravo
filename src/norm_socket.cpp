@@ -70,7 +70,7 @@ norm_socket::norm_socket(SOCKET s)
     sock = s;
 }
 
-norm_socket::clear()
+void norm_socket::clear()
 {
     hostname.clear();
     port = 0;

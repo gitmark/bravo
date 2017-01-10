@@ -50,7 +50,7 @@ public:
     virtual int write_content               (http_message &request, http_message &response);
     void        add_dir                     (const std::string &dir, const std::string &actual_dir,
                                              dir_specs::dir_type type);
-    void        init()                      ();
+    void        init                        ();
     dir_specs::dir_type dir_type            (const std::string &dir);
     
     int             keep_alive_max;

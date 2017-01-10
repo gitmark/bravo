@@ -71,8 +71,8 @@ public:
         port_(port),
         stop_(true),
         running_(false),
-        timeout_(timeout)
-        secure_(secure),
+        timeout_(timeout),
+        secure_(secure)
     {}
 
     virtual ~base_listen_port()
