@@ -22,51 +22,14 @@
  SOFTWARE.
  *******************************************************************************/
 
-#ifndef vec_buf_h
-#define vec_buf_h
+#ifndef base_server_h
+#define base_server_h
 
-#include <vector>
-#include <deque>
-#include <memory>
-#include <mutex>
-
-namespace bravo
-{
-class vec_buf
+// Place holder
+class base_server
 {
 public:
-    vec_buf(int block_size = 4096, int timeout = 1000) :
-    read_index(0),
-    write_index(0),
-    block_size_(block_size),
-    timeout_(timeout),
-    error_(0)
-    {}
     
-    vec_buf(const std::vector<char> &vec, int block_size = 4096, int timeout = 1000);
-    
-    int     write       (const char *buf, int count);
-    int     read        (char *buf, int count);
-    int     read_to_vec (std::vector<char> &vec);
-    int     total_count ();
-    bool    eof         ();
-    std::vector<char> vec();
-    
-    inline int  error       () { return error_; }
-    inline void clear_error () { error_ = 0; }
-    inline int  timeout     () { return timeout_; }
-    inline void set_timeout (int timeout) { timeout_ = timeout; }
-    
-private:
-    volatile int            read_index;
-    volatile int            write_index;
-    const int               block_size_;
-    int                     timeout_;
-    int                     error_;
-    std::recursive_mutex    mtx;
-    std::deque<std::unique_ptr<std::vector<char>>> q;
 };
 
-}
-
-#endif /* vec_buf_h */
+#endif /* base_server_h */

@@ -22,51 +22,25 @@
  SOFTWARE.
  *******************************************************************************/
 
-#ifndef vec_buf_h
-#define vec_buf_h
+#include <bravo/base_socket.h>
 
-#include <vector>
-#include <deque>
-#include <memory>
-#include <mutex>
+using namespace bravo;
 
-namespace bravo
+std::string base_socket::error_string(socket_error e)
 {
-class vec_buf
-{
-public:
-    vec_buf(int block_size = 4096, int timeout = 1000) :
-    read_index(0),
-    write_index(0),
-    block_size_(block_size),
-    timeout_(timeout),
-    error_(0)
-    {}
-    
-    vec_buf(const std::vector<char> &vec, int block_size = 4096, int timeout = 1000);
-    
-    int     write       (const char *buf, int count);
-    int     read        (char *buf, int count);
-    int     read_to_vec (std::vector<char> &vec);
-    int     total_count ();
-    bool    eof         ();
-    std::vector<char> vec();
-    
-    inline int  error       () { return error_; }
-    inline void clear_error () { error_ = 0; }
-    inline int  timeout     () { return timeout_; }
-    inline void set_timeout (int timeout) { timeout_ = timeout; }
-    
-private:
-    volatile int            read_index;
-    volatile int            write_index;
-    const int               block_size_;
-    int                     timeout_;
-    int                     error_;
-    std::recursive_mutex    mtx;
-    std::deque<std::unique_ptr<std::vector<char>>> q;
-};
-
+    return error_string((int)e);
 }
 
-#endif /* vec_buf_h */
+std::string base_socket::error_string(int e)
+{
+    if(!e)
+        return socket_error_strings_[e];
+    
+    e -= error_start_;
+    
+    if (e < 1 && e >= ((int)socket_error::max_error - error_start_))
+        e = 0;
+    
+    return socket_error_strings_[e];
+}
+

@@ -22,51 +22,29 @@
  SOFTWARE.
  *******************************************************************************/
 
-#ifndef vec_buf_h
-#define vec_buf_h
+#ifndef content_types_h
+#define content_types_h
 
-#include <vector>
-#include <deque>
-#include <memory>
-#include <mutex>
+#include <map>
+#include <string>
 
 namespace bravo
 {
-class vec_buf
+struct name_val
 {
-public:
-    vec_buf(int block_size = 4096, int timeout = 1000) :
-    read_index(0),
-    write_index(0),
-    block_size_(block_size),
-    timeout_(timeout),
-    error_(0)
-    {}
-    
-    vec_buf(const std::vector<char> &vec, int block_size = 4096, int timeout = 1000);
-    
-    int     write       (const char *buf, int count);
-    int     read        (char *buf, int count);
-    int     read_to_vec (std::vector<char> &vec);
-    int     total_count ();
-    bool    eof         ();
-    std::vector<char> vec();
-    
-    inline int  error       () { return error_; }
-    inline void clear_error () { error_ = 0; }
-    inline int  timeout     () { return timeout_; }
-    inline void set_timeout (int timeout) { timeout_ = timeout; }
-    
-private:
-    volatile int            read_index;
-    volatile int            write_index;
-    const int               block_size_;
-    int                     timeout_;
-    int                     error_;
-    std::recursive_mutex    mtx;
-    std::deque<std::unique_ptr<std::vector<char>>> q;
+    const char* name;
+    const char* val;
+};
+
+extern name_val content_types_[];
+
+struct content_types_t
+{
+    content_types_t();
+    std::string get_type(const std::string &ext);
+    std::map<std::string,std::string> types;
 };
 
 }
 
-#endif /* vec_buf_h */
+#endif /* content_type_h */
