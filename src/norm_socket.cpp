@@ -155,7 +155,7 @@ int norm_socket::read(char *buf, int count, const char *end, int end_len, int ti
         cur_ += actual;
         remaining -= actual;
         
-        if (!remaining || mcount == end_len)
+        if (!remaining || (end_len && (mcount == end_len)))
             return actual;
     }
     
