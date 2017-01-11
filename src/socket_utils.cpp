@@ -24,8 +24,6 @@
 
 #include <bravo/socket_utils.h>
 
-using namespace bravo;
-
 #define CLOSE_BUF_SIZE 1024
 
 #ifndef _WIN32
@@ -35,6 +33,8 @@ using namespace bravo;
 #define SOCKET_ERROR -1
 #endif
 
+namespace bravo
+{
 int safe_close(SOCKET s)
 {
     // Closing sockets gracefully per Microsoft documentaion.
@@ -53,5 +53,5 @@ int safe_close(SOCKET s)
     return 0;
 }
 
-
+}
 

@@ -61,7 +61,7 @@ class norm_socket : public base_socket
         virtual int close   ();
         virtual bool closed ();
         virtual int set_no_delay();
-        virtual int init    () { initialized_ = true; return 0; }
+        virtual int init    ();
         virtual bool initialized() { return initialized_; }
         virtual void clear  ();
 

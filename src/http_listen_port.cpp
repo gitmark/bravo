@@ -37,11 +37,12 @@
 #include <bravo/io_named_pipe.h>
 
 using namespace std;
-using namespace bravo;
 
 // Good reference:
 //http://stackoverflow.com/questions/1547899/which-characters-make-a-url-invalid
 
+namespace bravo
+{ 
 http_listen_port::http_listen_port(unsigned short port, bool secure, int timeout) :
     base_listen_port(port, secure, timeout)
 {
@@ -76,20 +77,24 @@ void http_listen_port::add_dir(const std::string &dir, const std::string &actual
 
 int http_listen_port::process_connection(std::shared_ptr<socket_task> &task)
 {
+    socket_stream ss(task->sock_.get());
+
     while (!task->stop_)
     {
         http_message request;
-        int rc = request.read_from(task->sock_.get());
+        int rc = request.read_from(ss);
         
         if (rc <= 0)
             break;
 
-        rc = process_http_request(request);
+        rc = process_http_request(ss, request);
 
-        if (rc || request.sock->closed())
+        ss.flush();
+        if (rc || task->sock_->closed())
             break;
     }
 
+    ss.flush();
     return 0;
 }
 
@@ -201,7 +206,7 @@ int http_listen_port::build_response(http_message &request, http_message &respon
     return 0;
 }
 
-int http_listen_port::process_http_request(http_message &request)
+int http_listen_port::process_http_request(std::ostream &os, http_message &request)
 {
     http_message response;
     
@@ -210,7 +215,7 @@ int http_listen_port::process_http_request(http_message &request)
 
     if (response.status == "404 Not Found")
     {
-        if (response.write_to(response.sock) < 0)
+        if (response.write_to(os) < 0)
             return -1;
     }
     else
@@ -218,10 +223,10 @@ int http_listen_port::process_http_request(http_message &request)
         switch(response.type)
         {
             case dir_specs::exec:
-                return process_http_exec_request(request, response);
+                return process_http_exec_request(os, request, response);
                 
             case dir_specs::text:
-                return process_http_file_request(request, response);
+                return process_http_file_request(os, request, response);
                 
             default:
             case dir_specs::unknown:
@@ -235,7 +240,7 @@ int http_listen_port::process_http_request(http_message &request)
 // Good reference:
 // http://stackoverflow.com/questions/19598326/easiest-way-to-execute-linux-program-and-communicate-with-it-via-stdin-stdout-in
 
-int http_listen_port::process_http_exec_request(http_message &request, http_message &response)
+int http_listen_port::process_http_exec_request(std::ostream &os, http_message &request, http_message &response)
 {
     // Write response headers.
     if (response.write_to(request.sock) < 0)
@@ -471,7 +476,7 @@ int http_listen_port::process_http_exec_request(http_message &request, http_mess
     return 0;
 }
 
-int http_listen_port::write_content(http_message &request, http_message &response)
+int http_listen_port::write_content(std::ostream &os, http_message &request, http_message &response)
 {
     vector<char> buf;
     
@@ -485,10 +490,10 @@ int http_listen_port::write_content(http_message &request, http_message &respons
         text = buf.data();
         generate_content(request,text);
         
-        if (write_chunk(request.sock, text))
+        if (write_chunk(os, text))
             return -1;
         
-        if (write_chunk(request.sock, ""))
+        if (write_chunk(os, ""))
             return -1;
     }
     else
@@ -496,22 +501,22 @@ int http_listen_port::write_content(http_message &request, http_message &respons
         if (read_file(response.full_path, buf))
             return -1;
         
-        if (write_chunk(request.sock, buf))
+        if (write_chunk(os, buf) < 0)
             return -1;
         
-        if (write_chunk(request.sock, ""))
+        if (write_chunk(os, "") < 0)
             return -1;
     }
     
     return 0;
 }
 
-int http_listen_port::process_http_file_request(http_message &request, http_message &response)
+int http_listen_port::process_http_file_request(std::ostream &os, http_message &request, http_message &response)
 {
-    if (response.write_to(request.sock) < 0)
+    if (response.write_to(os) < 0)
         return -1;
 
-    return write_content(request, response);
+    return write_content(os, request, response);
 }
 
 int http_listen_port::process_params(http_message &request)
@@ -544,5 +549,5 @@ void http_listen_port::generate_response_header(const std::string &ext, size_t c
     response_header = ss.str();
 }
 
-
+}
 

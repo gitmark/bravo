@@ -30,31 +30,34 @@
 #include <bravo/socket_stream.h>
 
 using namespace std;
-using namespace bravo;
 
 #define MAX_CONTENT_LENGTH 4096
 
+namespace bravo
+{
 http_message::http_message()
 {
     request = false;
     sock = nullptr;
-    app_vars["test"] = "one";
     type = dir_specs::dir_type::text;
 }
 
 http_message::~http_message()
 {}
 
+/*
 int http_message::read_from(std::unique_ptr<base_socket> &p, int timeout)
 {
     return read_from(p.get(), timeout);
 }
+*/
 
 int http_message::write_to(std::unique_ptr<base_socket> &p, int timeout)
 {
     return write_to(p.get(), timeout);
 }
 
+/*
 int http_message::read_from(base_socket *s, int timeout)
 {
     socket_stream ss(s);
@@ -67,17 +70,23 @@ int http_message::read_from(base_socket *s, int timeout)
         return -1;
     
     if ((int)s->error())
-        return -1;
-    
+    {
+        if (s->error() == base_socket::socket_error::timeout)
+            s->clear_error();
+        else
+            return -1;
+    }
+
     sock = s;
     return rc;
 }
+*/
 
-int http_message::read_from(std::istream &s)
+int http_message::read_from(std::istream &is)
 {
     clear();
     int total = 0;
-    std::getline(s,request_line);
+    std::getline(is,request_line);
     bravo::chomp(request_line);
     int len = (int)request_line.size() + 2;
     
@@ -102,7 +111,7 @@ int http_message::read_from(std::istream &s)
     if(get_param_str.size())
         parse_param_str(get_param_str,params);
     
-    len = bravo::read_all_headers(s, headers);
+    len = bravo::read_all_headers(is, headers);
 
     if(len < 0)
         return -1;
@@ -111,7 +120,7 @@ int http_message::read_from(std::istream &s)
 
     if (method == "POST")
     {
-        std::getline(s,post_param_str);
+        std::getline(is,post_param_str);
         bravo::chomp(post_param_str);
         int len2 = (int)post_param_str.size() + 2;
         total += len2;
@@ -128,7 +137,7 @@ int http_message::read_from(std::istream &s)
         if (content_length < 0 || content_length > MAX_CONTENT_LENGTH)
             return -1;
         
-        len = read_fixed_length_string(s, content, content_length);
+        len = read_fixed_length_string(is, content, content_length);
 
         if (len != content_length)
             return -1;
@@ -153,7 +162,7 @@ int http_message::read_from(std::istream &s)
         
         if (chunked)
         {
-            int content_length = read_chunked_content(s, content);
+            int content_length = read_chunked_content(is, content);
 
             if (content_length < 0)
                 return -1;
@@ -307,3 +316,4 @@ void http_message::clear()
     app_vars.clear();
 }
 
+}

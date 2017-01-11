@@ -26,9 +26,11 @@
 #define IO_NAMED_PIPE_H_
 
 #ifdef _WIN32
+#define NOMINMAX
 #include <windows.h>
 #include <string>
 #include <vector>
+#include <algorithm>
 #include <bravo/io_stream.h>
 
 #define OVERLAPPED_BUFSIZE 4096
@@ -150,6 +152,10 @@ namespace bravo
         // Client side method        
         int connect(const std::string &pipe_name, int timeout = -1)
         {        
+            SECURITY_ATTRIBUTES saAttr;
+            saAttr.nLength = sizeof(SECURITY_ATTRIBUTES);
+            saAttr.bInheritHandle = TRUE;
+            saAttr.lpSecurityDescriptor = NULL;
             std::wstring wname(pipe_name.begin(), pipe_name.end());
             
             for (int i = 0; i < 2; i++)
@@ -361,7 +367,7 @@ namespace bravo
                 buf += attempted;
                 
                 if (!remaining)
-                    return buf - read_buf;
+                    return (int)(buf - read_buf);
             }
 
             // The only reasons we will exit from the loop below are
@@ -403,7 +409,7 @@ namespace bravo
                             if (!remaining)
                             {
                                 // Remaining == 0, we've read everything the caller asked for so return now
-                                return buf - read_buf;
+                                return (int)(buf - read_buf);
                             }
                             else
                             {
@@ -415,7 +421,7 @@ namespace bravo
                         else
                         {
                             // We read 0 count without an error, so just return what's been read so far
-                            return buf - read_buf;
+                            return (int)(buf - read_buf);
                         }
                     }
                     else
@@ -441,7 +447,7 @@ namespace bravo
                 if (timeout == 0)
                 {
                     // Timed out, not an error
-                    return buf - read_buf;
+                    return (int)(buf - read_buf);
                 }
                 
                 if (timeout < 0)
@@ -478,7 +484,7 @@ namespace bravo
                             if (!remaining)
                             {
                                 // Remaining == 0, we've read everything the caller asked for so return now
-                                return buf - read_buf;
+                                return (int)(buf - read_buf);
                             }
                             else
                             {
@@ -490,7 +496,7 @@ namespace bravo
                         else
                         {
                             // We read 0 count without an error, so just return what's been read so far
-                            return buf - read_buf;
+                            return (int)(buf - read_buf);
                         }
                     }
                     else
@@ -503,7 +509,7 @@ namespace bravo
                 else if (WAIT_TIMEOUT == wait_result)
                 {
                     // Timed out
-                    return buf - read_buf;
+                    return (int)(buf - read_buf);
                 }
                 else
                 {
@@ -531,7 +537,7 @@ namespace bravo
                 return 0; // Odd, but not an error
             
             // Init local vars
-            char *buf       = write_buf;
+            const char *buf = write_buf;
             int remaining   = requested_count;
             int attempted   = 0;
             
@@ -619,7 +625,7 @@ namespace bravo
                         buf += attempted;
                     }
                     
-                    write_info.requested_transfer_count = write_info.current - write_info.buf;
+                    write_info.requested_transfer_count = (DWORD)(write_info.current - write_info.buf);
                     write_info.actual_transfer_count = 0;
                     BOOL write_result = WriteFile(handle,
                                                 write_info.buf,
@@ -643,7 +649,7 @@ namespace bravo
                             if (!write_info.requested_transfer_count && !remaining)
                             {
                                 // We've written everything the caller asked for so return now
-                                return buf - write_buf;
+                                return (int)(buf - write_buf);
                             }
                             else
                             {
@@ -655,7 +661,7 @@ namespace bravo
                         else
                         {
                             // We wrote 0 count without an error, so just return what's been written so far
-                            return buf - write_buf;
+                            return (int)(buf - write_buf);
                         }
                     }
                     else
@@ -679,7 +685,7 @@ namespace bravo
                 // If we reach this point we know that data is pending
                 // If timeout == 0, the caller doesn't want to wait, thus return now because data is pending.
                 if (timeout == 0)
-                    return buf - write_buf; // Timed out, not an error
+                    return (int)(buf - write_buf); // Timed out, not an error
                 
                 if (timeout < 0)
                     timeout = INFINITE;
@@ -712,7 +718,7 @@ namespace bravo
                             if (!write_info.requested_transfer_count && !remaining)
                             {
                                 // We've written everything the caller asked for so return now.
-                                return buf - write_buf;
+                                return (int)(buf - write_buf);
                             }
                             else
                             {
@@ -724,7 +730,7 @@ namespace bravo
                         else
                         {
                             // We wrote 0 bytes without an error, so just return what's been written so far
-                            return buf - write_buf;
+                            return (int)(buf - write_buf);
                         }
                     }
                     else
@@ -737,7 +743,7 @@ namespace bravo
                 else if (WAIT_TIMEOUT == wait_result)
                 {
                     // Timed out
-                    return buf - write_buf;
+                    return (int)(buf - write_buf);
                 }
                 else
                 {

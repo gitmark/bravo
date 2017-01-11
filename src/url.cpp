@@ -25,8 +25,8 @@
 #include <bravo/url.h>
 #include <bravo/http_utils.h>
 
-using namespace bravo;
-
+namespace bravo
+{ 
 #define C 0  // colon
 #define S 1  // space
 #define F 2  // forward slash
@@ -240,6 +240,10 @@ int url::parse(const std::string& str)
     
     switch(state)
     {
+        case S_PTH1:
+                path = "/";
+            break;
+    
         case S_PTH:
             if (item.size())
                 path = item;
@@ -326,4 +330,5 @@ bool url::secure()
 #undef O
 #undef N
 
+}
 

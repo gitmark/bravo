@@ -26,6 +26,7 @@
 #define BASE_LISTEN_PORT_H_
 
 #ifdef _WIN32
+    #define NOMINMAX
     #include <winsock2.h>
     #define socklen_t int
 #else

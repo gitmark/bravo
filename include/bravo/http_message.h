@@ -22,61 +22,49 @@
  SOFTWARE.
  *******************************************************************************/
 
-#ifndef http_server_h
-#define http_server_h
+#ifndef http_message_h
+#define http_message_h
 
-#include <vector>
-#include <memory>
-#include <bravo/base_server.h>
-#include <bravo/http_listen_port.h>
+#include <string>
+#include <map>
+#include <bravo/base_socket.h>
+#include <bravo/dir_specs.h>
 
 namespace bravo
 {
-template<class T>
-std::unique_ptr<T> to_unique(T *p)
-{
-    std::unique_ptr<T> ptr(p);
-    return std::move(ptr);
-}
-
-class http_server : public base_server
+class http_message
 {
 public:
-    http_server() {}
+    http_message();
+    virtual ~http_message();
+    int     read_from   (std::istream &is_);
 
-    ~http_server()
-    {
-        stop();
-    }
+    int     write_to    (base_socket *s, int timeout = base_socket::default_timeout_);
+    int     write_to    (std::unique_ptr<base_socket> &p, int timeout = base_socket::default_timeout_);
+    int     write_to    (std::ostream &os_);
+    void    clear();
     
-    void add_port(http_listen_port *port)
-    {
-        ports.push_back(std::move(unique_ptr<http_listen_port>(port)));
-    }
-    
-    void start()
-    {
-        for(auto &p : ports)
-            p->start();
-    }
-    
-    void stop()
-    {
-        for(auto &p : ports)
-            p->set_stop();
-        
-        for(auto &p : ports)
-        {
-            p->stop();
-            p->close();
-        }
-    }
-
-    std::vector<std::unique_ptr<http_listen_port>> ports;
+    base_socket *sock;
+    bool        request;
+    dir_specs::dir_type type;
+    std::string request_line;
+    std::string method;
+    std::string uri;
+    std::string http_version;
+    std::string dir;
+    std::string sub_dir;
+    std::string filename;
+    std::string full_path;
+    std::string get_param_str;
+    std::string post_param_str;
+    std::string status;
+    std::string content;
+    std::vector<char> binary_content;
+    std::map<std::string,std::string> headers;
+    std::map<std::string,std::string> params;
+    std::map<std::string,std::string> app_vars;
 };
-
+    
 }
 
-#endif /* http_server_h */
-
-
+#endif

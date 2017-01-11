@@ -1,5 +1,8 @@
 /DerivedData
 /bravo.xcodeproj
+/winbuild
+/apps/baretta/winbuild
+/apps/serrano/winbuild
 
 # Compiled Object files
 *.slo

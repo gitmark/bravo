@@ -26,6 +26,7 @@
     #ifndef _WIN32_WINNT
         #define _WIN32_WINNT 0x0700f
     #endif
+    #define NOMINMAX
     #include <winsock2.h>
     #include <ws2tcpip.h>
     typedef __int64 ssize_t;
@@ -39,10 +40,11 @@
 #include <bravo/tls_socket.h>
 
 using namespace std;
-using namespace bravo;
 
 #define BACKLOG 20
 
+namespace bravo
+{
 bool is_ip(const std::string &str);
 std::string server_cert_file_;
 std::string server_key_file_;
@@ -521,3 +523,4 @@ int tls_socket::init()
     return 0;
 }
 
+}

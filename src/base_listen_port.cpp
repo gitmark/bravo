@@ -23,18 +23,9 @@
  *******************************************************************************/
 
 #ifdef _WIN32
+#define NOMINMAX
 #include <winsock2.h>
 
-namespace bravo
-{
-class WSInit {
-public:
-    WSInit() { WSAStartup(MAKEWORD(2, 2), &wsaData); }
-    ~WSInit() { WSACleanup(); }
-    WSAData wsaData;
-} wsInit;
-
-}
-
+// Place holder
 #endif
 

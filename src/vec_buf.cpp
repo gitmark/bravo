@@ -29,8 +29,8 @@
 #include <algorithm>
 #include <bravo/vec_buf.h>
 
-using namespace bravo;
-
+namespace bravo
+{
 vec_buf::vec_buf(const std::vector<char> &v, int block_size, int timeout) :
 read_index(0),
 write_index(block_size),
@@ -232,4 +232,4 @@ int vec_buf::total_count()
     return count + (int)(q.size() - 2)*block_size_;
 }
 
-
+}

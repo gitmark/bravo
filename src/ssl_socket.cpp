@@ -45,6 +45,7 @@
         #define _WIN32_WINNT 0x0700f
     #endif
     typedef __int64 ssize_t;
+    #define NOMINMAX
     #include <winsock2.h>
     #include <ws2tcpip.h>
 #else
@@ -62,10 +63,11 @@
 #include <bravo/string_utils.h>
 
 using namespace std;
-using namespace bravo;
 
 #define BACKLOG 20
 
+namespace bravo
+{
 bool        is_ip           (const std::string &str);
 SSL_CTX*    ssl_client_ctx  ();
 SSL_CTX*    ssl_server_ctx  ();
@@ -275,6 +277,7 @@ int ssl_socket::init()
             return -1;
         }
         
+        /*
         if(safe_ssl_handshake() != 0)
         {
             SSL_shutdown(ssl);
@@ -282,6 +285,7 @@ int ssl_socket::init()
             ssl = 0;
             return -1;
         }
+        */
     }
     else
     {
@@ -328,6 +332,6 @@ int ssl_socket::safe_ssl_handshake(bool input, int timeout)
     return 0;
 }
 
-
+}
 
 

@@ -36,6 +36,7 @@ namespace bravo
 #endif
 
 #ifdef _WIN32
+#define NOMINMAX
 #include <Windows.h>
 
 namespace bravo

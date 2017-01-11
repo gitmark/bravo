@@ -24,8 +24,8 @@
 
 #include <bravo/content_types.h>
 
-using namespace bravo;
-
+namespace bravo
+{
 content_types_t::content_types_t()
 {
     for(name_val *nv = content_types_; nv->name; ++nv)
@@ -232,3 +232,4 @@ name_val content_types_[] = {
     {0,0}
 };
 
+}

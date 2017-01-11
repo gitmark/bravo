@@ -28,9 +28,9 @@
 #include <bravo/hex.h>
 
 using namespace std;
+
 namespace bravo
 {
-
 static int path_chars[] = {
 //  0           4           8 9 A B     C D E F
     0,0,0,0,    0,0,0,0,    0,0,0,0,    0,0,0,0, // 0

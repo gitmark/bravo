@@ -351,9 +351,10 @@ namespace bravo
         
         while (true)
         {
+            line.clear();
             std::getline(is, line);
-            len = (int)is.gcount();
             chomp(line);
+            len = (int)line.size();
             
             if (len == 0)
                 break;

@@ -37,6 +37,8 @@
 
 namespace bravo
 {
+void* init_sockets();
+
 static constexpr const char *socket_error_strings_[] = {    "none", "unknown", "already open", "init", "socket",
                                                             "bad_index", "timeout", "bad_param", "closed", "max_error"};
 class base_socket
@@ -46,6 +48,7 @@ public:
     const static int    error_start_ = -1000;
     enum class          socket_error {  none = 0, unknown = error_start_, already_open, init, socket,
                                         bad_index, timeout, bad_param, closed, max_error };
+    base_socket() { error_ = socket_error::none; init_sockets(); }
     virtual         ~base_socket() {};
     
     virtual int     read_       (char *buf, int count) = 0;

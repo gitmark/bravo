@@ -52,10 +52,11 @@
 #include <bravo/socket_utils.h>
 
 using namespace std;
-using namespace bravo;
 
 #define BACKLOG 20
 
+namespace bravo
+{
 int data_match(const char *data, int len, const char *end_marker, int end_len, int &mcount);
 bool is_ip(const std::string &str);
 
@@ -68,6 +69,20 @@ norm_socket::norm_socket(SOCKET s)
 {
     clear();
     sock = s;
+}
+
+int norm_socket::init()
+{
+    if (initialized_)
+        return 0;
+
+    int on = 1; 
+    int rc = ioctlsocket(sock, FIONBIO, (u_long*)&on);   
+    if (SOCKET_ERROR == rc)
+        return -1;
+
+    initialized_ = true;
+    return 0;
 }
 
 void norm_socket::clear()
@@ -220,9 +235,13 @@ int norm_socket::read(char *buf, int count, const char *end, int end_len, int ti
             }
             else if (actual == 0)
             {
-                close();
-                error_ = socket_error::closed;
-                return (int)error_; // Return close error
+                std::this_thread::sleep_for(std::chrono::milliseconds(1));
+                if (timeout > 0 && c < timeout)
+                    ++c;
+
+//                close();
+//                error_ = socket_error::closed;
+//                return (int)error_; // Return close error
             }
             else
             {
@@ -274,12 +293,14 @@ int norm_socket::read(char *buf, int count, const char *end, int end_len, int ti
     if (b != buf)
         return (int)(b - buf); // No error, return count
     
+    
     if (c == timeout)
     {
-        error_ = socket_error::timeout;
-        return (int)error_; // Return timeout error
+        return 0;
+//        error_ = socket_error::timeout;
+//        return (int)error_; // Return timeout error
     }
-    
+        
     return 0;
 }
 
@@ -433,7 +454,7 @@ int norm_socket::connect(const std::string &hostname, short port_, int timeout)
     in_addr addr;
     
     if (is_ip(hostname))
-        addr.s_addr = inet_addr(hostname.c_str());
+        inet_pton(AF_INET, hostname.c_str(), &(addr.s_addr));
     else
     {
         hostent *host = gethostbyname(hostname.c_str());
@@ -511,16 +532,6 @@ int norm_socket::connect(const std::string &hostname_, in_addr &ip_, short port_
             break;
         }
     }
-    
-    /*
-     int rc = ioctlsocket(server_sock, FIONBIO, (u_long*)&on);   if (SOCKET_ERROR == rc)
-     {
-        safe_close(server_sock);
-        server_sock = INVALID_SOCKET;
-        error_ = socket_error::socket;
-        return (int)error_; // Return socket error
-     }
-     */
     
     sock = server_sock;
     return 0;
@@ -690,3 +701,4 @@ int norm_socket::set_no_delay()
     return setsockopt(sock, IPPROTO_TCP, TCP_NODELAY, (char *)&on, sizeof(int));
 }
 
+}

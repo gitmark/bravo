@@ -22,50 +22,73 @@
  SOFTWARE.
  *******************************************************************************/
 
-#ifndef http_message_h
-#define http_message_h
+#ifndef http_server_h
+#define http_server_h
 
-#include <string>
-#include <map>
-#include <bravo/base_socket.h>
-#include <bravo/dir_specs.h>
+#include <vector>
+#include <memory>
+#include <bravo/base_server.h>
+#include <bravo/http_listen_port.h>
 
 namespace bravo
 {
-class http_message
+template<class T>
+std::unique_ptr<T> to_unique(T *p)
 {
-public:
-    http_message();
-    virtual ~http_message();
-    int     read_from   (base_socket *s, int timeout = base_socket::default_timeout_);
-    int     read_from   (std::unique_ptr<base_socket> &p, int timeout = base_socket::default_timeout_);
-    int     read_from   (std::istream &s);
-    int     write_to    (base_socket *s, int timeout = base_socket::default_timeout_);
-    int     write_to    (std::unique_ptr<base_socket> &p, int timeout = base_socket::default_timeout_);
-    int     write_to    (std::ostream &s);
-    void    clear();
-    
-    base_socket *sock;
-    bool        request;
-    dir_specs::dir_type type;
-    std::string request_line;
-    std::string method;
-    std::string uri;
-    std::string http_version;
-    std::string dir;
-    std::string sub_dir;
-    std::string filename;
-    std::string full_path;
-    std::string get_param_str;
-    std::string post_param_str;
-    std::string status;
-    std::string content;
-    std::vector<char> binary_content;
-    std::map<std::string,std::string> headers;
-    std::map<std::string,std::string> params;
-    std::map<std::string,std::string> app_vars;
-};
-    
+    std::unique_ptr<T> ptr(p);
+    return std::move(ptr);
 }
 
-#endif
+class http_server : public base_server
+{
+public:
+    http_server() {}
+
+    ~http_server()
+    {
+        stop();
+    }
+    
+    void add_port(http_listen_port *port)
+    {
+        for (auto &p : dir_map)
+            port->add_dir(p.first, p.second.name, p.second.type);
+
+        ports.push_back(std::move(std::unique_ptr<http_listen_port>(port)));
+    }
+    
+    void add_dir(const std::string &dir, const std::string &actual_dir, dir_specs::dir_type type)
+    {
+        for (auto &p : ports)
+            p->add_dir(dir, actual_dir, type);
+
+        dir_map[dir] = dir_specs(actual_dir, type);
+    }
+
+    void start()
+    {
+        for(auto &p : ports)
+            p->start();
+    }
+    
+    void stop()
+    {
+        for(auto &p : ports)
+            p->set_stop();
+        
+        for(auto &p : ports)
+        {
+            p->stop();
+            p->close();
+        }
+    }
+
+    std::vector<std::unique_ptr<http_listen_port>> ports;
+    std::map<std::string, dir_specs> dir_map;
+};
+
+}
+
+#endif /* http_server_h */
+
+

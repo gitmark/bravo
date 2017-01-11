@@ -41,13 +41,13 @@ public:
 
     virtual int process_connection          (std::shared_ptr<socket_task> &task);
     virtual int process_params              (http_message &request);
-    virtual int process_http_request        (http_message &request);
-    virtual int process_http_file_request   (http_message &request, http_message &response);
-    virtual int process_http_exec_request   (http_message &request, http_message &response);
+    virtual int process_http_request        (std::ostream &os, http_message &request);
+    virtual int process_http_file_request   (std::ostream &os, http_message &request, http_message &response);
+    virtual int process_http_exec_request   (std::ostream &os, http_message &request, http_message &response);
     void        generate_response_header    (const std::string &ext, size_t content_length, std::string &response_header);
     virtual int generate_content            (http_message &request, std::string &content);
     virtual int build_response              (http_message &request, http_message &response);
-    virtual int write_content               (http_message &request, http_message &response);
+    virtual int write_content               (std::ostream &os, http_message &request, http_message &response);
     void        add_dir                     (const std::string &dir, const std::string &actual_dir,
                                              dir_specs::dir_type type);
     void        init                        ();
