@@ -23,6 +23,7 @@
  *******************************************************************************/
 
 #include <iostream>
+#include <cstdlib>
 #include <vector>
 #include <string>
 #include <bravo/argv_parser.h>
@@ -160,7 +161,11 @@ std::string download(const std::string& url)
             
             if (u.secure())
             {
+#ifdef _WIN32
+                sock = new ssl_socket();
+#else
                 sock = new tls_socket();
+#endif
             }
             else
             {
@@ -290,10 +295,18 @@ int main(int argc, const char *argv[])
         return 1;
     }
 
-    set_server_cert_file("/Users/mark/Desktop/mustang/certs/servercert.pem");
-    set_server_key_file("/Users/mark/Desktop/mustang/certs/serverkey.pem");
-    set_client_ca_file("/Users/mark/Desktop/mustang/certs/ca-certificates.crt");
+    std::string home;
     
+#ifdef _WIN32
+    home = std::getenv("USERPROFILE");
+#else
+    home = std::getenv("HOME");
+#endif
+
+    set_server_cert_file(home + "/Desktop/projects/mustang/certs/servercert.pem");
+    set_server_key_file(home + "/Desktop/projects/mustang/certs/serverkey.pem");
+    set_client_ca_file(home + "/Desktop/projects/mustang/certs/ca-certificates.crt");
+
     std::string content = download(cmd_line.args[0]);
     cout << content << "\n";
     cout.flush();

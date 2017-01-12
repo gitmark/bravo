@@ -34,6 +34,10 @@
 #pragma clang diagnostic ignored "-Wdocumentation"
 #endif
 
+#ifdef _WIN32
+typedef __int64 ssize_t;
+#endif
+
 #include <tls.h>
 
 #ifndef _WIN32

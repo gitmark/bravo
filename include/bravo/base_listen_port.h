@@ -144,7 +144,7 @@ public:
             }
             
             if (secure_)
-                ptr = std::move(std::make_unique<tls_socket>(sock1, cert_file_, key_file_));
+                ptr = std::move(std::make_unique<secure_socket>(sock1, cert_file_, key_file_));
             else
                 ptr = std::move(std::make_unique<norm_socket>(sock1));
             

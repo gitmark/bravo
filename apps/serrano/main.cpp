@@ -22,7 +22,22 @@
  SOFTWARE.
  *******************************************************************************/
 
+#include <iostream>
+#include <cstdlib>
+#include <vector>
+#include <string>
 #include <bravo/argv_parser.h>
+#include <bravo/url.h>
+#include <bravo/base_socket.h>
+#include <bravo/ssl_socket.h>
+#include <bravo/tls_socket.h>
+#include <bravo/string_utils.h>
+#include <bravo/hex.h>
+#include <bravo/http_server.h>
+#include <bravo/http_listen_port.h>
+
+using namespace std;
+using namespace bravo;
 
 using namespace bravo;
 
@@ -37,7 +52,7 @@ public:
         flag_defs["version"]    = AP_NO_ARG;
         flag_defs["verbose"]    = AP_NO_ARG;
         
-        usage_ = "usage:\nbaretta url";
+        usage_ = "usage:\nserrano";
     }
 };
 
@@ -47,5 +62,40 @@ int main(int argc, const char *argv[])
 {
     cmd_line.parse(argc,argv);
     
+    std::string home;
+
+#ifdef _WIN32
+    home = std::getenv("USERPROFILE");
+#else
+    home = std::getenv("HOME");
+#endif
+
+    set_server_cert_file(home + "/Desktop/projects/mustang/certs/servercert.pem");
+    set_server_key_file(home + "/Desktop/projects/mustang/certs/serverkey.pem");
+    set_client_ca_file(home + "/Desktop/projects/mustang/certs/ca-certificates.crt");
+
+    http_server server;
+    server.add_dir("", home + "/Desktop/projects/mustang/research/serrano/web", dir_specs::text);
+    server.add_dir("cgi-bin", home + "/Desktop/projects/mustang/research/serrano/web/cgi-bin-win", dir_specs::exec);
+
+    {
+        server.add_port(new http_listen_port(2002, home + "/Desktop/projects/mustang/certs/servercert.pem", home + "/Desktop/projects/mustang/certs/serverkey.pem"));
+        server.add_port(new http_listen_port(2001));
+        server.start();
+
+//        for (int i = 0; i < 10; ++i)
+            for (;;)
+                std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    }
+    server.stop();
+
+    for (int i = 0; i < 10; ++i)
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+
+    server.start();
+
+    for (;;)
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+
     return 0;
 }

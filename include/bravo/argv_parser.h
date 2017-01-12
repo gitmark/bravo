@@ -110,7 +110,7 @@ public:
     
     inline std::string error_msg()
     {
-        return error_string_ + "\n" + usage_;
+        return error_string_ + "\n" + usage_ + "\n";
     }
     
     inline int error() { return error_; }

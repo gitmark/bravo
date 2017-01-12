@@ -277,7 +277,6 @@ int ssl_socket::init()
             return -1;
         }
         
-        /*
         if(safe_ssl_handshake() != 0)
         {
             SSL_shutdown(ssl);
@@ -285,7 +284,11 @@ int ssl_socket::init()
             ssl = 0;
             return -1;
         }
-        */
+
+        int on = 1;
+        int rc = ioctlsocket(sock, FIONBIO, (u_long*)&on);
+        if (SOCKET_ERROR == rc)
+            return -1;
     }
     else
     {
