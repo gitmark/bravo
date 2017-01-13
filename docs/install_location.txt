@@ -1,0 +1,133 @@
+Install location for Bravo
+
+On UNIX type systems, Bravo is installed by default in /usr/local. The directory structure is shown with the following example.
+
+/usr/local/bravo/1.0.0
+/usr/local/bravo/1.0.1
+/usr/local/bravo/current 	-> /usr/local/bravo/1.0.1
+/usr/local/bin/baretta 		-> /usr/local/bravo/current/bin/baretta
+/usr/local/bin/serrano 		-> /usr/local/bravo/current/bin/serrano
+/usr/local/lib/libbravo.a 	-> /usr/local/bravo/current/lib/libbravo.a
+/usr/local/include/bravo 	-> /usr/local/bravo/current/include/bravo
+
+The convention is followed in a similar fashion by many popular apps and utilites such as mysql, apache and HomeBrew.  
+
+Notes from researching install locations and conventions:
+
+http://stackoverflow.com/questions/11457670/where-are-the-headers-of-the-c-standard-libary-linux
+
+The C++ library header files are stored at /usr/include/c++/<version>. This convention allows multiple versions to co-exist. Using this approach for Bravo we would have something like:
+
+/usr/local/bravo/1.0.0/include/bravo/tls_socket.h
+
+http://www.tldp.org/LDP/Linux-Filesystem-Hierarchy/html/usr.html
+/usr/local is commonly used for self-compiled and third party apps installed locally by the sys admin.
+
+http://unix.stackexchange.com/questions/11544/what-is-the-difference-between-opt-and-usr-local
+
+Bravo would use something like:
+/usr/local/bin/baretta and /usr/local/share/man/... for man pages
+
+Filesystem Hierarchy Standard (FHS)
+
+Marks-MBP:~ mark$ ls -al /usr/local/bin 
+total 920
+drwxrwxr-x  117 mark  admin  3978 Jan  9 00:02 .
+drwxr-xr-x   13 root  wheel   442 Dec  6 17:02 ..
+lrwxr-xr-x    1 mark  admin    28 Dec  6 17:02 brew -> /usr/local/Homebrew/bin/brew
+lrwxr-xr-x    1 mark  admin    32 Dec  6 17:03 ccmake -> ../Cellar/cmake/3.7.1/bin/ccmake
+lrwxr-xr-x    1 mark  admin    31 Dec  6 17:03 cmake -> ../Cellar/cmake/3.7.1/bin/cmake
+lrwxr-xr-x    1 mark  admin    37 Dec  6 17:03 cmakexbuild -> ../Cellar/cmake/3.7.1/bin/cmakexbuild
+lrwxr-xr-x    1 mark  admin    31 Dec  6 17:03 cpack -> ../Cellar/cmake/3.7.1/bin/cpack
+lrwxr-xr-x    1 mark  admin    31 Dec  6 17:03 ctest -> ../Cellar/cmake/3.7.1/bin/ctest
+
+Following this technique we would have
+
+/usr/local/bin/baretta -> /usr/local/bravo/1.0.0/bin/baretta
+/usr/local/bin/serrano -> /usr/local/bravo/1.0.0/bin/serrano
+/usr/local/include/bravo -> /usr/local/bravo/1.0.0/include/bravo
+/usr/local/lib/libbravo.a -> /usr/local/bravo/1.0.0/lib/libbravo.a
+
+http://www.tldp.org/HOWTO/HighQuality-Apps-HOWTO/fhs.html
+
+/usr/lib
+Contains dynamic libraries and support static files for the executables at /usr/bin and /usr/sbin. You can create a subdirectory like /usr/lib/myproduct to contain your helper files, or dynamic libraries that will be accessed only by your Software, without user intervention. A subdirectory here can be used as a container for plugins and extensions.
+
+http://www.tldp.org/HOWTO/HighQuality-Apps-HOWTO/plugin.html
+Good candidates are /usr/lib/myproduct/plugins as the plugins directory, and /etc/myproduct/plugins as the plugins configuration files directory. 
+
+http://apple.stackexchange.com/questions/119230/what-is-standard-for-os-x-filesystem-e-g-opt-vs-usr
+
+So this is my take on it: OS X is BSD-based and consequently I'd use /usr/local. Note that you can create a program directory and then symlink commands to /usr/local/bin, etc, for example:
+
+/usr/local/mysql
+/usr/local/mysql/bin/mysqladmin
+/usr/local/mysql/lib/libmysqlclient.so
+/usr/local/bin/mysqladmin -> ../mysql/bin/mysqladmin
+/usr/local/lib/libmysqlclient.so -> ../mysql/lib/libmysqlclient.so
+
+This used to be usual practice in Linux and UNIX too, but the FHS explicitely forbids it: if you wish to install third party packages in their own directory hierarchy you should use/opt/<package> instead. Note that FHS-compliance requires to put configuration files in /etc/opt/<package> and variable files in /var/opt/<package>.
+
+google.com /usr/local /usr/opt
+
+http://stackoverflow.com/questions/35337601/why-is-there-a-usr-local-opt-directory-created-by-homebrew-and-should-i-use-it
+
+This would suggest ...
+/usr/local/bin/baretta -> /usr/local/opt/baretta/1.0.0/bin/baretta
+
+could also have 
+
+/usr/local/opt/baretta/current -> /usr/local/opt/baretta/1.0.0
+
+But following mysql or the Homebrew approach we would have ...
+
+/usr/local/bin/baretta -> /usr/local/bravo/1.0.0/bin/baretta
+
+/usr/local/opt/bravo -> /usr/local/bravo/1.0.0
+
+but could have (my preference)
+/usr/local/bravo/1.0.0
+/usr/local/bravo/1.0.1
+/usr/local/bravo/current 	-> /usr/local/bravo/1.0.1
+/usr/local/bin/baretta 		-> /usr/local/bravo/current/bin/baretta
+/usr/local/bin/serrano 		-> /usr/local/bravo/current/bin/serrano
+/usr/local/lib/libbravo.a 	-> /usr/local/bravo/current/lib/libbravo.a
+/usr/local/include/bravo 	-> /usr/local/bravo/current/include/bravo
+
+http://superuser.com/questions/122420/usr-local-or-opt
+http://askubuntu.com/questions/722968/why-should-i-move-everything-in-opt
+http://www.pathname.com/fhs/pub/fhs-2.3.html
+http://httpd.apache.org/docs/current/sections.html
+http://www.informit.com/articles/article.aspx?p=26130&seqNum=3
+
+/usr/local/apache/bin/httpd
+notice apache is installed directly under /usr/local as mysql is and Homebrew is.
+
+http://support.veryant.com/support/phpkb/question.php?ID=91
+/usr/local/jdk
+
+Some sources say 
+
+opt is for precompiled binaries, not my case
+opt is for unbundled packages, not part of standard install, not my case
+/usr/local is for apps compiled and installed in the standard way, ./configure, make, make install, my case
+/opt is not standard with maxOS install or BSD
+Could use /usr/local/opt but can't count on that being present on all OS's
+/usr/local is quite universal on UNIX type systems
+there is an established precedent for using /usr/local/package
+mysql, apache, jdk, and others.
+
+google linux install directory
+http://askubuntu.com/questions/27213/what-is-the-linux-equivalent-to-windows-program-files
+
+Ubuntu uses /usr/local/share/applications/app.desktop
+
+But this is a console app.
+
+The answer will vary over distributions but /usr/local seems to be a common demoninator for the type of utilities we wish to install. Once a location is decided on, it is preferable to use the same location on all platforms if possible. Thus for some platforms /usr/local may seem non standard and for others it will seem typical.
+
+http://unix.stackexchange.com/questions/127076/into-which-directory-should-i-install-programs-in-linux
+
+
+
+

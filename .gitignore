@@ -3,6 +3,10 @@
 /winbuild
 /apps/baretta/winbuild
 /apps/serrano/winbuild
+/apps/baretta/.deps
+/apps/serrano/.deps
+/src/.deps
+
 
 # Compiled Object files
 *.slo

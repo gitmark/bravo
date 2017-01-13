@@ -49,10 +49,17 @@
     #include <winsock2.h>
     #include <ws2tcpip.h>
 #else
-    #include <poll.h>
+    #include <sys/ioctl.h>
     #define INVALID_SOCKET -1
+    #define WSAGetLastError() errno
+    #define SOCKET_ERROR -1
+    #define ioctlsocket ioctl
+    #define WSAEWOULDBLOCK EWOULDBLOCK
+    #include <netinet/tcp.h>
+    #include <poll.h>
 #endif
 
+#include <sys/ioctl.h>
 #include <mutex>
 #include <thread>
 #include <openssl/ssl.h>
