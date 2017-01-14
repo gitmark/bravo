@@ -66,4 +66,17 @@ libdir = $(prefix)/hello/0.0.1/lib
 lib_LIBRARIES = libhello.a
 libhello_a_SOURCES = main.c
 
+autotest
+http://check.sourceforge.net/doc/check_html/check_3.html
+http://junit.sourceforge.net/doc/testinfected/testing.htm
+
+google chrome testsuite autotest
+https://www.chromium.org/chromium-os/testing/test-suites
+
+https://guiquanz.gitbooks.io/google-cc-style-guide/content/ebook/Naming.html
+
+https://www.lrde.epita.fr/~akim/ccmp/doc/gnuprog2/The-GNU-M4-Test-Suite.html#The%20GNU%20M4%20Test%20Suite
+
+http://git.net/ml/autoconf-gnu/2013-03/msg00008.html
+
 

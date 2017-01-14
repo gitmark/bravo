@@ -289,12 +289,22 @@ cmd_line_parser cmd_line;
 int main(int argc, const char *argv[])
 {
     cmd_line.parse(argc,argv);
+    
+    std::string version = "0.0.1";
+ //   if(cmd_line.flags.count("version"))
+    {
+        cout << "Baretta version " << version << "\n";
+        return 0;
+    }
+    
     if (!cmd_line.args.size())
     {
         cout << cmd_line.error_msg();
         return 1;
     }
 
+
+    
     std::string home;
     
 #ifdef _WIN32
