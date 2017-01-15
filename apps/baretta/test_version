@@ -1992,9 +1992,9 @@ at_xfail=no
 
 
 { set +x
-$as_echo "$at_srcdir/test_version.at:10: baretta"
+$as_echo "$at_srcdir/test_version.at:10: baretta --version"
 at_fn_check_prepare_trace "test_version.at:10"
-( $at_check_trace; baretta
+( $at_check_trace; baretta --version
 ) >>"$at_stdout" 2>>"$at_stderr" 5>&-
 at_status=$? at_failed=false
 $at_check_filter

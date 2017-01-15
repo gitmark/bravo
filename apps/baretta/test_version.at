@@ -6,7 +6,7 @@ m4_define([AT_PACKAGE_BUGREPORT], [bugs@bravotools.org])
 AT_INIT([baretta])
 AT_SETUP([baretta])
 AT_TESTED([baretta])
-AT_CHECK([baretta],[],[[Baretta version 0.0.1
+AT_CHECK([baretta --version],[],[[Baretta version 0.0.1
 ]])
 AT_CLEANUP()
 

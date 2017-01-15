@@ -291,7 +291,8 @@ int main(int argc, const char *argv[])
     cmd_line.parse(argc,argv);
     
     std::string version = "0.0.1";
- //   if(cmd_line.flags.count("version"))
+    
+    if (cmd_line.flags.count("version"))
     {
         cout << "Baretta version " << version << "\n";
         return 0;
