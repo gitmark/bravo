@@ -496,7 +496,7 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 SUBDIRS = src apps/baretta apps/serrano tests
 dist_doc_DATA = README.md
-TESTS = tests/testsuite
+TESTS = tests/testsuite1 tests/testsuite2
 all: all-recursive
 
 .SUFFIXES:
@@ -803,9 +803,16 @@ recheck: all
 	        am__force_recheck=am--force-recheck \
 	        TEST_LOGS="$$log_list"; \
 	exit $$?
-tests/testsuite.log: tests/testsuite
-	@p='tests/testsuite'; \
-	b='tests/testsuite'; \
+tests/testsuite1.log: tests/testsuite1
+	@p='tests/testsuite1'; \
+	b='tests/testsuite1'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
+tests/testsuite2.log: tests/testsuite2
+	@p='tests/testsuite2'; \
+	b='tests/testsuite2'; \
 	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \

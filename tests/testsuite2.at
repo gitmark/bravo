@@ -1,0 +1,4 @@
+AT_INIT([serrano])
+m4_include(../apps/serrano/tests/testsuite.at)
+
+

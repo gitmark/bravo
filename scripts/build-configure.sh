@@ -10,7 +10,8 @@
 
 cd ../tests
 
-autom4te -l autotest testsuite.at -o testsuite
+autom4te -l autotest testsuite1.at -o testsuite1
+autom4te -l autotest testsuite2.at -o testsuite2
 
 cd ..
 autoreconf --install

@@ -1,0 +1,3 @@
+AT_INIT([baretta])
+m4_include(../apps/baretta/tests/testsuite.at)
+

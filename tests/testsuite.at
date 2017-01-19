@@ -1,5 +1,0 @@
-AT_INIT([tests])
-m4_include(../apps/baretta/tests/testsuite.at)
-m4_include(../apps/serrano/tests/testsuite.at)
-
-
