@@ -1,0 +1,7 @@
+
+AT_SETUP([serrano])
+AT_TESTED([serrano])
+AT_KEYWORDS([serrano])
+AT_CHECK([serrano --version],[],[[Serrano version 0.0.0
+]])
+AT_CLEANUP()

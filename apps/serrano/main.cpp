@@ -62,6 +62,14 @@ int main(int argc, const char *argv[])
 {
     cmd_line.parse(argc,argv);
     
+    std::string version = "0.0.0";
+    
+    if (cmd_line.flags.count("version"))
+    {
+        cout << "Serrano version " << version << "\n";
+        return 0;
+    }
+    
     std::string home;
 
 #ifdef _WIN32

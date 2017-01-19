@@ -1,5 +1,5 @@
 #! /bin/sh
-# Generated from test_version.at by GNU Autoconf 2.69.
+# Generated from testsuite.at by GNU Autoconf 2.69.
 #
 # Copyright (C) 2009-2012 Free Software Foundation, Inc.
 #
@@ -584,13 +584,15 @@ at_change_dir=false
 # Whether to enable colored test results.
 at_color=no
 # List of the tested programs.
-at_tested='baretta'
+at_tested='baretta
+serrano'
 # As many question marks as there are digits in the last test group number.
 # Used to normalize the test group numbers so that `ls' lists them in
 # numerical order.
 at_format='?'
 # Description of all the test groups.
-at_help_all="1;test_version.at:7;baretta;;
+at_help_all="1;test_version.at:2;baretta;baretta;
+2;test_version.at:2;serrano;serrano;
 "
 # List of the all the test groups.
 at_groups_all=`$as_echo "$at_help_all" | sed 's/;.*//'`
@@ -604,7 +606,7 @@ at_fn_validate_ranges ()
   for at_grp
   do
     eval at_value=\$$at_grp
-    if test $at_value -lt 1 || test $at_value -gt 1; then
+    if test $at_value -lt 1 || test $at_value -gt 2; then
       $as_echo "invalid test group: $at_value" >&2
       exit 1
     fi
@@ -902,7 +904,7 @@ fi
 # List of tests.
 if $at_list_p; then
   cat <<_ATEOF || at_write_fail=1
-Baretta test suite: baretta test groups:
+tests 0.0.0 test suite: tests test groups:
 
  NUM: FILE-NAME:LINE     TEST-GROUP-NAME
       KEYWORDS
@@ -943,7 +945,7 @@ _ATEOF
   exit $at_write_fail
 fi
 if $at_version_p; then
-  $as_echo "$as_me (Baretta)" &&
+  $as_echo "$as_me (tests 0.0.0)" &&
   cat <<\_ATEOF || at_write_fail=1
 
 Copyright (C) 2012 Free Software Foundation, Inc.
@@ -1119,13 +1121,13 @@ fi
 exec 5>>"$at_suite_log"
 
 # Banners and logs.
-$as_echo "## ---------------------------- ##
-## Baretta test suite: baretta. ##
-## ---------------------------- ##"
+$as_echo "## ------------------------------ ##
+## tests 0.0.0 test suite: tests. ##
+## ------------------------------ ##"
 {
-  $as_echo "## ---------------------------- ##
-## Baretta test suite: baretta. ##
-## ---------------------------- ##"
+  $as_echo "## ------------------------------ ##
+## tests 0.0.0 test suite: tests. ##
+## ------------------------------ ##"
   echo
 
   $as_echo "$as_me: command line was:"
@@ -1369,7 +1371,7 @@ IFS=$as_save_IFS
   esac
   if test -f "$at_program_"; then
     {
-      $as_echo "$at_srcdir/test_version.at:6: $at_program_ --version"
+      $as_echo "$at_srcdir/testsuite.at:1: $at_program_ --version"
       "$at_program_" --version </dev/null
       echo
     } >&5 2>&1
@@ -1968,7 +1970,7 @@ _ASBOX
   $as_echo "Please send $at_msg and all information you think might help:
 
    To: <bugs@bravotools.org>
-   Subject: [Baretta] $as_me: $at_fail_list${at_fail_list:+ failed${at_xpass_list:+, }}$at_xpass_list${at_xpass_list:+ passed unexpectedly}
+   Subject: [tests 0.0.0] $as_me: $at_fail_list${at_fail_list:+ failed${at_xpass_list:+, }}$at_xpass_list${at_xpass_list:+ passed unexpectedly}
 
 You may investigate any problem if you feel able to do so, in which
 case the test suite provides a good starting point.  Its output may
@@ -1983,7 +1985,7 @@ exit 0
 ## Actual tests. ##
 ## ------------- ##
 #AT_START_1
-at_fn_group_banner 1 'test_version.at:7' \
+at_fn_group_banner 1 'test_version.at:2' \
   "baretta" "                                        "
 at_xfail=no
 (
@@ -1991,18 +1993,19 @@ at_xfail=no
   $at_traceon
 
 
+
 { set +x
-$as_echo "$at_srcdir/test_version.at:10: baretta --version"
-at_fn_check_prepare_trace "test_version.at:10"
+$as_echo "$at_srcdir/test_version.at:6: baretta --version"
+at_fn_check_prepare_trace "test_version.at:6"
 ( $at_check_trace; baretta --version
 ) >>"$at_stdout" 2>>"$at_stderr" 5>&-
 at_status=$? at_failed=false
 $at_check_filter
 at_fn_diff_devnull "$at_stderr" || at_failed=:
-echo >>"$at_stdout"; $as_echo "Baretta version 0.0.1
+echo >>"$at_stdout"; $as_echo "Baretta version 0.0.0
 " | \
   $at_diff - "$at_stdout" || at_failed=:
-at_fn_check_status 0 $at_status "$at_srcdir/test_version.at:10"
+at_fn_check_status 0 $at_status "$at_srcdir/test_version.at:6"
 $at_failed && at_fn_log_failure
 $at_traceon; }
 
@@ -2011,3 +2014,33 @@ $at_traceon; }
 ) 5>&1 2>&1 7>&- | eval $at_tee_pipe
 read at_status <"$at_status_file"
 #AT_STOP_1
+#AT_START_2
+at_fn_group_banner 2 'test_version.at:2' \
+  "serrano" "                                        "
+at_xfail=no
+(
+  $as_echo "2. $at_setup_line: testing $at_desc ..."
+  $at_traceon
+
+
+
+{ set +x
+$as_echo "$at_srcdir/test_version.at:6: serrano --version"
+at_fn_check_prepare_trace "test_version.at:6"
+( $at_check_trace; serrano --version
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+at_fn_diff_devnull "$at_stderr" || at_failed=:
+echo >>"$at_stdout"; $as_echo "Serrano version 0.0.0
+" | \
+  $at_diff - "$at_stdout" || at_failed=:
+at_fn_check_status 0 $at_status "$at_srcdir/test_version.at:6"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+  set +x
+  $at_times_p && times >"$at_times_file"
+) 5>&1 2>&1 7>&- | eval $at_tee_pipe
+read at_status <"$at_status_file"
+#AT_STOP_2

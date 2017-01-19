@@ -1,0 +1,2 @@
+m4_include([../apps/baretta/tests/package.m4])
+m4_include([../apps/baretta/tests/test_version.at])

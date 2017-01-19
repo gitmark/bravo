@@ -1,0 +1,2 @@
+m4_include([../apps/serrano/tests/package.m4])
+m4_include([../apps/serrano/tests/test_version.at])

@@ -1,0 +1,8 @@
+
+AT_SETUP([baretta])
+AT_TESTED([baretta])
+AT_KEYWORDS([baretta])
+AT_CHECK([baretta --version],[],[[Baretta version 0.0.0
+]])
+AT_CLEANUP()
+

@@ -44,6 +44,7 @@
     #include <stropts.h>
 #endif
 
+#include <cstring>
 #include <algorithm>
 #include <functional>
 #include <cmath>

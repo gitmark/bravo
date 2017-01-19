@@ -294,7 +294,7 @@ int url::port_num()
         return 0;
     
     if (port.size())
-        return std::atoi(port.c_str());
+        return std::stoi(port.c_str());
     
     if (protocol == "https")
         return 443;
@@ -315,7 +315,7 @@ bool url::secure()
     
     if (port.size())
     {
-        int n = (int)std::atol(port.c_str());
+        int n = (int)std::stol(port.c_str());
         if (n == 443)
             return true;
     }

@@ -29,6 +29,7 @@
 #ifndef socket_buf_h
 #define socket_buf_h
 
+#include <cstring>
 #include <algorithm>
 
 namespace bravo

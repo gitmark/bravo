@@ -1,0 +1,5 @@
+http://check.sourceforge.net/doc/check_html/check_3.html
+http://check.sourceforge.net/doc/check_html/index.html#Top
+https://www.moiji-mobile.com/2013/06/25/using-gnu-autotest-for-running-uni/
+https://www.lrde.epita.fr/~akim/ccmp/doc/gnuprog2/Simple-Uses-of-Autotest.html
+

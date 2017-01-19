@@ -33,6 +33,7 @@
     #define INVALID_SOCKET -1
 #endif
 
+#include <condition_variable>
 #include <thread>
 #include <set>
 #include <bravo/tls_socket.h>

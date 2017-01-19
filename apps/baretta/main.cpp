@@ -290,7 +290,7 @@ int main(int argc, const char *argv[])
 {
     cmd_line.parse(argc,argv);
     
-    std::string version = "0.0.1";
+    std::string version = "0.0.0";
     
     if (cmd_line.flags.count("version"))
     {
