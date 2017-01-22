@@ -15,16 +15,38 @@ export PATH="/usr/local/bin:$PATH"
 
 cd /Users/$user
 
-if [ -d /Users/$user/bravo-test-build ]; then
-	rm -rf /Users/$user/bravo-test-build
+if [ ! -d /Users/$user/bravo-auto-build-and-test ]; then
+	mkdir /Users/$user/bravo-auto-build-and-test
 fi
 
-mkdir bravo-test-build
-cd bravo-test-build
+cd /Users/$user/bravo-auto-build-and-test
 
-git clone https://github.com/gitmark/bravo.git
+
+if [ ! -d bravo ]; then
+	git clone https://github.com/gitmark/bravo.git
+fi
 
 cd bravo
+git pull
+cid1=""
+
+if [ -f commit_id ]; then
+	cid1="`cat commit_id`"
+fi
+
+cid2="`git log --format=\"%H\" -n 1`"
+
+#echo "cid1: $cid1";
+#echo "cid2: $cid2";
+
+if [ "$cid1" == "$cid2" ]; then
+	echo "Already built this commit: $cid2"
+	exit 0
+fi
+
+echo "$cid2" > commit_id;
+
+commit_log="`git log $cid1..HEAD`"
 
 mkdir build
 cd build
@@ -33,12 +55,9 @@ cd build
 make
 make check
 cd tests
-echo "Bravo test results are attached." | mutt -a *.log -s "Bravo Test Results" -- $email
+echo "Bravo test results are attached for commit: \n$cid2\n\n $commit_log\n\n" | mutt -a *.log -s "Bravo Test Results" -- $email
 
 cd ../../..
 
-if [ -d /Users/$user/bravo-test-build ]; then
-	rm -rf /Users/$user/bravo-test-build
-fi
 
 
