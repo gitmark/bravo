@@ -8,7 +8,7 @@ date +%H:%M
 done
 echo "Testing build"
 make check
-echo "Bravo test results are attached" | mutt -a *.log -s "Bravo Test Results" -- mark1@helixport.com
+echo "Bravo test results are attached." | mutt -a *.log -s "Bravo Test Results" -- mark1@helixport.com
 
 sleep 61
 done
