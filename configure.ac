@@ -4,6 +4,7 @@ AC_PREREQ([2.59])
 AC_INIT([Bravo], [0.0.0], [bugs AT bravotools.org])
 AM_INIT_AUTOMAKE([-Wall -Werror foreign])
 AM_PROG_AR
+AM_CONDITIONAL([LINUX], [test $(uname -s) -eq "Linux"])
 
 AC_PROG_CXX
 AC_PROG_RANLIB

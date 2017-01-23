@@ -31,8 +31,7 @@ END_TEST
 
 START_TEST(test_hex_to_char)
 {
-//    ck_assert_msg(0x0A == hex_to_char("0A"), "Hex error, 0A != 0A");
-   
+    ck_assert_msg(0x0A == hex_to_char("0A"), "Hex error, 0A != 0A");
 }
 END_TEST
 
@@ -40,9 +39,8 @@ START_TEST(test_char_to_hex)
 {
     if (char_to_hex(0x0D) != "0D")
     {
- //       ck_abort_msg("Hex error, 0D != 0D");
+        ck_abort_msg("Hex error, 0D != 0D");
     }
-    
 }
 END_TEST
 

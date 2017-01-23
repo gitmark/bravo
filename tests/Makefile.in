@@ -85,8 +85,10 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-TESTS = check_bravo$(EXEEXT) test_script.sh
-check_PROGRAMS = check_bravo$(EXEEXT)
+TESTS = test_bravo_string_utils_trim$(EXEEXT) \
+	test_bravo_string_utils_header$(EXEEXT) test_script.sh
+check_PROGRAMS = test_bravo_string_utils_trim$(EXEEXT) \
+	test_bravo_string_utils_header$(EXEEXT)
 subdir = tests
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -97,9 +99,17 @@ mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
-am_check_bravo_OBJECTS = check_bravo-check_bravo.$(OBJEXT)
-check_bravo_OBJECTS = $(am_check_bravo_OBJECTS)
-check_bravo_DEPENDENCIES = $(top_builddir)/src/libbravo.a
+am_test_bravo_string_utils_header_OBJECTS = test_bravo_string_utils_header-test_bravo_string_utils_header.$(OBJEXT)
+test_bravo_string_utils_header_OBJECTS =  \
+	$(am_test_bravo_string_utils_header_OBJECTS)
+am__DEPENDENCIES_1 =
+am__DEPENDENCIES_2 = $(top_builddir)/src/libbravo.a \
+	$(am__DEPENDENCIES_1)
+test_bravo_string_utils_header_DEPENDENCIES = $(am__DEPENDENCIES_2)
+am_test_bravo_string_utils_trim_OBJECTS = test_bravo_string_utils_trim-test_bravo_string_utils_trim.$(OBJEXT)
+test_bravo_string_utils_trim_OBJECTS =  \
+	$(am_test_bravo_string_utils_trim_OBJECTS)
+test_bravo_string_utils_trim_DEPENDENCIES = $(am__DEPENDENCIES_2)
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -133,8 +143,10 @@ AM_V_CXXLD = $(am__v_CXXLD_@AM_V@)
 am__v_CXXLD_ = $(am__v_CXXLD_@AM_DEFAULT_V@)
 am__v_CXXLD_0 = @echo "  CXXLD   " $@;
 am__v_CXXLD_1 = 
-SOURCES = $(check_bravo_SOURCES)
-DIST_SOURCES = $(check_bravo_SOURCES)
+SOURCES = $(test_bravo_string_utils_header_SOURCES) \
+	$(test_bravo_string_utils_trim_SOURCES)
+DIST_SOURCES = $(test_bravo_string_utils_header_SOURCES) \
+	$(test_bravo_string_utils_trim_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -457,10 +469,16 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-check_bravo_SOURCES = check_bravo.cpp
-check_bravo_CPPFLAGS = -std=c++14 -I$(top_srcdir)/include -I$(prefix)/include -I$(top_srcdir)
-#check_bravo_LDADD = $(top_builddir)/src/libbravo.a -L/usr/local/lib -lcheck -lrt -lpthread -lsubunit
-check_bravo_LDADD = $(top_builddir)/src/libbravo.a -L/usr/local/lib -lcheck -lpthread
+@LINUX_FALSE@LINUX_FLAGS = 
+@LINUX_TRUE@LINUX_FLAGS = -lrt -lsubunit
+BRAVO_CPPFLAGS = -std=c++14 -I$(top_srcdir)/include -I$(prefix)/include -I$(top_srcdir)
+BRAVO_LDADD = $(top_builddir)/src/libbravo.a -L/usr/local/lib -lcheck -lpthread $(LINUX_FLAGS)
+test_bravo_string_utils_trim_SOURCES = test_bravo_string_utils_trim.cpp
+test_bravo_string_utils_trim_CPPFLAGS = $(BRAVO_CPPFLAGS)
+test_bravo_string_utils_trim_LDADD = $(BRAVO_LDADD)
+test_bravo_string_utils_header_SOURCES = test_bravo_string_utils_header.cpp
+test_bravo_string_utils_header_CPPFLAGS = $(BRAVO_CPPFLAGS)
+test_bravo_string_utils_header_LDADD = $(BRAVO_LDADD)
 all: all-am
 
 .SUFFIXES:
@@ -498,9 +516,13 @@ $(am__aclocal_m4_deps):
 clean-checkPROGRAMS:
 	-test -z "$(check_PROGRAMS)" || rm -f $(check_PROGRAMS)
 
-check_bravo$(EXEEXT): $(check_bravo_OBJECTS) $(check_bravo_DEPENDENCIES) $(EXTRA_check_bravo_DEPENDENCIES) 
-	@rm -f check_bravo$(EXEEXT)
-	$(AM_V_CXXLD)$(CXXLINK) $(check_bravo_OBJECTS) $(check_bravo_LDADD) $(LIBS)
+test_bravo_string_utils_header$(EXEEXT): $(test_bravo_string_utils_header_OBJECTS) $(test_bravo_string_utils_header_DEPENDENCIES) $(EXTRA_test_bravo_string_utils_header_DEPENDENCIES) 
+	@rm -f test_bravo_string_utils_header$(EXEEXT)
+	$(AM_V_CXXLD)$(CXXLINK) $(test_bravo_string_utils_header_OBJECTS) $(test_bravo_string_utils_header_LDADD) $(LIBS)
+
+test_bravo_string_utils_trim$(EXEEXT): $(test_bravo_string_utils_trim_OBJECTS) $(test_bravo_string_utils_trim_DEPENDENCIES) $(EXTRA_test_bravo_string_utils_trim_DEPENDENCIES) 
+	@rm -f test_bravo_string_utils_trim$(EXEEXT)
+	$(AM_V_CXXLD)$(CXXLINK) $(test_bravo_string_utils_trim_OBJECTS) $(test_bravo_string_utils_trim_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -508,7 +530,8 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/check_bravo-check_bravo.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_bravo_string_utils_header-test_bravo_string_utils_header.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_bravo_string_utils_trim-test_bravo_string_utils_trim.Po@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -524,19 +547,33 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXXCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
 
-check_bravo-check_bravo.o: check_bravo.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(check_bravo_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT check_bravo-check_bravo.o -MD -MP -MF $(DEPDIR)/check_bravo-check_bravo.Tpo -c -o check_bravo-check_bravo.o `test -f 'check_bravo.cpp' || echo '$(srcdir)/'`check_bravo.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/check_bravo-check_bravo.Tpo $(DEPDIR)/check_bravo-check_bravo.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='check_bravo.cpp' object='check_bravo-check_bravo.o' libtool=no @AMDEPBACKSLASH@
+test_bravo_string_utils_header-test_bravo_string_utils_header.o: test_bravo_string_utils_header.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(test_bravo_string_utils_header_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT test_bravo_string_utils_header-test_bravo_string_utils_header.o -MD -MP -MF $(DEPDIR)/test_bravo_string_utils_header-test_bravo_string_utils_header.Tpo -c -o test_bravo_string_utils_header-test_bravo_string_utils_header.o `test -f 'test_bravo_string_utils_header.cpp' || echo '$(srcdir)/'`test_bravo_string_utils_header.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/test_bravo_string_utils_header-test_bravo_string_utils_header.Tpo $(DEPDIR)/test_bravo_string_utils_header-test_bravo_string_utils_header.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='test_bravo_string_utils_header.cpp' object='test_bravo_string_utils_header-test_bravo_string_utils_header.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(check_bravo_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o check_bravo-check_bravo.o `test -f 'check_bravo.cpp' || echo '$(srcdir)/'`check_bravo.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(test_bravo_string_utils_header_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o test_bravo_string_utils_header-test_bravo_string_utils_header.o `test -f 'test_bravo_string_utils_header.cpp' || echo '$(srcdir)/'`test_bravo_string_utils_header.cpp
 
-check_bravo-check_bravo.obj: check_bravo.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(check_bravo_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT check_bravo-check_bravo.obj -MD -MP -MF $(DEPDIR)/check_bravo-check_bravo.Tpo -c -o check_bravo-check_bravo.obj `if test -f 'check_bravo.cpp'; then $(CYGPATH_W) 'check_bravo.cpp'; else $(CYGPATH_W) '$(srcdir)/check_bravo.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/check_bravo-check_bravo.Tpo $(DEPDIR)/check_bravo-check_bravo.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='check_bravo.cpp' object='check_bravo-check_bravo.obj' libtool=no @AMDEPBACKSLASH@
+test_bravo_string_utils_header-test_bravo_string_utils_header.obj: test_bravo_string_utils_header.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(test_bravo_string_utils_header_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT test_bravo_string_utils_header-test_bravo_string_utils_header.obj -MD -MP -MF $(DEPDIR)/test_bravo_string_utils_header-test_bravo_string_utils_header.Tpo -c -o test_bravo_string_utils_header-test_bravo_string_utils_header.obj `if test -f 'test_bravo_string_utils_header.cpp'; then $(CYGPATH_W) 'test_bravo_string_utils_header.cpp'; else $(CYGPATH_W) '$(srcdir)/test_bravo_string_utils_header.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/test_bravo_string_utils_header-test_bravo_string_utils_header.Tpo $(DEPDIR)/test_bravo_string_utils_header-test_bravo_string_utils_header.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='test_bravo_string_utils_header.cpp' object='test_bravo_string_utils_header-test_bravo_string_utils_header.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(check_bravo_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o check_bravo-check_bravo.obj `if test -f 'check_bravo.cpp'; then $(CYGPATH_W) 'check_bravo.cpp'; else $(CYGPATH_W) '$(srcdir)/check_bravo.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(test_bravo_string_utils_header_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o test_bravo_string_utils_header-test_bravo_string_utils_header.obj `if test -f 'test_bravo_string_utils_header.cpp'; then $(CYGPATH_W) 'test_bravo_string_utils_header.cpp'; else $(CYGPATH_W) '$(srcdir)/test_bravo_string_utils_header.cpp'; fi`
+
+test_bravo_string_utils_trim-test_bravo_string_utils_trim.o: test_bravo_string_utils_trim.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(test_bravo_string_utils_trim_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT test_bravo_string_utils_trim-test_bravo_string_utils_trim.o -MD -MP -MF $(DEPDIR)/test_bravo_string_utils_trim-test_bravo_string_utils_trim.Tpo -c -o test_bravo_string_utils_trim-test_bravo_string_utils_trim.o `test -f 'test_bravo_string_utils_trim.cpp' || echo '$(srcdir)/'`test_bravo_string_utils_trim.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/test_bravo_string_utils_trim-test_bravo_string_utils_trim.Tpo $(DEPDIR)/test_bravo_string_utils_trim-test_bravo_string_utils_trim.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='test_bravo_string_utils_trim.cpp' object='test_bravo_string_utils_trim-test_bravo_string_utils_trim.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(test_bravo_string_utils_trim_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o test_bravo_string_utils_trim-test_bravo_string_utils_trim.o `test -f 'test_bravo_string_utils_trim.cpp' || echo '$(srcdir)/'`test_bravo_string_utils_trim.cpp
+
+test_bravo_string_utils_trim-test_bravo_string_utils_trim.obj: test_bravo_string_utils_trim.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(test_bravo_string_utils_trim_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT test_bravo_string_utils_trim-test_bravo_string_utils_trim.obj -MD -MP -MF $(DEPDIR)/test_bravo_string_utils_trim-test_bravo_string_utils_trim.Tpo -c -o test_bravo_string_utils_trim-test_bravo_string_utils_trim.obj `if test -f 'test_bravo_string_utils_trim.cpp'; then $(CYGPATH_W) 'test_bravo_string_utils_trim.cpp'; else $(CYGPATH_W) '$(srcdir)/test_bravo_string_utils_trim.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/test_bravo_string_utils_trim-test_bravo_string_utils_trim.Tpo $(DEPDIR)/test_bravo_string_utils_trim-test_bravo_string_utils_trim.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='test_bravo_string_utils_trim.cpp' object='test_bravo_string_utils_trim-test_bravo_string_utils_trim.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(test_bravo_string_utils_trim_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o test_bravo_string_utils_trim-test_bravo_string_utils_trim.obj `if test -f 'test_bravo_string_utils_trim.cpp'; then $(CYGPATH_W) 'test_bravo_string_utils_trim.cpp'; else $(CYGPATH_W) '$(srcdir)/test_bravo_string_utils_trim.cpp'; fi`
 
 ID: $(am__tagged_files)
 	$(am__define_uniq_tagged_files); mkid -fID $$unique
@@ -731,9 +768,16 @@ recheck: all $(check_PROGRAMS)
 	        am__force_recheck=am--force-recheck \
 	        TEST_LOGS="$$log_list"; \
 	exit $$?
-check_bravo.log: check_bravo$(EXEEXT)
-	@p='check_bravo$(EXEEXT)'; \
-	b='check_bravo'; \
+test_bravo_string_utils_trim.log: test_bravo_string_utils_trim$(EXEEXT)
+	@p='test_bravo_string_utils_trim$(EXEEXT)'; \
+	b='test_bravo_string_utils_trim'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
+test_bravo_string_utils_header.log: test_bravo_string_utils_header$(EXEEXT)
+	@p='test_bravo_string_utils_header$(EXEEXT)'; \
+	b='test_bravo_string_utils_header'; \
 	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
