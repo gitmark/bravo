@@ -1,11 +1,18 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <string.h>
+
 #include <string>
 #include <bravo/string_utils.h>
 #include <bravo/hex.h>
+extern "C" {
+#ifdef _WIN32
+#define pid_t int
+#endif
 #include <check.h>
-#include <config.h>
+}
+
+//#include <config.h>
 
 using namespace std;
 using namespace bravo;

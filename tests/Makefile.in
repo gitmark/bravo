@@ -469,7 +469,6 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-@LINUX_FALSE@LINUX_FLAGS = 
 @LINUX_TRUE@LINUX_FLAGS = -lrt -lsubunit
 BRAVO_CPPFLAGS = -std=c++14 -I$(top_srcdir)/include -I$(prefix)/include -I$(top_srcdir)
 BRAVO_LDADD = $(top_builddir)/src/libbravo.a -L/usr/local/lib -lcheck -lpthread $(LINUX_FLAGS)

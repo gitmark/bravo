@@ -2,8 +2,6 @@
 
 if LINUX
 LINUX_FLAGS = -lrt -lsubunit
-else
-LINUX_FLAGS =
 endif
 
 BRAVO_CPPFLAGS =  -std=c++14 -I$(top_srcdir)/include -I$(prefix)/include -I$(top_srcdir)

@@ -1,5 +1,6 @@
 #!/bin/sh
 
+chmod 0644 *
 chmod 0755 *.sh . ..
  
 cd ../apps/baretta
@@ -14,7 +15,11 @@ chmod 0755 . .. tests
 cd tests
 chmod 0644 *.at *.m4
 
-cd ../../../src
+cd ../../../cmake/Modules
+chmod 0644 *
+chmod 0755 . ..
+
+cd ../../src
 chmod 0644 *
 chmod 0755 . ..
 
@@ -27,12 +32,18 @@ chmod 0644 *
 chmod 0755 . ..
 
 cd ../tests
-chmod 0644 *.at *.m4 *.am
+chmod 0644 *
+chmod 0755 . .. *.sh testsuite1 testsuite2
+
+cd ../m4
+chmod 0644 .gitignore
+chmod 0755 . ..
 
 cd ..
 
-chmod 0644 README.md LICENSE .gitignore ar-lib compile configure configure.ac depcomp install-sh Makefile.am missing package.m4 test-driver
-chmod 0755 . .. tests configure
+chmod 0644 *
+chmod 0755 . .. apps cmake docs include m4 scripts src tests 
+chmod 0755 ar-lib compile configure depcomp install-sh missing test-driver
 
 cd scripts
 

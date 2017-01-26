@@ -39,7 +39,7 @@
 // https://msdn.microsoft.com/en-us/library/windows/desktop/aa378812(v=vs.85).aspx
 // https://msdn.microsoft.com/en-us/library/windows/desktop/aa375447(v=vs.85).aspx
 // https://www.ibm.com/support/knowledgecenter/SSB23S_1.1.0.13/gtps7/s5sple2.html
-
+  
 #ifdef _WIN32
     #ifndef _WIN32_WINNT
         #define _WIN32_WINNT 0x0700f
@@ -59,7 +59,6 @@
     #include <poll.h>
 #endif
 
-#include <sys/ioctl.h>
 #include <mutex>
 #include <thread>
 #include <openssl/ssl.h>

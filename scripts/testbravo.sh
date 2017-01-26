@@ -15,11 +15,11 @@ export PATH="/usr/local/bin:$PATH"
 
 cd /Users/$user
 
-if [ ! -d /Users/$user/bravo-auto-build-and-test ]; then
-	mkdir /Users/$user/bravo-auto-build-and-test
+if [ ! -d /Users/$user/bravo-auto-build ]; then
+	mkdir /Users/$user/bravo-auto-build
 fi
 
-cd /Users/$user/bravo-auto-build-and-test
+cd /Users/$user/bravo-auto-build
 
 
 if [ ! -d bravo ]; then

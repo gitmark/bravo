@@ -135,7 +135,6 @@ am__v_AR_1 =
 libbravo_a_AR = $(AR) $(ARFLAGS)
 libbravo_a_LIBADD =
 am_libbravo_a_OBJECTS = libbravo_a-argv_parser.$(OBJEXT) \
-	libbravo_a-base_listen_port.$(OBJEXT) \
 	libbravo_a-base_socket.$(OBJEXT) \
 	libbravo_a-content_types.$(OBJEXT) libbravo_a-hex.$(OBJEXT) \
 	libbravo_a-http_listen_port.$(OBJEXT) \
@@ -301,7 +300,7 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 lib_LIBRARIES = libbravo.a
-libbravo_a_SOURCES = argv_parser.cpp base_listen_port.cpp base_socket.cpp content_types.cpp hex.cpp http_listen_port.cpp http_message.cpp http_utils.cpp norm_socket.cpp socket_utils.cpp ssl_socket.cpp tls_socket.cpp url.cpp vec_buf.cpp
+libbravo_a_SOURCES = argv_parser.cpp base_socket.cpp content_types.cpp hex.cpp http_listen_port.cpp http_message.cpp http_utils.cpp norm_socket.cpp socket_utils.cpp ssl_socket.cpp tls_socket.cpp url.cpp vec_buf.cpp
 include_HEADERS = $(top_srcdir)/include/bravo/*.h
 libbravo_a_CPPFLAGS = -std=c++14 -I$(top_srcdir)/include -I$(prefix)/include
 all: all-am
@@ -381,7 +380,6 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libbravo_a-argv_parser.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libbravo_a-base_listen_port.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libbravo_a-base_socket.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libbravo_a-content_types.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libbravo_a-hex.Po@am__quote@
@@ -422,20 +420,6 @@ libbravo_a-argv_parser.obj: argv_parser.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='argv_parser.cpp' object='libbravo_a-argv_parser.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libbravo_a_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libbravo_a-argv_parser.obj `if test -f 'argv_parser.cpp'; then $(CYGPATH_W) 'argv_parser.cpp'; else $(CYGPATH_W) '$(srcdir)/argv_parser.cpp'; fi`
-
-libbravo_a-base_listen_port.o: base_listen_port.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libbravo_a_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libbravo_a-base_listen_port.o -MD -MP -MF $(DEPDIR)/libbravo_a-base_listen_port.Tpo -c -o libbravo_a-base_listen_port.o `test -f 'base_listen_port.cpp' || echo '$(srcdir)/'`base_listen_port.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libbravo_a-base_listen_port.Tpo $(DEPDIR)/libbravo_a-base_listen_port.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='base_listen_port.cpp' object='libbravo_a-base_listen_port.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libbravo_a_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libbravo_a-base_listen_port.o `test -f 'base_listen_port.cpp' || echo '$(srcdir)/'`base_listen_port.cpp
-
-libbravo_a-base_listen_port.obj: base_listen_port.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libbravo_a_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libbravo_a-base_listen_port.obj -MD -MP -MF $(DEPDIR)/libbravo_a-base_listen_port.Tpo -c -o libbravo_a-base_listen_port.obj `if test -f 'base_listen_port.cpp'; then $(CYGPATH_W) 'base_listen_port.cpp'; else $(CYGPATH_W) '$(srcdir)/base_listen_port.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libbravo_a-base_listen_port.Tpo $(DEPDIR)/libbravo_a-base_listen_port.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='base_listen_port.cpp' object='libbravo_a-base_listen_port.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libbravo_a_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libbravo_a-base_listen_port.obj `if test -f 'base_listen_port.cpp'; then $(CYGPATH_W) 'base_listen_port.cpp'; else $(CYGPATH_W) '$(srcdir)/base_listen_port.cpp'; fi`
 
 libbravo_a-base_socket.o: base_socket.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libbravo_a_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libbravo_a-base_socket.o -MD -MP -MF $(DEPDIR)/libbravo_a-base_socket.Tpo -c -o libbravo_a-base_socket.o `test -f 'base_socket.cpp' || echo '$(srcdir)/'`base_socket.cpp

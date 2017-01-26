@@ -3,3 +3,11 @@ http://check.sourceforge.net/doc/check_html/index.html#Top
 https://www.moiji-mobile.com/2013/06/25/using-gnu-autotest-for-running-uni/
 https://www.lrde.epita.fr/~akim/ccmp/doc/gnuprog2/Simple-Uses-of-Autotest.html
 
+autotest
+http://junit.sourceforge.net/doc/testinfected/testing.htm
+
+google chrome testsuite autotest
+https://www.chromium.org/chromium-os/testing/test-suites
+
+https://guiquanz.gitbooks.io/google-cc-style-guide/content/ebook/Naming.html
+https://www.lrde.epita.fr/~akim/ccmp/doc/gnuprog2/The-GNU-M4-Test-Suite.html#The%20GNU%20M4%20Test%20Suite
