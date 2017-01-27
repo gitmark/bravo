@@ -267,20 +267,20 @@ am__leading_dot = @am__leading_dot@
 am__quote = @am__quote@
 am__tar = @am__tar@
 am__untar = @am__untar@
-bindir = @bindir@
+bindir = ${exec_prefix}/bin
 build_alias = @build_alias@
 builddir = @builddir@
 datadir = @datadir@
 datarootdir = @datarootdir@
 docdir = @docdir@
 dvidir = @dvidir@
-exec_prefix = @exec_prefix@
+exec_prefix = ${prefix}/bravo/0.0.0
 host_alias = @host_alias@
 htmldir = @htmldir@
-includedir = $(prefix)/bravo/0.0.1/include/bravo
+includedir = @includedir@
 infodir = @infodir@
 install_sh = @install_sh@
-libdir = $(prefix)/bravo/0.0.1/lib
+libdir = ${exec_prefix}/lib
 libexecdir = @libexecdir@
 localedir = @localedir@
 localstatedir = @localstatedir@
@@ -819,8 +819,8 @@ uninstall-am: uninstall-includeHEADERS uninstall-libLIBRARIES
 
 
 install-exec-hook:
-	ln -s $(libdir)/libbravo.a $(prefix)/lib/libbravo.a
-	ln -s $(includedir) $(prefix)/include/bravo
+	ln -sf $(exec_prefix)/lib/libbravo.a $(prefix)/lib/libbravo.a
+	ln -sf $(exec_prefix)/include/bravo $(prefix)/include/bravo
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
