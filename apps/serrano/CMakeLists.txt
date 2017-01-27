@@ -38,3 +38,8 @@ endif()
 add_dependencies(${name} bravo)
 
 install(TARGETS ${name} DESTINATION bin)
+
+add_custom_command(TARGET ${name} POST_BUILD
+	COMMAND ln -sf ${CMAKE_INSTALL_PREFIX}/bin/${name} ${ORIG_INSTALL_PREFIX}/bin/${name}
+)
+
