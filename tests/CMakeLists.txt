@@ -51,9 +51,9 @@ add_dependencies(${name} bravo)
 install(TARGETS ${name}  DESTINATION bin)
 
 if(WIN32)
-add_custom_target(check test_bravo_string_utils_header.exe)
+	add_custom_target(check test_bravo_string_utils_header.exe)
 else()
-add_custom_target(check test_bravo_string_utils_header)
+	add_custom_target(check test_bravo_string_utils_header)
 endif()
 
 

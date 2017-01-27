@@ -1993,8 +1993,8 @@ at_xfail=no
 
 
 { set +x
-$as_echo "$at_srcdir/test_version.at:6: baretta --version"
-at_fn_check_prepare_trace "test_version.at:6"
+$as_echo "$at_srcdir/test_version.at:5: baretta --version"
+at_fn_check_prepare_trace "test_version.at:5"
 ( $at_check_trace; baretta --version
 ) >>"$at_stdout" 2>>"$at_stderr" 5>&-
 at_status=$? at_failed=false
@@ -2003,7 +2003,7 @@ at_fn_diff_devnull "$at_stderr" || at_failed=:
 echo >>"$at_stdout"; $as_echo "Baretta version 0.0.0
 " | \
   $at_diff - "$at_stdout" || at_failed=:
-at_fn_check_status 0 $at_status "$at_srcdir/test_version.at:6"
+at_fn_check_status 0 $at_status "$at_srcdir/test_version.at:5"
 $at_failed && at_fn_log_failure
 $at_traceon; }
 
