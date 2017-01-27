@@ -30,7 +30,7 @@ vec_buf.cpp)
 
 install(TARGETS ${name} ARCHIVE DESTINATION lib)
 
-add_custom_command(TARGET ${name} POST_BUILD
-	COMMAND ln -sf ${CMAKE_INSTALL_PREFIX}/lib/libbravo.a ${ORIG_INSTALL_PREFIX}/lib/libbravo.a
-	COMMAND ln -sf ${CMAKE_INSTALL_PREFIX}/include/bravo ${ORIG_INSTALL_PREFIX}/include/bravo
-)
+#add_custom_command(TARGET ${name} POST_BUILD
+#	COMMAND ln -sf ${CMAKE_INSTALL_PREFIX}/lib/libbravo.a ${ORIG_INSTALL_PREFIX}/lib/libbravo.a
+#	COMMAND ln -sf ${CMAKE_INSTALL_PREFIX}/include/bravo ${ORIG_INSTALL_PREFIX}/include/bravo
+#)
