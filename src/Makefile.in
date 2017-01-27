@@ -14,10 +14,6 @@
 
 @SET_MAKE@
 
-#exec_prefix	= ${prefix}/bravo/0.0.0
-#bindir = ${exec_prefix}/bin
-#libdir = ${exec_prefix}/lib
-
 
 VPATH = @srcdir@
 am__is_gnu_make = { \
@@ -281,7 +277,11 @@ dvidir = @dvidir@
 exec_prefix = @exec_prefix@
 host_alias = @host_alias@
 htmldir = @htmldir@
-includedir = @includedir@
+
+#exec_prefix	= ${prefix}/bravo/0.0.0
+#bindir = ${exec_prefix}/bin
+#libdir = ${exec_prefix}/lib
+includedir = ${prefix}/include/bravo
 infodir = @infodir@
 install_sh = @install_sh@
 libdir = @libdir@

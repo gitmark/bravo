@@ -1,6 +1,7 @@
 #exec_prefix	= ${prefix}/bravo/0.0.0
 #bindir = ${exec_prefix}/bin
 #libdir = ${exec_prefix}/lib
+includedir = ${prefix}/include/bravo
 
 lib_LIBRARIES = libbravo.a
 libbravo_a_SOURCES = argv_parser.cpp base_socket.cpp content_types.cpp hex.cpp http_listen_port.cpp http_message.cpp http_utils.cpp norm_socket.cpp socket_utils.cpp ssl_socket.cpp tls_socket.cpp url.cpp vec_buf.cpp
