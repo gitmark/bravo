@@ -56,7 +56,7 @@ static int path_chars[] = {
 
 int check_path_chars(const std::string& path)
 {
-    for (char c: path)
+    for (int c: path)
     {
         if (!path_chars[c])
             return -1;
@@ -474,7 +474,7 @@ std::string replace_all(const std::string& str, const std::string &old_substr, c
         start = pos + old_substr.size();
     }
     
-    return move(ss.str());
+    return ss.str();
 }
 
 int parse_uri(const string &uri, string &dir, string &sub_dir, string &filename, string &params)
@@ -684,7 +684,7 @@ std::string url_encode(const std::string &url)
 {
     std::stringstream ss;
 
-    for (char c : url)
+    for (int c : url)
     {
         int n = url_encode_chars[c];
         
@@ -699,7 +699,7 @@ std::string url_encode(const std::string &url)
         }
     }
     
-    return move(ss.str());
+    return ss.str();
 }
 
 std::string url_decode(const std::string &url)
@@ -733,7 +733,7 @@ std::string url_decode(const std::string &url)
         }
     }
     
-    return move(ss.str());
+    return ss.str();
 }
 
 std::string get_file_ext(const std::string &filename)

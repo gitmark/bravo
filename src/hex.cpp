@@ -54,7 +54,7 @@ int hex_to_num[] = {
         0,  0,  0,  0,      0,  0,  0,  0,      0,  0,  0,  0,      0,  0,  0,  0,
 };
 
-char num_to_hex[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
+int num_to_hex[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
 
 std::string char_to_hex(char b)
 {
@@ -70,9 +70,9 @@ char hex_to_char(const std::string& hex)
     if (hex.size() != 2)
         return 0;
     
-    int num = hex_to_num[hex[0]];
+    int num = hex_to_num[(int)hex[0]];
     num <<= 4;
-    num += hex_to_num[hex[1]];
+    num += hex_to_num[(int)hex[1]];
     return (char)num;
 }
 
@@ -82,7 +82,7 @@ std::vector<byte> hex_to_vec(const std::string str)
     int num = 0;
     int count = str.size() % 2;
     
-    for (char c : str)
+    for (int c : str)
     {
         if (!count)
         {
@@ -98,7 +98,7 @@ std::vector<byte> hex_to_vec(const std::string str)
         }
     }
     
-    return move(result);
+    return result;
 }
 
 std::string vec_to_hex(const std::vector<byte> &vec)
@@ -113,7 +113,7 @@ std::string vec_to_hex(const std::vector<byte> &vec)
         ss << num_to_hex[lsb];
     }
     
-    return move(ss.str());
+    return ss.str();
 }
 
 }

@@ -80,11 +80,11 @@ namespace bravo
     inline std::string trim(const std::string &str)
     {
         if (!str.size())
-            return std::move(std::string());
+            return std::string();
         
         int start = 0;
         
-        while(char_types[str[start]] == 1)
+        while(char_types[(int)str[start]] == 1)
             ++start;
         
         if(start == str.size())
@@ -92,42 +92,42 @@ namespace bravo
 
         int stop = (int)str.size() - 1;
 
-        while(char_types[str[stop]] == 1)
+        while(char_types[(int)str[stop]] == 1)
             --stop;
         
-        return move(str.substr(start, stop - start + 1));
+        return str.substr(start, stop - start + 1);
     }
     
     inline std::string trim_left(const std::string &str)
     {
         if (!str.size())
-            return std::move(std::string());
+            return std::string();
 
         int start = 0;
         
-        while(char_types[str[start]] == 1)
+        while(char_types[(int)str[start]] == 1)
             ++start;
         
         if(start == str.size())
             return "";
         
-        return move(str.substr(start));
+        return str.substr(start);
     }
     
     inline std::string trim_right(const std::string &str)
     {
         if (!str.size())
-            return std::move(std::string());
+            return std::string();
 
         int stop = (int)str.size() - 1;
         
-        while(stop >= 0 && char_types[str[stop]] == 1)
+        while(stop >= 0 && char_types[(int)str[stop]] == 1)
             --stop;
         
         if (stop < 0)
             return "";
         
-        return move(str.substr(0, stop + 1));
+        return str.substr(0, stop + 1);
     }
     
     template<class T>

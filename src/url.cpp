@@ -136,7 +136,7 @@ int url::parse(const std::string& str)
     int next_state = 0;
     int n = 0;
     
-    for(char c : str)
+    for(int c : str)
     {
         n = url_chars[c];
         next_state = states[state][n];
@@ -263,7 +263,7 @@ int url::parse(const std::string& str)
         return -1;
     }
     
-    for(char c : port)
+    for(int c : port)
     {
         int n = num_chars[c];
         

@@ -163,7 +163,7 @@ std::vector<char> vec_buf::vec()
 {
     std::vector<char> v;
     read_to_vec(v);
-    return std::move(v);
+    return v;
 }
 
 int vec_buf::read_to_vec(std::vector<char> &v)

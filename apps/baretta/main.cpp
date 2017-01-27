@@ -74,11 +74,11 @@ unsigned long long from_hex(const std::string str)
     
     int i = 0;
     
-    while (hex_to_num1[str[i]] == -1)
+    while (hex_to_num1[(int)str[i]] == -1)
         ++i;
     
     int n;
-    while ((n = hex_to_num1[str[i++]]) >= 0)
+    while ((n = hex_to_num1[(int)str[i++]]) >= 0)
     {
         num <<= 4;
         num += n;
@@ -139,7 +139,7 @@ std::string build_client_header(const std::string& host, const std::string& path
     "Accept-Language: en-US,en;q=0.8\r\n"
     "\r\n";
     
-    return move(ss.str());
+    return ss.str();
 }
 
 std::string download(const std::string& url)
@@ -261,7 +261,7 @@ std::string download(const std::string& url)
         break;
     }
     
-    return move(content);
+    return content;
 }
 
 

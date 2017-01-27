@@ -2,8 +2,7 @@ if (IS_DIRECTORY ${CMAKE_SOURCE_DIR}/include AND IS_DIRECTORY ${CMAKE_SOURCE_DIR
 	set(Bravo_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/include)
 else()
 	find_path(Bravo_INCLUDE_DIRS
-	NAMES bravo/string_utils.h
-	)
+	NAMES bravo/string_utils.h)
 endif()
 
 if (IS_DIRECTORY ${CMAKE_SOURCE_DIR}/src AND IS_DIRECTORY 	${CMAKE_SOURCE_DIR}/apps/baretta)
@@ -16,6 +15,16 @@ if (IS_DIRECTORY ${CMAKE_SOURCE_DIR}/src AND IS_DIRECTORY 	${CMAKE_SOURCE_DIR}/a
 			endif()
 		else()
 			set(Bravo_LIBRARIES ${CMAKE_BINARY_DIR}/src/bravo.lib)
+		endif()		
+    elseif (APPLE)
+		if ("${CMAKE_GENERATOR}" MATCHES "^Xcode")
+			if ("${CMAKE_BUILD_TYPE}" STREQUAL "Release")
+				set(Bravo_LIBRARIES ${CMAKE_BINARY_DIR}/src/Release/libbravo.a)
+			else()
+				set(Bravo_LIBRARIES ${CMAKE_BINARY_DIR}/src/Debug/libbravo.a)
+			endif()
+		else()
+			set(Bravo_LIBRARIES ${CMAKE_BINARY_DIR}/src/libbravo.a)
 		endif()		
    else()
         set(Bravo_LIBRARIES ${CMAKE_BINARY_DIR}/src/libbravo.a)

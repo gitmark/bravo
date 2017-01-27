@@ -90,9 +90,9 @@ public:
     int call_process_connection(std::shared_ptr<socket_task> task)
     {
         if (secure_)
-            task->sock_ = std::move(std::make_unique<secure_socket>(task->socket_, task->cert_file_, task->key_file_));
+            task->sock_ = std::make_unique<secure_socket>(task->socket_, task->cert_file_, task->key_file_);
         else
-            task->sock_ = std::move(std::make_unique<norm_socket>(task->socket_));
+            task->sock_ = std::make_unique<norm_socket>(task->socket_);
         
         int r = process_connection(task);
         
@@ -115,12 +115,12 @@ public:
         
         if (secure_)
         {
-            listen_sock_ = std::move(std::make_unique<secure_socket>());
+            listen_sock_ = std::make_unique<secure_socket>();
             return listen_sock_->listen(port_);
         }
         else
         {
-            listen_sock_ = std::move(std::make_unique<norm_socket>());
+            listen_sock_ = std::make_unique<norm_socket>();
             return listen_sock_->listen(port_);
         }
     }
@@ -145,14 +145,14 @@ public:
             }
             
             if (secure_)
-                ptr = std::move(std::make_unique<secure_socket>(sock1, cert_file_, key_file_));
+                ptr = std::make_unique<secure_socket>(sock1, cert_file_, key_file_);
             else
-                ptr = std::move(std::make_unique<norm_socket>(sock1));
+                ptr = std::make_unique<norm_socket>(sock1);
             
             break;
         }
 
-        return std::move(ptr);
+        return ptr;
     }
     
     virtual int run()
@@ -175,15 +175,15 @@ public:
                 continue;
             }
 
-            std::shared_ptr<socket_task> task = std::move(std::make_unique<socket_task>());
+            std::shared_ptr<socket_task> task = std::make_unique<socket_task>();
             task->socket_       = sock_;
             task->stop_         = false;
             task->running_      = true;
             task->cert_file_    = cert_file_;
             task->key_file_     = key_file_;
             add_socket_task(task);
-            task->thread_       = std::move(std::make_unique<std::thread>(&base_listen_port::call_process_connection,
-                                                                          this, task));
+            task->thread_       = std::make_unique<std::thread>(&base_listen_port::call_process_connection,
+                                                                          this, task);
         }
 
         running_ = false;

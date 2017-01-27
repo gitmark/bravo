@@ -138,7 +138,7 @@ bool is_ip(const std::string &str)
     int next = S_UNK;
     int n = 0;
     
-    for(char c : str)
+    for(int c : str)
     {
         n = num_map[c];
         next = state[st][n];
@@ -209,9 +209,9 @@ ssl_socket::ssl_socket()
 };
 
 ssl_socket::ssl_socket(SOCKET sock_, const std::string &cert_file, const std::string &key_file) :
-cert_file_(cert_file),
-key_file_(key_file),
-norm_socket(sock_)
+    norm_socket(sock_),
+    cert_file_(cert_file),
+    key_file_(key_file)
 {
     ssl = nullptr;
 }

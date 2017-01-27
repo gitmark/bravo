@@ -54,7 +54,7 @@ public:
         for (auto &p : dir_map)
             port->add_dir(p.first, p.second.name, p.second.type);
 
-        ports.push_back(std::move(std::unique_ptr<http_listen_port>(port)));
+        ports.push_back(std::unique_ptr<http_listen_port>(port));
     }
     
     void add_dir(const std::string &dir, const std::string &actual_dir, dir_specs::dir_type type)

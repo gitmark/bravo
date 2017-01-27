@@ -295,9 +295,9 @@ tls_socket::tls_socket()
 };
 
 tls_socket::tls_socket(SOCKET sock_, const std::string &cert_file, const std::string &key_file) :
-cert_file_(cert_file),
-key_file_(key_file),
-norm_socket(sock_)
+    norm_socket(sock_),
+    cert_file_(cert_file),
+    key_file_(key_file)
 {
     client_config = nullptr;
     server_config = nullptr;
