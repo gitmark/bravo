@@ -14,6 +14,10 @@
 
 @SET_MAKE@
 
+#exec_prefix	= ${prefix}/bravo/0.0.0
+#bindir = ${exec_prefix}/bin
+#libdir = ${exec_prefix}/lib
+
 
 VPATH = @srcdir@
 am__is_gnu_make = { \
@@ -267,20 +271,20 @@ am__leading_dot = @am__leading_dot@
 am__quote = @am__quote@
 am__tar = @am__tar@
 am__untar = @am__untar@
-bindir = ${exec_prefix}/bin
+bindir = @bindir@
 build_alias = @build_alias@
 builddir = @builddir@
 datadir = @datadir@
 datarootdir = @datarootdir@
 docdir = @docdir@
 dvidir = @dvidir@
-exec_prefix = ${prefix}/bravo/0.0.0
+exec_prefix = @exec_prefix@
 host_alias = @host_alias@
 htmldir = @htmldir@
 includedir = @includedir@
 infodir = @infodir@
 install_sh = @install_sh@
-libdir = ${exec_prefix}/lib
+libdir = @libdir@
 libexecdir = @libexecdir@
 localedir = @localedir@
 localstatedir = @localstatedir@
@@ -758,8 +762,7 @@ install-dvi: install-dvi-am
 install-dvi-am:
 
 install-exec-am: install-libLIBRARIES
-	@$(NORMAL_INSTALL)
-	$(MAKE) $(AM_MAKEFLAGS) install-exec-hook
+
 install-html: install-html-am
 
 install-html-am:
@@ -799,18 +802,18 @@ ps-am:
 
 uninstall-am: uninstall-includeHEADERS uninstall-libLIBRARIES
 
-.MAKE: install-am install-exec-am install-strip
+.MAKE: install-am install-strip
 
 .PHONY: CTAGS GTAGS TAGS all all-am check check-am clean clean-generic \
 	clean-libLIBRARIES cscopelist-am ctags ctags-am distclean \
 	distclean-compile distclean-generic distclean-tags distdir dvi \
 	dvi-am html html-am info info-am install install-am \
 	install-data install-data-am install-dvi install-dvi-am \
-	install-exec install-exec-am install-exec-hook install-html \
-	install-html-am install-includeHEADERS install-info \
-	install-info-am install-libLIBRARIES install-man install-pdf \
-	install-pdf-am install-ps install-ps-am install-strip \
-	installcheck installcheck-am installdirs maintainer-clean \
+	install-exec install-exec-am install-html install-html-am \
+	install-includeHEADERS install-info install-info-am \
+	install-libLIBRARIES install-man install-pdf install-pdf-am \
+	install-ps install-ps-am install-strip installcheck \
+	installcheck-am installdirs maintainer-clean \
 	maintainer-clean-generic mostlyclean mostlyclean-compile \
 	mostlyclean-generic pdf pdf-am ps ps-am tags tags-am uninstall \
 	uninstall-am uninstall-includeHEADERS uninstall-libLIBRARIES
@@ -818,9 +821,9 @@ uninstall-am: uninstall-includeHEADERS uninstall-libLIBRARIES
 .PRECIOUS: Makefile
 
 
-install-exec-hook:
-	ln -sf $(exec_prefix)/lib/libbravo.a $(prefix)/lib/libbravo.a
-	ln -sf $(exec_prefix)/include/bravo $(prefix)/include/bravo
+#install-exec-hook:
+#	ln -sf $(exec_prefix)/lib/libbravo.a $(prefix)/lib/libbravo.a
+#	ln -sf $(exec_prefix)/include/bravo $(prefix)/include/bravo
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
