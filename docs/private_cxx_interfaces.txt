@@ -1,0 +1,430 @@
+How Qt Hides C++ Interfaces
+
+----------------
+C:\QtDev\qt5\qtbase\src\corelib\kernel
+qobject_p.h
+
+p for private
+header file lives in the source, not the include dir
+
+namespace QtPrivate {
+
+-----------------
+
+C:\QtDev\qt5\qtbase\src\corelib\kernel
+qobject.cpp
+
+/*!
+    \internal
+ */
+QObject::QObject(QObjectPrivate &dd, QObject *parent)
+    : d_ptr(&dd)
+{
+    Q_D(QObject);
+    d_ptr->q_ptr = this;
+	
+	
+-------------------------------------
+C:\QtDev\debug\include\QtCore
+qglobal.h
+
+template <typename T> static inline T *qGetPtrHelper(T *ptr) { return ptr; }
+template <typename Wrapper> static inline typename Wrapper::pointer qGetPtrHelper(const Wrapper &p) { return p.data(); }
+
+#define Q_DECLARE_PRIVATE(Class) \
+    inline Class##Private* d_func() { return reinterpret_cast<Class##Private *>(qGetPtrHelper(d_ptr)); } \
+    inline const Class##Private* d_func() const { return reinterpret_cast<const Class##Private *>(qGetPtrHelper(d_ptr)); } \
+    friend class Class##Private;
+
+#define Q_DECLARE_PRIVATE_D(Dptr, Class) \
+    inline Class##Private* d_func() { return reinterpret_cast<Class##Private *>(Dptr); } \
+    inline const Class##Private* d_func() const { return reinterpret_cast<const Class##Private *>(Dptr); } \
+    friend class Class##Private;
+
+#define Q_DECLARE_PUBLIC(Class)                                    \
+    inline Class* q_func() { return static_cast<Class *>(q_ptr); } \
+    inline const Class* q_func() const { return static_cast<const Class *>(q_ptr); } \
+    friend class Class;
+
+#define Q_D(Class) Class##Private * const d = d_func()
+#define Q_Q(Class) Class * const q = q_func()	
+
+#  if defined(QT_BUILD_WIDGETS_LIB)
+#    define Q_WIDGETS_EXPORT Q_DECL_EXPORT
+#  else
+#    define Q_WIDGETS_EXPORT Q_DECL_IMPORT
+
+
+----------------------------
+C:\QtDev\qt5\qtbase\src\widgets\kernel
+qwidget.h
+
+class QWidgetPrivate;
+
+class Q_WIDGETS_EXPORT QWidget : public QObject, public QPaintDevice
+{
+    Q_OBJECT
+    Q_DECLARE_PRIVATE(QWidget)
+	
+	
+------------------------------
+C:\QtDev\debug\include\QtCore
+qcompilerdetection.h
+#  define Q_DECL_EXPORT __declspec(dllexport)
+#  define Q_DECL_IMPORT __declspec(dllimport)
+
+-------------------------------
+C:\QtDev\debug\include\QtCore
+qobjectdefs.h
+
+/* qmake ignore Q_OBJECT */
+#define Q_OBJECT \
+public: \
+    Q_OBJECT_CHECK \
+    QT_WARNING_PUSH \
+    Q_OBJECT_NO_OVERRIDE_WARNING \
+    static const QMetaObject staticMetaObject; \
+    virtual const QMetaObject *metaObject() const; \
+    virtual void *qt_metacast(const char *); \
+    virtual int qt_metacall(QMetaObject::Call, int, void **); \
+    QT_WARNING_POP \
+    QT_TR_FUNCTIONS \
+private: \
+    Q_DECL_HIDDEN_STATIC_METACALL static void qt_static_metacall(QObject *, QMetaObject::Call, int, void **); \
+    struct QPrivateSignal {};
+	
+---------------------
+C:\QtDev\qt5\qtbase\src\widgets\itemviews
+qtableview.cpp
+QTableView::QTableView(QWidget *parent)
+    : QAbstractItemView(*new QTableViewPrivate, parent)
+{
+    Q_D(QTableView);
+    d->init();
+}
+	
+	
+---------------------------------
+
+C:\QtDev\qt5\qtbase\src\widgets\itemviews
+qtableview_p.h
+class QTableViewPrivate : public QAbstractItemViewPrivate
+{
+    Q_DECLARE_PUBLIC(QTableView)
+public:
+    QTableViewPrivate()
+        : showGrid(true), gridStyle(Qt::SolidLine),
+          rowSectionAnchor(-1), columnSectionAnchor(-1),
+          columnResizeTimerID(0), rowResizeTimerID(0),
+          horizontalHeader(0), verticalHeader(0),
+          sortingEnabled(false), geometryRecursionBlock(false),
+          visualCursor(QPoint())
+ {
+    wrapItemText = true;
+#ifndef QT_NO_DRAGANDDROP
+    overwrite = true;
+#endif
+ }
+    void init();	
+
+	
+---------------------------
+C:\QtDev\qt5\qtbase\src\widgets\itemviews
+qabstractitemview.cpp
+/*!
+    \internal
+*/
+QAbstractItemView::QAbstractItemView(QAbstractItemViewPrivate &dd, QWidget *parent)
+    : QAbstractScrollArea(dd, parent)
+{
+    d_func()->init();
+}
+	
+-------------------------
+C:\QtDev\qt5\qtbase\src\widgets\widgets
+qabstractscrollarea.cpp	
+	/*!
+    \internal
+
+    Creates a new QAbstractScrollAreaPrivate, \a dd with the given \a parent.
+*/
+QAbstractScrollArea::QAbstractScrollArea(QAbstractScrollAreaPrivate &dd, QWidget *parent)
+    :QFrame(dd, parent)
+{
+    Q_D(QAbstractScrollArea);
+    QT_TRY {
+        d->init();
+    } QT_CATCH(...) {
+        d->viewportFilter.reset();
+        QT_RETHROW;
+    }
+}
+
+	
+	------------------------------
+C:\QtDev\qt5\qtbase\src\widgets\widgets
+qframe.cpp	
+	/*!
+    Constructs a frame widget with frame style \l NoFrame and a
+    1-pixel frame width.
+
+    The \a parent and \a f arguments are passed to the QWidget
+    constructor.
+*/
+
+QFrame::QFrame(QWidget* parent, Qt::WindowFlags f)
+    : QWidget(*new QFramePrivate, parent, f)
+{
+    Q_D(QFrame);
+    d->init();
+}
+
+/*! \internal */
+QFrame::QFrame(QFramePrivate &dd, QWidget* parent, Qt::WindowFlags f)
+    : QWidget(dd, parent, f)
+{
+    Q_D(QFrame);
+    d->init();
+}
+	
+	
+	---------------
+	C:\QtDev\qt5\qtbase\src\widgets\kernel
+	qwidget.cpp
+	/*!
+    Constructs a widget which is a child of \a parent, with  widget
+    flags set to \a f.
+
+    If \a parent is 0, the new widget becomes a window. If
+    \a parent is another widget, this widget becomes a child window
+    inside \a parent. The new widget is deleted when its \a parent is
+    deleted.
+
+    The widget flags argument, \a f, is normally 0, but it can be set
+    to customize the frame of a window (i.e. \a
+    parent must be 0). To customize the frame, use a value composed
+    from the bitwise OR of any of the \l{Qt::WindowFlags}{window flags}.
+
+    If you add a child widget to an already visible widget you must
+    explicitly show the child to make it visible.
+
+    Note that the X11 version of Qt may not be able to deliver all
+    combinations of style flags on all systems. This is because on
+    X11, Qt can only ask the window manager, and the window manager
+    can override the application's settings. On Windows, Qt can set
+    whatever flags you want.
+
+    \sa windowFlags
+*/
+QWidget::QWidget(QWidget *parent, Qt::WindowFlags f)
+    : QObject(*new QWidgetPrivate, 0), QPaintDevice()
+{
+    QT_TRY {
+        d_func()->init(parent, f);
+    } QT_CATCH(...) {
+        QWidgetExceptionCleaner::cleanup(this, d_func());
+        QT_RETHROW;
+    }
+}
+
+
+/*! \internal
+*/
+QWidget::QWidget(QWidgetPrivate &dd, QWidget* parent, Qt::WindowFlags f)
+    : QObject(dd, 0), QPaintDevice()
+{
+    Q_D(QWidget);
+    QT_TRY {
+        d->init(parent, f);
+    } QT_CATCH(...) {
+        QWidgetExceptionCleaner::cleanup(this, d_func());
+        QT_RETHROW;
+    }
+}
+	
+	--------------
+	C:\QtDev\qt5\qtbase\src\corelib\kernel
+	qobject.cpp
+	/*!
+    Constructs an object with parent object \a parent.
+
+    The parent of an object may be viewed as the object's owner. For
+    instance, a \l{QDialog}{dialog box} is the parent of the \uicontrol{OK}
+    and \uicontrol{Cancel} buttons it contains.
+
+    The destructor of a parent object destroys all child objects.
+
+    Setting \a parent to 0 constructs an object with no parent. If the
+    object is a widget, it will become a top-level window.
+
+    \sa parent(), findChild(), findChildren()
+*/
+
+QObject::QObject(QObject *parent)
+    : d_ptr(new QObjectPrivate)
+{
+    Q_D(QObject);
+    d_ptr->q_ptr = this;
+    d->threadData = (parent && !parent->thread()) ? parent->d_func()->threadData : QThreadData::current();
+    d->threadData->ref();
+    if (parent) {
+        QT_TRY {
+            if (!check_parent_thread(parent, parent ? parent->d_func()->threadData : 0, d->threadData))
+                parent = 0;
+            setParent(parent);
+        } QT_CATCH(...) {
+            d->threadData->deref();
+            QT_RETHROW;
+        }
+    }
+    qt_addObject(this);
+    if (Q_UNLIKELY(qtHookData[QHooks::AddQObject]))
+        reinterpret_cast<QHooks::AddQObjectCallback>(qtHookData[QHooks::AddQObject])(this);
+}
+
+/*!
+    \internal
+ */
+QObject::QObject(QObjectPrivate &dd, QObject *parent)
+    : d_ptr(&dd)
+{
+    Q_D(QObject);
+    d_ptr->q_ptr = this;
+    d->threadData = (parent && !parent->thread()) ? parent->d_func()->threadData : QThreadData::current();
+    d->threadData->ref();
+    if (parent) {
+        QT_TRY {
+            if (!check_parent_thread(parent, parent ? parent->d_func()->threadData : 0, d->threadData))
+                parent = 0;
+            if (d->isWidget) {
+                if (parent) {
+                    d->parent = parent;
+                    d->parent->d_func()->children.append(this);
+                }
+                // no events sent here, this is done at the end of the QWidget constructor
+            } else {
+                setParent(parent);
+            }
+        } QT_CATCH(...) {
+            d->threadData->deref();
+            QT_RETHROW;
+        }
+    }
+    qt_addObject(this);
+    if (Q_UNLIKELY(qtHookData[QHooks::AddQObject]))
+        reinterpret_cast<QHooks::AddQObjectCallback>(qtHookData[QHooks::AddQObject])(this);
+}
+
+---------------
+C:\QtDev\qt5\qtbase\src\corelib\kernel
+qobject.h
+protected:
+    QScopedPointer<QObjectData> d_ptr;
+
+	
+	-------------
+C:\QtDev\qt5\qtbase\src\corelib\kernel
+qobject_p.h	
+	class Q_CORE_EXPORT QObjectPrivate : public QObjectData
+{
+    Q_DECLARE_PUBLIC(QObject)
+
+public:
+    struct ExtraData
+    {
+        ExtraData() {}
+    #ifndef QT_NO_USERDATA
+        QVector<QObjectUserData *> userData;
+    #endif
+        QList<QByteArray> propertyNames;
+        QList<QVariant> propertyValues;
+        QVector<int> runningTimers;
+        QList<QPointer<QObject> > eventFilters;
+        QString objectName;
+    };
+
+----------------
+C:\QtDev\debug\include\QtCore
+qobject.h
+class Q_CORE_EXPORT QObjectData {
+public:
+    virtual ~QObjectData() = 0;
+    QObject *q_ptr;
+    QObject *parent;
+    QObjectList children;
+
+    uint isWidget : 1;
+    uint blockSig : 1;
+    uint wasDeleted : 1;
+    uint isDeletingChildren : 1;
+    uint sendChildEvents : 1;
+    uint receiveChildEvents : 1;
+    uint isWindow : 1; //for QWindow
+    uint unused : 25;
+    int postedEvents;
+    QDynamicMetaObjectData *metaObject;
+    QMetaObject *dynamicMetaObject() const;
+};
+
+
+class Q_CORE_EXPORT QObject
+{
+    Q_OBJECT
+    Q_PROPERTY(QString objectName READ objectName WRITE setObjectName NOTIFY objectNameChanged)
+    Q_DECLARE_PRIVATE(QObject)
+	
+	
+	-------------
+	C:\QtDev\qt5\qtbase\src\widgets\itemviews
+	qlistwidget.h
+	class QListWidgetPrivate;
+
+class Q_WIDGETS_EXPORT QListWidget : public QListView
+{
+    Q_OBJECT
+    Q_PROPERTY(int count READ count)
+    Q_PROPERTY(int currentRow READ currentRow WRITE setCurrentRow NOTIFY currentRowChanged USER true)
+    Q_PROPERTY(bool sortingEnabled READ isSortingEnabled WRITE setSortingEnabled)
+
+    friend class QListWidgetItem;
+    friend class QListModel;
+public:
+    explicit QListWidget(QWidget *parent = 0);
+    ~QListWidget();
+
+    QListWidgetItem *item(int row) const;
+    int row(const QListWidgetItem *item) const;
+    void insertItem(int row, QListWidgetItem *item);
+    void insertItem(int row, const QString &label);
+    void insertItems(int row, const QStringList &labels);
+    inline void addItem(const QString &label) { insertItem(count(), label); }
+	
+	
+	---------------
+	C:\QtDev\qt5\qtbase\src\widgets\itemviews
+	qlistwidget.cpp
+	/*!
+    \property QListWidget::count
+    \brief the number of items in the list including any hidden items.
+*/
+
+int QListWidget::count() const
+{
+    Q_D(const QListWidget);
+    return d->model->rowCount();
+}
+
+/*!
+    Inserts an item with the text \a label in the list widget at the position
+    given by \a row.
+
+    \sa addItem()
+*/
+
+void QListWidget::insertItem(int row, const QString &label)
+{
+    Q_D(QListWidget);
+    d->listModel()->insert(row, new QListWidgetItem(label));
+}
+
+	
