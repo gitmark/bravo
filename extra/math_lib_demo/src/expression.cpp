@@ -8,15 +8,30 @@
 #include<string>
 using namespace std;
 
-class expression_p : public base_p
+void expression_p::init()
 {
-public:
     
-    deque<double> args;
-};
+}
 
-expression::expression()
+void expression_p::push(double num)
 {
-    data = make_unique<expression_p>();
+    nums.push_back(num);
+}
 
+expression::expression(expression_p &d) : base(d)
+{
+    C_P(expression)
+    p->init();
+}
+
+expression::expression() : base(*new expression_p)
+{
+    C_P(expression)
+    p->init();
+}
+
+void expression::push(double num)
+{
+    C_P(expression)
+    p->push(num);
 }

@@ -4,14 +4,17 @@
 #include <memory>
 #include <base.h>
 
-class base_p;
+class expression_p;
 
 class expression : public base
 {
 public:
     expression();
-
-    std::unique_ptr<base_p> data;
+    expression(expression_p &);
+    
+    void push(double num);
+    double add();
+    double mult();
 };
 
 #endif
