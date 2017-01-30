@@ -9,7 +9,9 @@ class expression_p : public base_p
     public:
     void init();
     void push(double d);
-    
+    void add();
+    void mult();
+
     std::deque<double> nums;
 };
 

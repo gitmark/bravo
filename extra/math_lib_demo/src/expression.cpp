@@ -35,3 +35,10 @@ void expression::push(double num)
     C_P(expression)
     p->push(num);
 }
+
+void expression_p::add()
+{
+    if (p->size() < 2)
+        return;
+
+}
