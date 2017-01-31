@@ -3,8 +3,8 @@
 
 #include <base.h>
 
-#define C_P(C) \
-C##_p * p = static_cast<C##_p*>(p_.get());
+#define BP(C) \
+C##_p * p = static_cast<C##_p*>(p_);
 
 class base_p
 {
