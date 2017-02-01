@@ -14,8 +14,7 @@ if(WIN32)
 else()
 	set (CMAKE_CXX_FLAGS "--std=c++14" ${CMAKE_CXX_FLAGS})
 	set(LINK_LIBS
-	${Bravo_LIBRARIES}
-	${LibreSSL_LIBRARIES})
+	math_lib_demo)
 endif()
 
 if(WIN32)
