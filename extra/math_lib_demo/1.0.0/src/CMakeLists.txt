@@ -43,7 +43,8 @@ set(headers
 
 SET_TARGET_PROPERTIES(${name} PROPERTIES 
 VERSION ${major}.${minor}.${patch}
-SOVERSION ${major})
+SOVERSION ${major}
+MACOSX_RPATH ON)
 
 SET_TARGET_PROPERTIES(${name}_static PROPERTIES 
 VERSION ${major}.${minor}.${patch}
@@ -77,10 +78,10 @@ set(dll_version_files
 
 install(FILES ${dll_version_files} DESTINATION bin)
 	elseif(APPLE)
-	set(lib_version_files 
-	${CMAKE_BINARY_DIR}/src/lib${name}.${major}.dylib
-	${CMAKE_BINARY_DIR}/src/lib${name}.${major}.${minor}.dylib
-	${CMAKE_BINARY_DIR}/src/lib${name}.${major}.${minor}.${patch}.dylib)
+#	set(lib_version_files 
+#	${CMAKE_BINARY_DIR}/src/lib${name}.${major}.dylib
+#	${CMAKE_BINARY_DIR}/src/lib${name}.${major}.${minor}.dylib
+#	${CMAKE_BINARY_DIR}/src/lib${name}.${major}.${minor}.${patch}.dylib)
 install(FILES ${lib_version_files} DESTINATION lib)
 	else()
 	endif()
@@ -97,12 +98,12 @@ add_custom_command(TARGET ${name} POST_BUILD
 	COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/src/${name}.dll ${CMAKE_BINARY_DIR}/src/${name}.${major}.dll 
 	)	
 	elseif(APPLE)
-add_custom_command(TARGET ${name} POST_BUILD
-	COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/src/lib${name}.dylib ${CMAKE_BINARY_DIR}/src/lib${name}.${major}.${minor}.${patch}.dylib 
-	COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/src/lib${name}.dylib ${CMAKE_BINARY_DIR}/src/lib${name}.${major}.${minor}.dylib 	
-	COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/src/lib${name}.dylib ${CMAKE_BINARY_DIR}/src/lib${name}.${major}.dylib
-
-	)	
+#add_custom_command(TARGET ${name} POST_BUILD
+#	COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/src/lib${name}.dylib ${CMAKE_BINARY_DIR}/src/lib${name}.${major}.${minor}.${patch}.dylib 
+#	COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/src/lib${name}.dylib ${CMAKE_BINARY_DIR}/src/lib${name}.${major}.${minor}.dylib 	
+#	COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/src/lib${name}.dylib ${CMAKE_BINARY_DIR}/src/lib${name}.${major}.dylib
+#
+#	)	
 	else()	
 endif()
 

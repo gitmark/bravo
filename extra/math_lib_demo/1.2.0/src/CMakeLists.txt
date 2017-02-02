@@ -43,7 +43,8 @@ set(headers
 
 SET_TARGET_PROPERTIES(${name} PROPERTIES 
 VERSION ${major}.${minor}.${patch}
-SOVERSION ${major})
+SOVERSION ${major}
+MACOSX_RPATH ON)
 
 SET_TARGET_PROPERTIES(${name}_static PROPERTIES 
 VERSION ${major}.${minor}.${patch}

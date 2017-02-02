@@ -17,7 +17,7 @@ else()
 	math_lib_demo)
 
 	set(STATIC_LINK_LIBS
-	math_lib_demo.a)
+	libmath_lib_demo.a)
 endif()
 
 if(WIN32)
@@ -31,10 +31,20 @@ else()
     set_property(TARGET ${name} 
 PROPERTY INSTALL_RPATH_USE_LINK_PATH TRUE)
 
-    add_executable(${name}_static main.cpp)
-    target_link_libraries(${name}_static ${STATIC_LINK_LIBS})
-    set_property(TARGET ${name} 
-PROPERTY INSTALL_RPATH_USE_LINK_PATH TRUE)
+set(CMAKE_EXE_LINKER_FLAGS 
+${CMAKE_EXE_LINKER_FLAGS}
+-L${math_lib_dir}/lib
+-Bstatic
+-lmath_lib_demo)
+ 
+MESSAGE(STATUS “FLAGS=======“ ${CMAKE_EXE_LINKER_FLAGS})
+add_executable(${name}_static main.cpp)
+
+#    set_property(TARGET ${name}_static 
+#PROPERTY LINK_FLAGS “${LINKER_FLAGS}”)
+
+#target_link_libraries(${name}_static ${STATIC_LINK_LIBS})
+
 endif()
 
 install(TARGETS ${name} DESTINATION bin)
