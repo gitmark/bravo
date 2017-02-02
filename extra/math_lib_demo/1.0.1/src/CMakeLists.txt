@@ -26,6 +26,14 @@ base.cpp
 math_lib_demo.cpp
 stack.cpp
 )
+
+add_library(${name}_static STATIC
+base.cpp
+math_lib_demo.cpp
+stack.cpp
+)
+
+set_target_properties(${name}_static PROPERTIES OUTPUT_NAME ${name})
 endif()
 
 set(headers
@@ -33,14 +41,25 @@ set(headers
 ../include/stack.h
 )
 
-#SET_TARGET_PROPERTIES(${name} PROPERTIES 
-#VERSION ${major}.${minor}.${patch}
-#SOVERSION 0.0.0)
+SET_TARGET_PROPERTIES(${name} PROPERTIES 
+VERSION ${major}.${minor}.${patch}
+SOVERSION ${major})
+
+SET_TARGET_PROPERTIES(${name}_static PROPERTIES 
+VERSION ${major}.${minor}.${patch}
+SOVERSION ${major})
 
 INSTALL(FILES ${headers} DESTINATION include)
 install(TARGETS ${name}
 	RUNTIME DESTINATION bin
 	LIBRARY DESTINATION lib
+	ARCHIVE DESTINATION lib
+	)
+
+install(TARGETS ${name}_static
+	RUNTIME DESTINATION bin
+	LIBRARY DESTINATION lib
+	ARCHIVE DESTINATION lib
 	)
 
 if(WIN32)
@@ -62,9 +81,8 @@ install(FILES ${dll_version_files} DESTINATION bin)
 	${CMAKE_BINARY_DIR}/src/lib${name}.${major}.dylib
 	${CMAKE_BINARY_DIR}/src/lib${name}.${major}.${minor}.dylib
 	${CMAKE_BINARY_DIR}/src/lib${name}.${major}.${minor}.${patch}.dylib)
-	
 install(FILES ${lib_version_files} DESTINATION lib)
-	
+	else()
 	endif()
 	
 	
@@ -84,7 +102,8 @@ add_custom_command(TARGET ${name} POST_BUILD
 	COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/src/lib${name}.dylib ${CMAKE_BINARY_DIR}/src/lib${name}.${major}.${minor}.dylib 	
 	COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/src/lib${name}.dylib ${CMAKE_BINARY_DIR}/src/lib${name}.${major}.dylib
 
-	)		
+	)	
+	else()	
 endif()
 
 

@@ -43,7 +43,7 @@ void stack::mult()
     p->mult();
 }
 
-double stack::result()
+double stack::val()
 {
     BP(stack)
     return p->val();
