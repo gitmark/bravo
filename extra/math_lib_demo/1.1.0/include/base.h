@@ -1,5 +1,6 @@
 #ifndef BASE_H
 #define BASE_H
+#include <memory>
 
 #ifdef _WIN32
 #if defined(B_BUILD_LIB)
@@ -25,7 +26,7 @@ public:
     base(base_p &);
     ~base();
     
-    base_p *p_;
+    std::unique_ptr<base_p> _p;
 };
 
 #endif // BASE_H

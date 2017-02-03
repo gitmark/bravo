@@ -4,7 +4,7 @@
 #include <base.h>
 
 #define BP(C) \
-C##_p * p = static_cast<C##_p*>(p_);
+C##_p * p = static_cast<C##_p*>(_p.get());
 
 class base_p
 {

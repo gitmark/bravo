@@ -11,7 +11,7 @@
 using namespace std;
 
 base::base() :
-p_(new base_p)
+_p(new base_p)
 {
     BP(base)
     p->init();
@@ -19,7 +19,7 @@ p_(new base_p)
 }
 
 base::base(base_p &b) :
-    p_(&b)
+    _p(&b)
 {
     BP(base)
     p->init();
@@ -28,8 +28,6 @@ base::base(base_p &b) :
 
 base::~base()
 {
-    delete p_;
-    p_ = nullptr;
 }
 
 void base_p::init()
