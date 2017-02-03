@@ -1,0 +1,4 @@
+set(major 1)
+set(minor 2)
+set(patch 0)
+

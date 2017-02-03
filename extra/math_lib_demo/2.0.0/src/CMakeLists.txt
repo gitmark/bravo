@@ -1,9 +1,7 @@
 cmake_minimum_required(VERSION 2.8)
 project(math_lib_demo)
 set(name math_lib_demo)
-set(major 2)
-set(minor 0)
-set(patch 0)
+include(version.txt)
 
 if (WIN32)
     ADD_DEFINITIONS(-DUNICODE -D_UNICODE)
@@ -33,7 +31,6 @@ math_lib_demo.cpp
 stack.cpp
 )
 
-set_target_properties(${name}_static PROPERTIES OUTPUT_NAME ${name})
 endif()
 
 set(headers
@@ -48,7 +45,10 @@ MACOSX_RPATH ON)
 
 SET_TARGET_PROPERTIES(${name}_static PROPERTIES 
 VERSION ${major}.${minor}.${patch}
-SOVERSION ${major})
+SOVERSION ${major}
+OUTPUT_NAME ${name})
+
+
 
 INSTALL(FILES ${headers} DESTINATION include)
 install(TARGETS ${name}
@@ -78,11 +78,6 @@ set(dll_version_files
 
 install(FILES ${dll_version_files} DESTINATION bin)
 	elseif(APPLE)
-	set(lib_version_files 
-	${CMAKE_BINARY_DIR}/src/lib${name}.${major}.dylib
-	${CMAKE_BINARY_DIR}/src/lib${name}.${major}.${minor}.dylib
-	${CMAKE_BINARY_DIR}/src/lib${name}.${major}.${minor}.${patch}.dylib)
-install(FILES ${lib_version_files} DESTINATION lib)
 	else()
 	endif()
 	
@@ -98,12 +93,6 @@ add_custom_command(TARGET ${name} POST_BUILD
 	COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/src/${name}.dll ${CMAKE_BINARY_DIR}/src/${name}.${major}.dll 
 	)	
 	elseif(APPLE)
-add_custom_command(TARGET ${name} POST_BUILD
-	COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/src/lib${name}.dylib ${CMAKE_BINARY_DIR}/src/lib${name}.${major}.${minor}.${patch}.dylib 
-	COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/src/lib${name}.dylib ${CMAKE_BINARY_DIR}/src/lib${name}.${major}.${minor}.dylib 	
-	COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/src/lib${name}.dylib ${CMAKE_BINARY_DIR}/src/lib${name}.${major}.dylib
-
-	)	
 	else()	
 endif()
 

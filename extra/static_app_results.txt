@@ -1,0 +1,5 @@
+add: 2 + 3, 5
+mult: 4 * 5, 20
+div: 6 / 7, 0.857143
+sub: 8 - 9, -1
+passed: 4, failed: 0
