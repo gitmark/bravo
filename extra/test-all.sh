@@ -29,11 +29,12 @@ fail_count=`grep -e 'passed: [0-9]*, failed: [0-9]*.*' app_results.txt | sed  -e
 
 echo "pass count: $pass_count"
 echo "fail count: $fail_count"
-echo ""
 
 if [ "$fail_count" = "" ]; then
 fail_count="1"
 fi
+echo "fail count: $fail_count"
+echo ""
 
 
   
@@ -52,9 +53,22 @@ echo ""
 echo $line >> matrix.txt
 }
 
-echo "" > matrix.txt
+test_lib (){
+lib_version=$1
+line=""
 for app_version in $app_versions; do
-	test_app $app_version
+	test_app_lib $app_version $lib_version
+line="${line} $fail_count"
+done
+echo ""
+echo "-----------------------------"
+echo ""
+echo $line >> matrix.txt
+}
+
+echo "" > matrix.txt
+for lib_version in $lib_versions; do
+	test_lib $lib_version
 done
 
 
