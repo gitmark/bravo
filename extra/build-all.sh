@@ -26,16 +26,18 @@ cd ../../..
 
 }
 
-build_it math_lib_demo/1.0.0
-build_it math_lib_demo/1.0.1
-build_it math_lib_demo/1.1.0
-build_it math_lib_demo/1.2.0
-build_it math_lib_demo/2.0.0
+#app_versions="1.0.0 1.1.0 1.2.0 2.0.0 3.0.0"
+#lib_versions="1.0.0 1.0.1 1.1.0 1.2.0 2.0.0 3.0.0 3.1.0"
 
-build_it math_app_demo/1.0.0
-build_it math_app_demo/1.1.0
-build_it math_app_demo/1.2.0
-build_it math_app_demo/2.0.0
+app_versions="4.0.0"
+lib_versions="4.0.0 4.1.0"
 
+for lib_version in $lib_versions; do
+	build_it math_lib_demo/$lib_version
+done
+
+for app_version in $app_versions; do
+	build_it math_app_demo/$app_version
+done
 
 

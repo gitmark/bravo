@@ -18,6 +18,19 @@
 /extra/math_lib_demo/1.2.0/install
 /extra/math_lib_demo/2.0.0/build
 /extra/math_lib_demo/2.0.0/install
+/extra/math_lib_demo/3.0.0/build
+/extra/math_lib_demo/3.0.0/install
+/extra/math_lib_demo/3.1.0/build
+/extra/math_lib_demo/3.1.0/install
+/extra/math_lib_demo/3.2.0/build
+/extra/math_lib_demo/3.2.0/install
+/extra/math_lib_demo/3.3.0/build
+/extra/math_lib_demo/3.3.0/install
+/extra/math_lib_demo/4.0.0/build
+/extra/math_lib_demo/4.0.0/install
+/extra/math_lib_demo/4.1.0/build
+/extra/math_lib_demo/4.1.0/install
+
 
 /extra/math_app_demo/1.0.0/build
 /extra/math_app_demo/1.0.0/install
@@ -27,6 +40,10 @@
 /extra/math_app_demo/1.2.0/install
 /extra/math_app_demo/2.0.0/build
 /extra/math_app_demo/2.0.0/install
+/extra/math_app_demo/3.0.0/build
+/extra/math_app_demo/3.0.0/install
+/extra/math_app_demo/4.0.0/build
+/extra/math_app_demo/4.0.0/install
 
 # Compiled Object files
 *.slo

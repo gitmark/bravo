@@ -1,0 +1,2 @@
+set(lib_version 4.0.0)
+

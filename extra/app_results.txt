@@ -1,5 +1,10 @@
-add: 2 + 3, 5
-mult: 4 * 5, 20
-div: 6 / 7, 0.857143
-sub: 8 - 9, -1
-passed: 4, failed: 0
+Test Summary
+add:  2 + 3
+mult: 4 * 5
+div:  6 / 7
+sub:  8 - 9
+last_result: 8 - 9
+stack_size:
+----------------------------
+passed: 6, failed: 0
+delta: 8
