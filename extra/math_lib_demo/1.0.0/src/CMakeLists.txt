@@ -18,6 +18,13 @@ dllmain.cpp
 math_lib_demo.cpp
 stack.cpp
 )
+
+add_library(${name}_static STATIC
+base.cpp
+math_lib_demo.cpp
+stack.cpp
+)
+
 else()
 add_library(${name} SHARED
 base.cpp
@@ -43,11 +50,16 @@ VERSION ${major}.${minor}.${patch}
 SOVERSION ${major}
 MACOSX_RPATH ON)
 
+target_compile_definitions(${name} PUBLIC B_BUILD_LIB=1)	
+target_compile_definitions(${name}_static PUBLIC B_BUILD_LIB=1)	
+
+
+if(NOT WIN32)
 SET_TARGET_PROPERTIES(${name}_static PROPERTIES 
 VERSION ${major}.${minor}.${patch}
 SOVERSION ${major}
 OUTPUT_NAME ${name})
-
+endif()
 
 
 INSTALL(FILES ${headers} DESTINATION include)
@@ -77,6 +89,14 @@ set(dll_version_files
 	${CMAKE_BINARY_DIR}/src/${name}.${major}.${minor}.${patch}.dll)
 
 install(FILES ${dll_version_files} DESTINATION bin)
+
+	set(static_lib_version_files 
+	${CMAKE_BINARY_DIR}/src/${name}.${major}_static.lib
+	${CMAKE_BINARY_DIR}/src/${name}.${major}.${minor}_static.lib
+	${CMAKE_BINARY_DIR}/src/${name}.${major}.${minor}.${patch}_static.lib)
+	
+install(FILES ${static_lib_version_files} DESTINATION lib)
+
 	elseif(APPLE)
 	else()
 	endif()
@@ -92,6 +112,11 @@ add_custom_command(TARGET ${name} POST_BUILD
 	COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/src/${name}.dll ${CMAKE_BINARY_DIR}/src/${name}.${major}.${minor}.dll 
 	COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/src/${name}.dll ${CMAKE_BINARY_DIR}/src/${name}.${major}.dll 
 	)	
+	
+	add_custom_command(TARGET ${name}_static POST_BUILD
+	COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/src/${name}_static.lib ${CMAKE_BINARY_DIR}/src/${name}.${major}.${minor}.${patch}_static.lib 
+	COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/src/${name}_static.lib ${CMAKE_BINARY_DIR}/src/${name}.${major}.${minor}_static.lib 	
+	COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/src/${name}_static.lib ${CMAKE_BINARY_DIR}/src/${name}.${major}_static.lib)
 	elseif(APPLE)
 	else()	
 endif()

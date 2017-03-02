@@ -11,7 +11,11 @@ if(WIN32)
 	set(LINK_LIBS
 	math_lib_demo.lib
 	)
-else()
+
+	set(STATIC_LINK_LIBS
+	math_lib_demo_static.lib
+	)
+	else()
 	set (CMAKE_CXX_FLAGS "--std=c++14" ${CMAKE_CXX_FLAGS})
 	set(LINK_LIBS
 	math_lib_demo)
@@ -28,7 +32,14 @@ if(WIN32)
     target_link_libraries(${name} ${LINK_LIBS})
     set_target_properties(${name} PROPERTIES LINK_FLAGS
         "/SUBSYSTEM:CONSOLE")
-else()
+		
+	add_executable(${name}_static main.cpp)
+	target_link_libraries(${name}_static ${STATIC_LINK_LIBS})
+    set_target_properties(${name}_static PROPERTIES LINK_FLAGS
+        "/SUBSYSTEM:CONSOLE")
+
+    target_compile_definitions(${name}_static PUBLIC B_STATIC_BUILD=1)	
+	else()
 add_executable(${name} main.cpp)
 target_link_libraries(${name} ${LINK_LIBS})
 set_property(TARGET ${name} 
