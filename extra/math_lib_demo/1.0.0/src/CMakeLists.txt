@@ -5,6 +5,7 @@ include(version.txt)
 
 if (WIN32)
     ADD_DEFINITIONS(-DUNICODE -D_UNICODE)
+	set (CMAKE_CXX_FLAGS "/DEF:math-lib-demo.def" ${CMAKE_CXX_FLAGS})
 else()
 	set (CMAKE_CXX_FLAGS "--std=c++14" ${CMAKE_CXX_FLAGS})
 endif()
@@ -48,11 +49,11 @@ set(headers
 SET_TARGET_PROPERTIES(${name} PROPERTIES 
 VERSION ${major}.${minor}.${patch}
 SOVERSION ${major}
-MACOSX_RPATH ON)
+MACOSX_RPATH ON
+LINK_FLAGS "/DEF:${CMAKE_SOURCE_DIR}/src/math-lib-demo.def")
 
 target_compile_definitions(${name} PUBLIC B_BUILD_LIB=1)	
 target_compile_definitions(${name}_static PUBLIC B_BUILD_LIB=1)	
-
 
 if(NOT WIN32)
 SET_TARGET_PROPERTIES(${name}_static PROPERTIES 

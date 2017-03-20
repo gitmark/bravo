@@ -1,0 +1,13 @@
+LIBRARY math_lib_demo
+EXPORTS
+    ??0base@@QEAA@AEAVbase_p@@@Z @10
+    ??0base@@QEAA@XZ @20
+    ??0stack@@QEAA@AEAVstack_p@@@Z @30
+    ??0stack@@QEAA@XZ @65
+    ??1base@@QEAA@XZ @66
+    ??1stack@@QEAA@XZ @67
+    ??4base@@QEAAAEAV0@AEBV0@@Z @7
+    ??4stack@@QEAAAEAV0@AEBV0@@Z @8
+    ?add@stack@@QEAAXXZ @9
+    ?mult@stack@@QEAAXXZ @100
+

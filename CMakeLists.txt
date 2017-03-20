@@ -15,5 +15,7 @@ endif()
 add_subdirectory(src)
 add_subdirectory(apps/baretta)
 add_subdirectory(apps/serrano)
+add_subdirectory(apps/exporter)
+add_subdirectory(apps/gen_test_code)
 add_subdirectory(tests)
 

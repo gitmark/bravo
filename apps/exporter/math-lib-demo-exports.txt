@@ -1,0 +1,40 @@
+Microsoft (R) COFF/PE Dumper Version 14.00.23026.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file math_lib_demo.dll
+
+File Type: DLL
+
+  Section contains the following exports for math_lib_demo.dll
+
+    00000000 characteristics
+    58C94587 time date stamp Wed Mar 15 08:45:43 2017
+        0.00 version
+           1 ordinal base
+          12 number of functions
+          12 number of names
+
+    ordinal hint RVA      name
+
+          1    0 00001000 ??0base@@QEAA@AEAVbase_p@@@Z
+          2    1 00001010 ??0base@@QEAA@XZ
+          3    2 000010E0 ??0stack@@QEAA@AEAVstack_p@@@Z
+          4    3 00001100 ??0stack@@QEAA@XZ
+          5    4 00001040 ??1base@@QEAA@XZ
+          6    5 00001140 ??1stack@@QEAA@XZ
+          7    6 00001050 ??4base@@QEAAAEAV0@AEBV0@@Z
+          8    7 00001050 ??4stack@@QEAAAEAV0@AEBV0@@Z
+          9    8 00001280 ?add@stack@@QEAAXXZ
+         10    9 00001320 ?mult@stack@@QEAAXXZ
+         11    A 00001340 ?push@stack@@QEAAXN@Z
+         12    B 00001400 ?val@stack@@QEAANXZ
+
+  Summary
+
+        1000 .data
+        1000 .pdata
+        2000 .rdata
+        1000 .reloc
+        1000 .rsrc
+        2000 .text
