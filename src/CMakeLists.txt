@@ -26,7 +26,8 @@ socket_utils.cpp
 ssl_socket.cpp
 tls_socket.cpp
 url.cpp
-vec_buf.cpp)
+vec_buf.cpp
+cpp_types.cpp)
 
 install(TARGETS ${name} ARCHIVE DESTINATION lib)
 
