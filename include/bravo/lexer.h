@@ -55,6 +55,13 @@
 #include <bravo/lex_buffer.h>
 #include <bravo/range_value.h>
 
+
+#ifdef BRAVO_LIB_BUILD
+#define LIB_PUBLIC __declspec(dllexport)
+#else
+#define LIB_PUBLIC
+#endif
+
 #define E_CONTINUE_SCAN   0
 #define E_END_OF_FILE     1
 #define E_LAST_MATCH      2
@@ -225,7 +232,7 @@ std::vector<std::map<int32_t, range_value>> &get_ext_maps()
 
 // Lexer template class
 template<class T>
-class lexer
+class LIB_PUBLIC lexer
 {
 public:
     enum input_type {txt, filename};

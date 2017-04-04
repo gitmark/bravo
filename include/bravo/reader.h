@@ -4,7 +4,13 @@
 #include <string>
 #include <iostream>
 
-class reader
+#ifdef BRAVO_LIB_BUILD
+#define LIB_PUBLIC __declspec(dllexport)
+#else
+#define LIB_PUBLIC
+#endif
+
+class LIB_PUBLIC reader
 {
 public:
     reader() {}
@@ -14,7 +20,7 @@ public:
     virtual bool eof() = 0;
 };
 
-class file_reader : public reader
+class LIB_PUBLIC file_reader : public reader
 {
 public:
     file_reader(std::istream *is_) : is(is_), bom_read(false)  

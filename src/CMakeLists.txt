@@ -1,9 +1,13 @@
+# on windows build with ...
+# ....\builds\bravo>..\..\projects\scripts\vcvars.bat
+# ....\builds\bravo>cmake -G "Visual Studio 14 2015 Win64" ../../projects/bravo
+
 cmake_minimum_required(VERSION 2.8)
 project(bravo)
 set(name bravo)
 
 if (WIN32)
-    ADD_DEFINITIONS(-DUNICODE -D_UNICODE)
+    ADD_DEFINITIONS(-DUNICODE -D_UNICODE -DBRAVO_LIB_BUILD)
 else()
 	set (CMAKE_CXX_FLAGS "--std=c++14" ${CMAKE_CXX_FLAGS})
 endif()
@@ -13,7 +17,7 @@ find_package(LibreSSL)
 
 include_directories(${Bravo_INCLUDE_DIRS} ${LibreSSL_INCLUDE_DIRS})
 
-add_library(${name}
+add_library(${name} SHARED
 argv_parser.cpp
 base_socket.cpp
 content_types.cpp
@@ -28,6 +32,10 @@ tls_socket.cpp
 url.cpp
 vec_buf.cpp
 cpp_types.cpp)
+
+if(WIN32)
+  target_link_libraries(${name} ws2_32 ${LibreSSL_LIBRARIES})
+endif()
 
 install(TARGETS ${name} ARCHIVE DESTINATION lib)
 
