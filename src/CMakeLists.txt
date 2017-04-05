@@ -6,6 +6,10 @@ cmake_minimum_required(VERSION 2.8)
 project(bravo)
 set(name bravo)
 
+if (APPLE)
+    set(CMAKE_MACOSX_RPATH ON)
+endif (APPLE)
+
 if (WIN32)
     ADD_DEFINITIONS(-DUNICODE -D_UNICODE -DBRAVO_LIB_BUILD)
 else()
@@ -35,9 +39,13 @@ cpp_types.cpp)
 
 if(WIN32)
   target_link_libraries(${name} ws2_32 ${LibreSSL_LIBRARIES})
+install(TARGETS ${name} ARCHIVE DESTINATION lib)
+
+else()
+  target_link_libraries(${name} ${LibreSSL_LIBRARIES})
+install(TARGETS ${name} LIBRARY DESTINATION lib)
 endif()
 
-install(TARGETS ${name} ARCHIVE DESTINATION lib)
 
 #add_custom_command(TARGET ${name} POST_BUILD
 #	COMMAND ln -sf ${CMAKE_INSTALL_PREFIX}/lib/libbravo.a ${ORIG_INSTALL_PREFIX}/lib/libbravo.a
