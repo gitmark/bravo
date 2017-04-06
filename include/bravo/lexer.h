@@ -614,7 +614,7 @@ public:
         state = -state;
     }
 
-    inline int next()
+    inline enum T::id next()
     {
         // Get the next token
         loop_state = S_INIT;
@@ -661,7 +661,7 @@ public:
  //       swap_char = *buf.ptr;
  //       *buf.ptr = 0;
 
-        return return_val;
+        return (enum T::id)return_val;
     }
 
     int prep_next_buffer()
