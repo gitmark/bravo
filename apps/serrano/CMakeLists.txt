@@ -6,7 +6,8 @@ find_package(Bravo REQUIRED)
 find_package(LibreSSL REQUIRED)
 
 include_directories(${Bravo_INCLUDE_DIRS} ${LibreSSL_INCLUDE_DIRS})
-
+message(STATUS "Bravo include dirs " ${Bravo_INCLUDE_DIRS})
+message(STATUS "Bravo libraries dirs " ${Bravo_LIBRARIES})
 if(WIN32)
 	set(LINK_LIBS
 	ws2_32.lib
