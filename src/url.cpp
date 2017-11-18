@@ -136,8 +136,9 @@ int url::parse(const std::string& str)
     int next_state = 0;
     int n = 0;
     
-    for(int c : str)
+    for(char ch : str)
     {
+        unsigned c = (unsigned)ch;
         n = url_chars[c];
         next_state = states[state][n];
         
@@ -151,6 +152,7 @@ int url::parse(const std::string& str)
                     break;
                     
                 case S_PORT:
+                    item.clear();
                     if (state == S_SL1)
                     {
                         host = protocol;
@@ -225,7 +227,6 @@ int url::parse(const std::string& str)
             {
                 case S_PROT1:
                 case S_HST1:
-                case S_PORT1:
                     item.clear();
                     break;
             }
@@ -240,6 +241,10 @@ int url::parse(const std::string& str)
     
     switch(state)
     {
+        case S_PORT:
+            port = item;
+            break;
+
         case S_PTH1:
                 path = "/";
             break;

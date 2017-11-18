@@ -31,6 +31,14 @@
     #define socklen_t int
 #else
     #define INVALID_SOCKET -1
+#include <sys/ioctl.h>
+#define INVALID_SOCKET -1
+#define WSAGetLastError() errno
+#define SOCKET_ERROR -1
+#define ioctlsocket ioctl
+#define WSAEWOULDBLOCK EWOULDBLOCK
+#include <netinet/tcp.h>
+#include <poll.h>
 #endif
 
 #include <condition_variable>
@@ -38,6 +46,7 @@
 #include <set>
 #include <bravo/tls_socket.h>
 #include <bravo/ssl_socket.h>
+#include <bravo/socket_utils.h>
 
 namespace bravo
 {
@@ -164,6 +173,7 @@ public:
         {
             SOCKET sock_ = listen_sock_->accept(10);
             
+            
             if (sock_  == INVALID_SOCKET)
             {
                 if (stop_)
@@ -175,6 +185,17 @@ public:
                 continue;
             }
 
+            int on = 1;
+            int rc = setsockopt(sock_, IPPROTO_TCP, TCP_NODELAY, (char *)&on, sizeof(int));
+            
+            if (SOCKET_ERROR == rc)
+            {
+                safe_close(sock_);
+                std::this_thread::sleep_for(std::chrono::milliseconds(1));
+                continue;
+            }
+            
+            
             std::shared_ptr<socket_task> task = std::make_unique<socket_task>();
             task->socket_       = sock_;
             task->stop_         = false;

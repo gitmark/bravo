@@ -131,17 +131,17 @@ public:
         return traits_type::eof();
     }
 
-    int do_flush()
+    bool do_flush()
     {
         std::ptrdiff_t n = pptr() - pbase();
         
         if (n <= 0)
-            return 0;
+            return true;
         
-        pbump(-(int)n);
         char *buf = pbase();
         sock->write(buf, (int)n);
-        return (int)n;
+        pbump(-(int)n);
+        return true;
     }
     
     int sync()

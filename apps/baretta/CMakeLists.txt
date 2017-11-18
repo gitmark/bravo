@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 2.8)
 project(baretta)
 set(name baretta)
 
+set(CMAKE_MACOSX_RPATH ON)
+
 find_package(Bravo REQUIRED)
 find_package(LibreSSL REQUIRED)
 
@@ -29,7 +31,7 @@ else()
     target_link_libraries(${name} ${LINK_LIBS})
 endif()
 
-add_dependencies(${name} bravo)
+add_dependencies(${name} bravo1)
 
 install(TARGETS ${name} DESTINATION bin)
 

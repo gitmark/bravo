@@ -2,11 +2,14 @@ cmake_minimum_required(VERSION 2.8)
 project(serrano)
 set(name serrano)
 
+set(CMAKE_MACOSX_RPATH ON)
+
 find_package(Bravo REQUIRED)
 find_package(LibreSSL REQUIRED)
 
 include_directories(${Bravo_INCLUDE_DIRS} ${LibreSSL_INCLUDE_DIRS})
-
+message(STATUS "Bravo include dirs " ${Bravo_INCLUDE_DIRS})
+message(STATUS "Bravo libraries dirs " ${Bravo_LIBRARIES})
 if(WIN32)
 	set(LINK_LIBS
 	ws2_32.lib
@@ -35,7 +38,7 @@ else()
     target_link_libraries(${name} ${LINK_LIBS})
 endif()
 
-add_dependencies(${name} bravo)
+add_dependencies(${name} bravo1)
 
 install(TARGETS ${name} DESTINATION bin)
 

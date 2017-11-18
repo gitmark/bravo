@@ -26,6 +26,8 @@
 #include <cstdlib>
 #include <vector>
 #include <string>
+#include <thread>
+#include <algorithm>
 #include <bravo/argv_parser.h>
 #include <bravo/url.h>
 #include <bravo/base_socket.h>
@@ -33,6 +35,7 @@
 #include <bravo/tls_socket.h>
 #include <bravo/string_utils.h>
 #include <bravo/hex.h>
+
 
 using namespace std;
 using namespace bravo;
@@ -176,6 +179,7 @@ std::string download(const std::string& url)
             std::string client_header = build_client_header(u.host, u.path);
             cout << client_header << "\n";
             sock->write(client_header);
+            std::this_thread::sleep_for(std::chrono::milliseconds(2000));
             std::string str;
             std::string first_line;
             sock->read_line(first_line);
@@ -192,6 +196,7 @@ std::string download(const std::string& url)
             
             while(sock->read_line(str) > 2)
             {
+                cout << "line: " << str << "\n";
                 parse_header(str,name,val);
                 if(m.find(name) != m.end())
                 {
@@ -209,7 +214,14 @@ std::string download(const std::string& url)
                 continue;
             }
             
-            if(m.count("Transfer-Encoding") && m["Transfer-Encoding"] == "chunked")
+            string trans_encoding;
+            if (m.count("Transfer-Encoding"))
+            {
+                trans_encoding = m["Transfer-Encoding"];
+                std::transform(trans_encoding.begin(), trans_encoding.end(), trans_encoding.begin(), ::tolower);
+            }
+            
+            if(trans_encoding == "chunked")
             {
                 stringstream ss;
                 int len = 0;

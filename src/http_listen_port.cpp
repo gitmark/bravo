@@ -26,6 +26,7 @@
     typedef __int64 ssize_t;
 #endif
 
+#include <iostream>
 #include <fcntl.h>
 #include <sstream>
 #include <string>
@@ -478,6 +479,7 @@ int http_listen_port::process_http_exec_request(std::ostream &os, http_message &
 
 int http_listen_port::write_content(std::ostream &os, http_message &request, http_message &response)
 {
+    cout << "write content\n";
     vector<char> buf;
     
     if(response.headers["Content-Type"] == "text/html")
@@ -488,13 +490,17 @@ int http_listen_port::write_content(std::ostream &os, http_message &request, htt
             return -1;
         
         text = buf.data();
+        cout << "content: " << text << "\n";
         generate_content(request,text);
         
-        if (write_chunk(os, text))
+        if (write_chunk(os, text) != text.size())
             return -1;
         
         if (write_chunk(os, ""))
             return -1;
+        
+        os.flush();
+        std::this_thread::sleep_for(std::chrono::seconds(5));
     }
     else
     {
@@ -516,6 +522,7 @@ int http_listen_port::process_http_file_request(std::ostream &os, http_message &
     if (response.write_to(os) < 0)
         return -1;
 
+    os.flush();
     return write_content(os, request, response);
 }
 

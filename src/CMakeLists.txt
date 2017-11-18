@@ -49,9 +49,6 @@ INSTALL (
     DESTINATION bravo/brv1.0.0
     FILES_MATCHING PATTERN "*.h*")
 endif()
-
-
-
 #add_custom_command(TARGET ${name} POST_BUILD
 #	COMMAND ln -sf ${CMAKE_INSTALL_PREFIX}/bravo/brv1.0.0 ${CMAKE_INSTALL_PREFIX}/bravo/brv1.0
 #	COMMAND ln -sf ${CMAKE_INSTALL_PREFIX}/bravo/brv1.0 ${CMAKE_INSTALL_PREFIX}/bravo/brv1

@@ -78,16 +78,16 @@ int main(int argc, const char *argv[])
     home = std::getenv("HOME");
 #endif
 
-    set_server_cert_file(home + "/Desktop/projects/mustang/certs/servercert.pem");
-    set_server_key_file(home + "/Desktop/projects/mustang/certs/serverkey.pem");
-    set_client_ca_file(home + "/Desktop/projects/mustang/certs/ca-certificates.crt");
+    set_server_cert_file(home + "/mustang/b-0.0.0/certs/servercert.pem");
+    set_server_key_file(home + "/mustang/b-0.0.0/certs/serverkey.pem");
+    set_client_ca_file(home + "/mustang/b-0.0.0/certs/ca-certificates.crt");
 
     http_server server;
-    server.add_dir("", home + "/Desktop/projects/mustang/research/serrano/web", dir_specs::text);
-    server.add_dir("cgi-bin", home + "/Desktop/projects/mustang/research/serrano/web/cgi-bin-win", dir_specs::exec);
+    server.add_dir("", home + "/mustang/b-0.0.0/research/serrano/web", dir_specs::text);
+    server.add_dir("cgi-bin", home + "/mustang/b-0.0.0/research/serrano/web/cgi-bin-win", dir_specs::exec);
 
     {
-        server.add_port(new http_listen_port(2002, home + "/Desktop/projects/mustang/certs/servercert.pem", home + "/Desktop/projects/mustang/certs/serverkey.pem"));
+        server.add_port(new http_listen_port(2002, home + "/mustang/b-0.0.0/certs/servercert.pem", home + "/mustang/b-0.0.0/certs/serverkey.pem"));
         server.add_port(new http_listen_port(2001));
         server.start();
 

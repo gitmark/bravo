@@ -262,6 +262,8 @@ int http_message::write_to(std::ostream &s)
         }
     }
     
+    
+ //   content = "<html><body>hey</body></html>";
     if (content.size())
     {
         if (chunked)

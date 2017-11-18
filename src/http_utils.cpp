@@ -315,7 +315,7 @@ int write_chunk(base_socket *s, const string &str, int timeout)
     if (write_string(s, "\r\n") != 2)
         return -1;
 
-    return 0;
+    return len;
 }
 
 int write_chunk(std::ostream &s, const string &str)
@@ -331,7 +331,7 @@ int write_chunk(std::ostream &s, const string &str)
     if (write_string(s, "\r\n") != 2)
         return -1;
     
-    return 0;
+    return len;
 }
 
 int write_chunk(base_socket *s, const vector<char> &buf, int timeout)
@@ -347,7 +347,7 @@ int write_chunk(base_socket *s, const vector<char> &buf, int timeout)
     if (write_string(s, "\r\n") != 2)
         return -1;
 
-    return 0;
+    return len;
 }
 
 int write_chunk(std::ostream &s, const vector<char> &buf)
