@@ -3,8 +3,8 @@
 # ....\builds\bravo>cmake -G "Visual Studio 14 2015 Win64" ../../projects/bravo
 
 cmake_minimum_required(VERSION 2.8)
-project(bravo)
-set(name bravo)
+project(bravo1)
+set(name bravo1)
 
 if (APPLE)
     set(CMAKE_MACOSX_RPATH ON)
@@ -43,11 +43,19 @@ install(TARGETS ${name} ARCHIVE DESTINATION lib)
 
 else()
   target_link_libraries(${name} ${LibreSSL_LIBRARIES})
-install(TARGETS ${name} LIBRARY DESTINATION lib)
+install(TARGETS ${name} LIBRARY DESTINATION bravo/brv1.0.0/lib)
+INSTALL (
+    DIRECTORY ${CMAKE_SOURCE_DIR}/include
+    DESTINATION bravo/brv1.0.0
+    FILES_MATCHING PATTERN "*.h*")
 endif()
 
 
+
 #add_custom_command(TARGET ${name} POST_BUILD
-#	COMMAND ln -sf ${CMAKE_INSTALL_PREFIX}/lib/libbravo.a ${ORIG_INSTALL_PREFIX}/lib/libbravo.a
-#	COMMAND ln -sf ${CMAKE_INSTALL_PREFIX}/include/bravo ${ORIG_INSTALL_PREFIX}/include/bravo
+#	COMMAND ln -sf ${CMAKE_INSTALL_PREFIX}/bravo/brv1.0.0 ${CMAKE_INSTALL_PREFIX}/bravo/brv1.0
+#	COMMAND ln -sf ${CMAKE_INSTALL_PREFIX}/bravo/brv1.0 ${CMAKE_INSTALL_PREFIX}/bravo/brv1
+#	COMMAND ln -sf ${CMAKE_INSTALL_PREFIX}/bravo/brv1/lib/libbravo1.dylib ${CMAKE_INSTALL_PREFIX}/lib/libbravo1.dylib
+#	COMMAND ln -sf ${CMAKE_INSTALL_PREFIX}/bravo/brv1/lib/libbravo1.dylib ${CMAKE_INSTALL_PREFIX}/lib/libbravo.dylib
+#	COMMAND ln -sf ${CMAKE_INSTALL_PREFIX}/bravo/brv1/include/bravo ${CMAKE_INSTALL_PREFIX}/include/bravo
 #)
