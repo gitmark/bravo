@@ -154,9 +154,10 @@ std::string download(const std::string& url)
     {
         class url u;
         u.parse(s_url);
-        
+        if (!u.path.size())
+            u.path = "/";
+            
         std::map<std::string,std::string> m;
-        
         
         if (u.valid)
         {
@@ -179,7 +180,7 @@ std::string download(const std::string& url)
             std::string client_header = build_client_header(u.host, u.path);
             cout << client_header << "\n";
             sock->write(client_header);
-            std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+//            std::this_thread::sleep_for(std::chrono::milliseconds(2000));
             std::string str;
             std::string first_line;
             sock->read_line(first_line);
@@ -326,10 +327,16 @@ int main(int argc, const char *argv[])
     home = std::getenv("HOME");
 #endif
 
-    set_server_cert_file(home + "/Desktop/projects/mustang/certs/servercert.pem");
-    set_server_key_file(home + "/Desktop/projects/mustang/certs/serverkey.pem");
-    set_client_ca_file(home + "/Desktop/projects/mustang/certs/ca-certificates.crt");
+    set_server_cert_file(home + "/mustang/b-0.0.0/certs/serrano.cert.signed.pem");
+    set_server_key_file(home + "/mustang/b-0.0.0/certs/serrano.private.unsecured.key");
+    set_client_ca_file(home + "/mustang/b-0.0.0/certs/bravo.ca.signed.crt");
 
+    
+    /*
+    set_server_cert_file(home + "/mustang/b-0.0.0/certs/mycert.pem");
+    set_server_key_file(home + "/mustang/b-0.0.0/certs/mykey.pem");
+    set_client_ca_file(home + "/mustang/b-0.0.0/certs/mycert.pem");
+    */
     std::string content = download(cmd_line.args[0]);
     cout << content << "\n";
     cout.flush();

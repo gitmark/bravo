@@ -78,6 +78,7 @@ void http_listen_port::add_dir(const std::string &dir, const std::string &actual
 
 int http_listen_port::process_connection(std::shared_ptr<socket_task> &task)
 {
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
     socket_stream ss(task->sock_.get());
 
     while (!task->stop_)
@@ -500,7 +501,6 @@ int http_listen_port::write_content(std::ostream &os, http_message &request, htt
             return -1;
         
         os.flush();
-        std::this_thread::sleep_for(std::chrono::seconds(5));
     }
     else
     {

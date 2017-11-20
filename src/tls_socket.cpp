@@ -489,7 +489,7 @@ int tls_socket::init()
             return -1;
         }
         
-        tls_configure(tls, client_config);
+ //       tls_configure(tls, client_config);
         
         if(tls_configure(tls, client_config) < 0)
         {
@@ -517,6 +517,8 @@ int tls_socket::init()
             client_config = nullptr;
             return -1;
         }
+        
+        
     }
     
     initialized_ = true;
