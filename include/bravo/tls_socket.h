@@ -67,6 +67,7 @@ public:
     tls_config  *get_server_config(const std::string& cert = "", const std::string& key = "");
     std::map<std::string, tls_config*> configs;
     std::mutex  mtx;
+    int _error;
 };
 
 class tls_socket : public norm_socket

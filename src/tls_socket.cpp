@@ -105,6 +105,7 @@ int thread_cleanup(void)
 
 tls_config* tls_server_config_(std::string cert_file = "", std::string key_file = "")
 {
+    // step 2
     tls_config* server_config_ = tls_config_new();
     
     if(server_config_ == nullptr)
@@ -112,13 +113,16 @@ tls_config* tls_server_config_(std::string cert_file = "", std::string key_file 
     
     unsigned int protocols = 0;
     
+    // step 4
     if(tls_config_parse_protocols(&protocols, "secure") < 0)
         return nullptr;
     
+    // step 5
     tls_config_set_protocols(server_config_, protocols);
     
     const char *ciphers = "ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA384";
     
+    // step 6
     if(tls_config_set_ciphers(server_config_, ciphers) < 0)
         return nullptr;
     
@@ -128,9 +132,11 @@ tls_config* tls_server_config_(std::string cert_file = "", std::string key_file 
     if (!cert_file.size())
         cert_file = server_cert_file_;
 
+    // step 8
     if(tls_config_set_cert_file(server_config_, cert_file.c_str()) < 0)
         return nullptr;
 
+    // step 7
     if(tls_config_set_key_file(server_config_, key_file.c_str()) < 0)
         return nullptr;
     
@@ -162,18 +168,29 @@ tls_config *tls_client_config_(std::string cert = "")
     if(tls_config_set_ca_file(client_config_, cert.c_str()) < 0)
         return nullptr;
     
+    // step 4
+    tls_config_insecure_noverifycert(client_config_);
+    
+ //   // step 5
+ //   tls_config_insecure_noverifyname(client_config_);
+
+    
     return client_config_;
 }
 
-tls_init_t::tls_init_t()
+    tls_init_t::tls_init_t() : _error(0)
 {
     // Good reference:
     // https://github.com/daniloegea/libressl-tls-api-examples/blob/master/server.c
     
     std::unique_lock<std::mutex> lock(mtx);
 
+    // step 1
     if(tls_init() < 0)
+    {
+        _error = 1;
         return;
+    }
 
     thread_init();
 }
@@ -430,11 +447,13 @@ int tls_socket::init()
     
     if(mode_ == SM_SERVER)
     {
+        // step 3
         struct tls *tls1 = tls_server();
         
         if(tls1 == nullptr)
             return -1;
 
+        // extra step
         server_config = tls_server_config(cert_file_, key_file_);
         
         if(!server_config)
@@ -444,6 +463,7 @@ int tls_socket::init()
             return -1;
         }
 
+        // step 9
         if(tls_configure(tls1, server_config) < 0)
         {
             tls_close(tls1);
@@ -452,6 +472,7 @@ int tls_socket::init()
             return -1;
         }
     
+        // step 10
         if(tls_accept_socket(tls1, &tls, (int)sock) < 0)
         {
             tls_close(tls1);
@@ -460,7 +481,10 @@ int tls_socket::init()
             return -1;
         }
         
+        // step 13
         tls_close(tls1);
+        
+        // step 14
         tls_free(tls1);
 
         if(safe_tls_handshake() != 0)
@@ -474,10 +498,12 @@ int tls_socket::init()
     }
     else
     {
+        // step 2
         tls = tls_client();
 
         if(tls == nullptr)
             return -1;
+        
         
         client_config = tls_client_config();
         
@@ -490,7 +516,7 @@ int tls_socket::init()
         }
         
  //       tls_configure(tls, client_config);
-        
+        //step 6
         if(tls_configure(tls, client_config) < 0)
         {
             tls_close(tls);
@@ -500,6 +526,7 @@ int tls_socket::init()
             return -1;
         }
         
+        // step 7
         if(tls_connect_socket(tls, (int)sock, hostname.c_str()) < 0)
         {
             tls_close(tls);
