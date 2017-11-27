@@ -169,7 +169,7 @@ tls_config *tls_client_config_(std::string cert = "")
         return nullptr;
     
     // step 4
-    tls_config_insecure_noverifycert(client_config_);
+//    tls_config_insecure_noverifycert(client_config_);
     
  //   // step 5
  //   tls_config_insecure_noverifyname(client_config_);
