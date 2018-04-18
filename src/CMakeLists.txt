@@ -7,7 +7,7 @@ project(bravo1)
 set(name bravo1)
 
 if (APPLE)
-    set(CMAKE_MACOSX_RPATH ON)
+    set(CMAKE_MACOSX_RPATH OFF)
 endif (APPLE)
 
 if (WIN32)

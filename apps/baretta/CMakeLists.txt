@@ -19,6 +19,8 @@ else()
 	set(LINK_LIBS
 	${Bravo_LIBRARIES}
 	${LibreSSL_LIBRARIES})
+
+message(STATUS "Bravo_LIBRARIES " ${Bravo_LIBRARIES})
 endif()
 
 if(WIN32)

@@ -81,7 +81,7 @@ qobjectdefs.h
 #define Q_OBJECT \
 public: \
     Q_OBJECT_CHECK \
-    QT_WARNING_PUSH \
+    QT_WARNING_PUSH \:
     Q_OBJECT_NO_OVERRIDE_WARNING \
     static const QMetaObject staticMetaObject; \
     virtual const QMetaObject *metaObject() const; \

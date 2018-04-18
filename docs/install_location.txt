@@ -10,7 +10,7 @@ On UNIX type systems, Bravo is installed by default in /usr/local. The directory
 /usr/local/lib/libbravo.a 	-> /usr/local/bravo/current/lib/libbravo.a
 /usr/local/include/bravo 	-> /usr/local/bravo/current/include/bravo
 
-The convention is followed in a similar fashion by many popular apps and utilites such as mysql, apache and HomeBrew.  
+The convention is followed in a similar fashion by many popular apps and utilites such as mysql, apachei, cuda and HomeBrew.  
 
 Notes from researching install locations and conventions:
 
@@ -93,6 +93,14 @@ but could have (my preference)
 /usr/local/bin/serrano 		-> /usr/local/bravo/current/bin/serrano
 /usr/local/lib/libbravo.a 	-> /usr/local/bravo/current/lib/libbravo.a
 /usr/local/include/bravo 	-> /usr/local/bravo/current/include/bravo
+
+I think /usr/local is more likely to exist than /opt. No sure
+
+I also think HomeBrew already takes care of openning permissions to /usr/local or maybe just /usr/local/bin and /usr/local/lib. Not sure
+
+
+
+
 
 http://superuser.com/questions/122420/usr-local-or-opt
 http://askubuntu.com/questions/722968/why-should-i-move-everything-in-opt
