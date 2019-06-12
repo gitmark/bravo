@@ -10,7 +10,7 @@ On UNIX type systems, Bravo is installed by default in /usr/local. The directory
 /usr/local/lib/libbravo.a 	-> /usr/local/bravo/current/lib/libbravo.a
 /usr/local/include/bravo 	-> /usr/local/bravo/current/include/bravo
 
-The convention is followed in a similar fashion by many popular apps and utilites such as mysql, apachei, cuda and HomeBrew.  
+The convention is followed in a similar fashion by many popular apps and utilites such as mysql, apache, cuda and HomeBrew.  
 
 Notes from researching install locations and conventions:
 
