@@ -28,6 +28,8 @@
 #include <vector>
 #include <memory>
 #include <algorithm>
+
+#include <bravo/string_utils.h>
 #include <bravo/vec_buf.h>
 
 namespace bravo

@@ -32,6 +32,32 @@
 #include <deque>
 #include <bravo/io_stream.h>
 
+namespace std {
+template <class T>
+std::unique_ptr<T> make_unique() {
+	return std::unique_ptr<T>(new T());
+}
+
+template <class T, class A>
+std::unique_ptr<T> make_unique(A a) {
+	return std::unique_ptr<T>(new T(a));
+}
+
+
+template <class T, class A, class B>
+std::unique_ptr<T> make_unique(A a, B b) {
+	return std::unique_ptr<T>(new T(a, b));
+}
+
+template <class T, class A, class B, class C>
+std::unique_ptr<T> make_unique(A a, B b, C c) {
+	return std::unique_ptr<T>(new T(a, b, c));
+}
+
+
+
+}
+
 static int char_types[] = {
 //  0           4           8 9 A B     C D E F
     0,0,0,0,    0,0,0,0,    1,1,1,1,    1,1,0,0, // 0

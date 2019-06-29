@@ -327,17 +327,7 @@ int main(int argc, const char *argv[])
     home = std::getenv("HOME");
 #endif
 
-//    set_server_cert_file(home + "/mustang/b-0.0.0/certs/serrano.cert.signed.pem");
-//    set_server_key_file(home + "/mustang/b-0.0.0/certs/serrano.private.unsecured.key");
-    set_client_ca_file(home + "/mustang/0.0.0/certs/rootCA.pem");
-//   set_client_ca_file(home + "/mustang/0.0.0/certs/ca-certificates.crt");
-
-    
-    /*
-    set_server_cert_file(home + "/mustang/b-0.0.0/certs/mycert.pem");
-    set_server_key_file(home + "/mustang/b-0.0.0/certs/mykey.pem");
-    set_client_ca_file(home + "/mustang/b-0.0.0/certs/mycert.pem");
-    */
+    set_client_ca_file(home + "/Documents/serrano/certs/demorootca.pem");
     std::string content = download(cmd_line.args[0]);
     cout << content << "\n";
     cout.flush();

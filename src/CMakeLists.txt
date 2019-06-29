@@ -13,7 +13,7 @@ endif (APPLE)
 if (WIN32)
     ADD_DEFINITIONS(-DUNICODE -D_UNICODE -DBRAVO_LIB_BUILD)
 else()
-	set (CMAKE_CXX_FLAGS "--std=c++14" ${CMAKE_CXX_FLAGS})
+	set (CMAKE_CXX_FLAGS "-std=c++11 -shared -fPIC" ${CMAKE_CXX_FLAGS})
 endif()
 
 find_package(Bravo)
@@ -42,7 +42,7 @@ if(WIN32)
 install(TARGETS ${name} ARCHIVE DESTINATION lib)
 
 else()
-  target_link_libraries(${name} ${LibreSSL_LIBRARIES})
+  target_link_libraries(${name} /usr/local/lib/libcrypto.so /usr/local/lib/libssl.so /usr/local/lib/libtls.so)
 install(TARGETS ${name} LIBRARY DESTINATION bravo/brv1.0.0/lib)
 INSTALL (
     DIRECTORY ${CMAKE_SOURCE_DIR}/include

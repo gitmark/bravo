@@ -41,7 +41,7 @@
 #endif
 
 #ifdef __linux__
-    #include <stropts.h>
+//    #include <stropts.h>
 #endif
 
 #include <cstring>

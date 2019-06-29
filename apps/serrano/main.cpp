@@ -78,33 +78,22 @@ int main(int argc, const char *argv[])
     home = std::getenv("HOME");
 #endif
 
-    set_server_cert_file(home + "/mustang/0.0.0/certs/localhost.pem");
-    set_server_key_file(home + "/mustang/0.0.0/certs/localhost.key");
-    set_client_ca_file(home + "/mustang/0.0.0/certs/rootCA.pem");
-    /*
-    set_server_cert_file(home + "/mustang/b-0.0.0/certs/servercert.pem");
-    set_server_key_file(home + "/mustang/b-0.0.0/certs/serverkey.pem");
-    set_client_ca_file(home + "/mustang/b-0.0.0/certs/ca-certificates.crt");
-     */
-/*
-    set_server_cert_file(home + "/mustang/b-0.0.0/certs/mycert.pem");
-    set_server_key_file(home + "/mustang/b-0.0.0/certs/mykey.pem");
-    set_client_ca_file(home + "/mustang/b-0.0.0/certs/mycert.pem");
-  */
+    set_server_cert_file(home + "/Documents/serrano/certs/demohost.pem");
+    set_server_key_file(home + "/Documents/serrano/certs/demohost.key");
+    set_client_ca_file(home + "/Documents/serrano/certs/demorootca.pem");
+
     http_server server;
-    server.add_dir("", home + "/mustang/0.0.0/research/serrano/web", dir_specs::text);
-    server.add_dir("cgi-bin", home + "/mustang/0.0.0/research/serrano/web/cgi-bin-win", dir_specs::exec);
+    server.add_dir("", home + "/Documents/serrano/web", dir_specs::text);
+    server.add_dir("cgi-bin", home + "/Documents/serrano/web/cgi-bin", dir_specs::exec);
 
     
     {
- //       server.add_port(new http_listen_port(2002, home + "/mustang/b-0.0.0/certs/serrano.cert.signed.pem", home + "/mustang/b-0.0.0/certs/serrano.private.unsecured.key"));
-        server.add_port(new http_listen_port(2002, home + "/mustang/0.0.0/certs/localhost.pem", home + "/mustang/0.0.0/certs/localhost.key"));
+        server.add_port(new http_listen_port(2002, home + "/Documents/serrano/certs/demohost.pem", home + "/Documents/serrano/certs/demohost.key"));
         server.add_port(new http_listen_port(2001));
         server.start();
 
-//        for (int i = 0; i < 10; ++i)
-            for (;;)
-                std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        for (;;)
+            std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     }
     server.stop();
 

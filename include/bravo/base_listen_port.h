@@ -44,6 +44,8 @@
 #include <condition_variable>
 #include <thread>
 #include <set>
+
+#include <bravo/string_utils.h>
 #include <bravo/tls_socket.h>
 #include <bravo/ssl_socket.h>
 #include <bravo/socket_utils.h>

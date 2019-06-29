@@ -15,7 +15,7 @@ if(WIN32)
 	${LibreSSL_LIBRARIES}
 	${Bravo_LIBRARIES})
 else()
-	set (CMAKE_CXX_FLAGS "--std=c++14" ${CMAKE_CXX_FLAGS})
+	set (CMAKE_CXX_FLAGS "--std=c++11" ${CMAKE_CXX_FLAGS})
 	set(LINK_LIBS
 	${Bravo_LIBRARIES}
 	${LibreSSL_LIBRARIES})
@@ -30,7 +30,7 @@ if(WIN32)
         "/SUBSYSTEM:CONSOLE")
 else()
     add_executable(${name} main.cpp)
-    target_link_libraries(${name} ${LINK_LIBS})
+    target_link_libraries(${name} ${CMAKE_BINARY_DIR}/src/libbravo1.so)
 endif()
 
 add_dependencies(${name} bravo1)

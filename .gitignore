@@ -1,3 +1,5 @@
+.DS_Store
+build/
 /autom4te.cache
 /DerivedData
 /bravo.xcodeproj
