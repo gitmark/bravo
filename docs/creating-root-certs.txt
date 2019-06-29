@@ -1,0 +1,13 @@
+Creating a Root Certificate
+
+The openssl utility can create private keys, create certificate signing requests, and sign certificate signing requests. The utility takes its defaults parameter from /etc/pki/tls/openssl.cnf.
+
+
+The openssl utility reads its configuration from /etc/pki/tls/openssl.cnf. When creating a certficate, openssl creates it for the machine it is running on. There is one global file /etc/pki/tls/openssl.cnf per machine. When signing a csr (certificate signing request) openssl signs it using the private key for the machine it is running on. The location of the machines private key is specified in /etc/pki/tls/openssl.cnf. The certificate that is being signed originates from another machine which has its own /etc/pki/tls/openssl.cnf.
+
+ 
+
+A root certificate is associated with a specific host or computer. We will set up a CentOS VM for our root certificate. To setup the machine we will need to edit /etc/pki/tls/openssl.cnf and generate a root key and a root certificate signed by that key. Once this is done the machine is ready to sign certificate signing requests from other machines. The root cert machine is perfect for signing csrs from other hosts. It's not the perfect machine for creating the csrs.  
+
+signing cnot intended to be  The openssl app reads /etc/pki/tls/openssl.cnf
+

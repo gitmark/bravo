@@ -1,0 +1,43 @@
+bravo
+
+
+// B1 SSL_load_error_strings()
+// B2 OpenSSL_add_ssl_algorithms()
+// B3 SSLv23_server_method()
+// B4 SSL_CTX_new()
+// B5 SSL_CTX_set_ecdh_auto()
+// B6 SSL_CTX_use_certificate_file()
+// B7 SSL_CTX_use_PrivateKey_file()
+// B8 *  CRYPTO_set_locking_callback()
+    // A1 socket()
+    // A2 *  setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, (char *)&on, sizeof(on));
+    // A3 *  setsockopt(sock, IPPROTO_TCP, TCP_NODELAY, (char *)&on, sizeof(int));
+    // A4 bind()
+    // A5 listen()
+    // A6 *  ioctlsocket(sock, FIONBIO, (u_long*)&on);
+    // A7 accept()
+    // A8 *  ioctlsocket(newSocket, FIONBIO, (u_long*)&off);
+// B9 SSL_new(s)
+// B10 SSL_set_fd()
+// B11 SSL_accept()
+    // A9 *  ioctlsocket()
+    // A10 *  poll()
+// B12 SSL_write()
+// B13 * S SL_shutdown()
+// B14 SSL_free()
+    // A11 close()
+    // A12 close()
+// B15 SSL_CTX_free(server_ctx)
+// B16 *   ERR_free_strings()
+// B17 EVP_cleanup()
+// B18 *   CRYPTO_set_locking_callback(NULL)
+
+
+
+
+
+
+
+
+
+
