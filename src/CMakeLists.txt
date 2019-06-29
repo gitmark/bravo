@@ -42,7 +42,10 @@ if(WIN32)
 install(TARGETS ${name} ARCHIVE DESTINATION lib)
 
 else()
-  target_link_libraries(${name} /usr/local/lib/libcrypto.so /usr/local/lib/libssl.so /usr/local/lib/libtls.so)
+
+target_link_libraries(${name} ${LibreSSL_LIBRARIES})
+#set (CMAKE_EXE_LINKER_FLAGS -L/usr/lib -lcrypto -lssl -ltls)
+#  target_link_libraries(${name} /usr/local/lib/libcrypto.so /usr/local/lib/libssl.so /usr/local/lib/libtls.so)
 install(TARGETS ${name} LIBRARY DESTINATION bravo/brv1.0.0/lib)
 INSTALL (
     DIRECTORY ${CMAKE_SOURCE_DIR}/include

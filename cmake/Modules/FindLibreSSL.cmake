@@ -5,17 +5,17 @@ find_path(LibreSSL_INCLUDE_DIRS
 )
 
 find_library(LibreSSL_crypto
-  NAMES libcrypto.a crypto-38.lib crypto.lib
+  NAMES libcrypto.dylib libcrypto.a crypto-38.lib crypto.lib
   HINTS /usr/local/opt/libressl/lib
 )
 
 find_library(LibreSSL_ssl
-NAMES libssl.a ssl-39.lib ssl.lib
+NAMES libssl.dylib libssl.a ssl-39.lib ssl.lib
   HINTS /usr/local/opt/libressl/lib
 )
 
 find_library(LibreSSL_tls
-NAMES libtls.a tls-11.lib tls.lib
+NAMES libtls.dylib libtls.a tls-11.lib tls.lib
   HINTS /usr/local/opt/libressl/lib
 )
 
